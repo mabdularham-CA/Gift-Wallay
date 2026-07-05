@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chromaplate Clone | Premium Metal Posters</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo" onclick="navigateTo('home')">
+            <span class="logo-white">CHROMA</span><span class="logo-gold">PLATE</span>
+        </div>
+        <nav>
+            <span onclick="navigateTo('home')">Home</span>
+            <span onclick="navigateTo('shop')">Shop Art</span>
+            <span onclick="navigateTo('custom')">Custom Plate</span>
+        </nav>
+        <div class="cart-icon" onclick="navigateTo('cart')">
+            🛒 <span id="cart-count">0</span>
+        </div>
+    </header>
+
+    <!-- Main View Routing Container -->
+    <main id="view-container">
+        <!-- Dynamic content injects here via script.js -->
+    </main>
+
+    <!-- Universal Footer -->
+    <footer>
+        <p>&copy; 2026 <span class="text-gold">Chromaplate Clone</span>. Premium Metallic Art Delivery.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
