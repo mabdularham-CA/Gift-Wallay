@@ -1,138 +1,141 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHROMA | Luxury Metal Art & Posters</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Premium Posters Store</title>
+  <meta name="description" content="Premium static storefront for metal posters and wall art." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg-neutral-950 text-neutral-100 font-sans selection:bg-white selection:text-black antialiased overflow-x-hidden">
-
-    <!-- Premium Top Banner -->
-    <div class="bg-white text-black text-center py-2 px-4 text-[11px] tracking-[0.2em] font-bold uppercase z-50 relative">
-        COMPLIMENTARY MAGNETIC MOUNTING KIT INCLUDED WITH EVERY PLATE
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <span>Free shipping above Rs. 6,000</span>
+      <span>Premium metal posters and wall art</span>
     </div>
+  </header>
 
-    <!-- Navigation Header -->
-    <header class="border-b border-neutral-900 bg-neutral-950/80 backdrop-blur-md sticky top-0 z-40 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            
-            <!-- Three Line Settings Logo Toggle -->
-            <button id="account-drawer-toggle" class="group flex items-center gap-3 text-neutral-400 hover:text-white transition-colors focus:outline-none">
-                <div class="space-y-1.5">
-                    <span class="block w-6 h-0.5 bg-current transition-transform duration-300 group-hover:translate-w-full"></span>
-                    <span class="block w-4 h-0.5 bg-current transition-transform duration-300"></span>
-                    <span class="block w-5 h-0.5 bg-current transition-transform duration-300"></span>
-                </div>
-                <span class="text-xs uppercase tracking-widest hidden sm:inline font-semibold">Hub</span>
-            </button>
-
-            <!-- Brand Logo Center -->
-            <a href="#" onclick="navigateTo('home')" class="text-2xl font-black tracking-[0.25em] text-white uppercase flex items-center gap-1">
-                CHROMA<span class="text-neutral-500 font-light">PLATE</span>
-            </a>
-
-            <!-- Utilities -->
-            <div class="flex items-center space-x-6">
-                <nav class="hidden md:flex items-center space-x-8 text-xs font-bold uppercase tracking-widest text-neutral-400">
-                    <a href="#" onclick="navigateTo('home')" class="nav-link text-white">Home</a>
-                    <a href="#" onclick="navigateTo('shop')" class="nav-link hover:text-white transition-colors">Shop</a>
-                    <a href="#" onclick="navigateTo('custom')" class="nav-link hover:text-white transition-colors">Custom Studio</a>
-                </nav>
-                <span class="h-4 w-[1px] bg-neutral-800 hidden md:block"></span>
-                <button onclick="navigateTo('cart')" class="relative text-neutral-400 hover:text-white transition-colors">
-                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-                    <span id="cart-counter" class="absolute -top-1.5 -right-1.5 bg-white text-black text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Slide-out Settings/Account Side Drawer -->
-    <div id="account-drawer" class="fixed inset-0 z-50 pointer-events-none">
-        <div id="drawer-overlay" class="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-500 pointer-events-auto"></div>
-        <div class="absolute top-0 left-0 w-full max-w-md h-full bg-neutral-900 border-r border-neutral-800 shadow-2xl p-8 flex flex-col justify-between transform -translate-x-full transition-transform duration-500 ease-out pointer-events-auto overflow-y-auto">
-            
-            <div>
-                <div class="flex items-center justify-between mb-8 border-b border-neutral-800 pb-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-neutral-800 rounded-full flex items-center justify-center font-bold text-white">ZA</div>
-                        <div>
-                            <h4 class="text-sm font-bold text-white tracking-wide">Zain Ahmed</h4>
-                            <p class="text-xs text-neutral-400">Premium Member</p>
-                        </div>
-                    </div>
-                    <button id="drawer-close" class="text-neutral-500 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-                </div>
-
-                <!-- Drawer Content Tabs -->
-                <div class="space-y-6">
-                    <div>
-                        <h5 class="text-[10px] uppercase font-bold tracking-widest text-neutral-500 mb-3">Order Management</h5>
-                        <div class="space-y-3">
-                            <!-- Active Order Card -->
-                            <div class="bg-neutral-950 p-3 border border-neutral-800 rounded-lg">
-                                <div class="flex justify-between text-xs font-mono mb-1">
-                                    <span class="text-neutral-400">#CP-9821</span>
-                                    <span class="text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded text-[10px]">In Transit</span>
-                                </div>
-                                <p class="text-xs font-bold text-white">1x Cyberpunk Ronin (Medium)</p>
-                                <div class="mt-2 text-[11px] text-neutral-400 flex justify-between items-center">
-                                    <span>Est Delivery: July 09</span>
-                                    <a href="#" class="text-white underline">Track</a>
-                                </div>
-                            </div>
-                            <!-- Past History -->
-                            <div class="bg-neutral-950/40 p-3 border border-neutral-800/50 rounded-lg opacity-70">
-                                <div class="flex justify-between text-xs font-mono mb-1">
-                                    <span class="text-neutral-500">#CP-8411</span>
-                                    <span class="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[10px]">Delivered</span>
-                                </div>
-                                <p class="text-xs font-medium text-neutral-300">2x Minimalist Manga Panel</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h5 class="text-[10px] uppercase font-bold tracking-widest text-neutral-500 mb-2">Account Control</h5>
-                        <ul class="space-y-1 text-sm font-medium text-neutral-300">
-                            <li><a href="#" class="flex items-center gap-3 p-2 hover:bg-neutral-950 rounded transition-colors"><i data-lucide="user" class="w-4 h-4 text-neutral-500"></i> Edit Profile Details</a></li>
-                            <li><a href="#" class="flex items-center gap-3 p-2 hover:bg-neutral-950 rounded transition-colors"><i data-lucide="map-pin" class="w-4 h-4 text-neutral-500"></i> Shipping Directory</a></li>
-                            <li><a href="#" class="flex items-center gap-3 p-2 hover:bg-neutral-950 rounded transition-colors"><i data-lucide="credit-card" class="w-4 h-4 text-neutral-500"></i> Saved Payment Methods</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border-t border-neutral-800 pt-4 flex justify-between items-center text-xs text-neutral-500">
-                <span>V2.4.1 Premium Engine</span>
-                <button class="text-rose-400 hover:underline">Log Out</button>
-            </div>
-        </div>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="logo">PREMIUM POSTERS</a>
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#sale">On Sale</a></li>
+        <li><a href="#best">Best Sellers</a></li>
+        <li><a href="#anime">Anime</a></li>
+        <li><a href="#movies">Movies</a></li>
+        <li><a href="#cars">Cars</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <input type="search" id="searchInput" placeholder="Search products..." />
+        <button class="cart-btn">Cart <span id="cartCount">0</span></button>
+      </div>
     </div>
+  </nav>
 
-    <!-- MAIN VIEWPORT CONTAINER -->
-    <main id="view-root" class="min-h-[70vh]">
-        <!-- Views inject dynamically here via script.js -->
-    </main>
-
-    <!-- Premium Luxury Footer -->
-    <footer class="bg-neutral-950 border-t border-neutral-900 py-12 px-6">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-neutral-500">
-            <p>&copy; 2026 Chromaplate Premium Ecosystem. All Rights Reserved.</p>
-            <div class="flex gap-8 tracking-widest uppercase font-bold text-[10px]">
-                <a href="#" class="hover:text-white transition-colors">Privacy</a>
-                <a href="#" class="hover:text-white transition-colors">Terms</a>
-                <a href="#" class="hover:text-white transition-colors">Mounting Safety</a>
-            </div>
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">This Season</p>
+          <h1>Premium wall art for modern spaces.</h1>
+          <p>
+            Explore a polished storefront layout built for your business, with category sections,
+            product cards, and a premium storefront feel.
+          </p>
+          <div class="hero-actions">
+            <a href="#sale" class="btn btn-primary">Shop Sale</a>
+            <a href="#best" class="btn btn-secondary">View Best Sellers</a>
+          </div>
         </div>
-    </footer>
 
-    <!-- Toast Notification Engine -->
-    <div id="toast-bin" class="fixed bottom-6 right-6 z-50 space-y-2"></div>
+        <div class="hero-visual">
+          <div class="hero-panel">
+            <div class="poster poster-1"></div>
+            <div class="poster poster-2"></div>
+            <div class="poster poster-3"></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <script src="script.js"></script>
+    <section class="section" id="sale">
+      <div class="container">
+        <div class="section-head">
+          <h2>On Sale</h2>
+          <p>Featured posters inspired by the public storefront structure.</p>
+        </div>
+        <div class="grid" id="saleGrid"></div>
+      </div>
+    </section>
+
+    <section class="section alt" id="best">
+      <div class="container">
+        <div class="section-head">
+          <h2>Best Sellers</h2>
+          <p>Popular items for a strong premium store homepage.</p>
+        </div>
+        <div class="grid" id="bestGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="anime">
+      <div class="container">
+        <div class="section-head">
+          <h2>Anime Posters</h2>
+          <p>Static cards for anime-inspired designs.</p>
+        </div>
+        <div class="grid" id="animeGrid"></div>
+      </div>
+    </section>
+
+    <section class="section alt" id="movies">
+      <div class="container">
+        <div class="section-head">
+          <h2>Movie Posters</h2>
+          <p>Cinematic layouts for posters and wall art.</p>
+        </div>
+        <div class="grid" id="movieGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="cars">
+      <div class="container">
+        <div class="section-head">
+          <h2>Cars Posters</h2>
+          <p>Motorsport and supercar-inspired visual cards.</p>
+        </div>
+        <div class="grid" id="carGrid"></div>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <div class="container contact-grid">
+        <div>
+          <h2>Contact Us</h2>
+          <p>Use this block for customer questions, bulk orders, and custom designs.</p>
+        </div>
+        <form class="contact-form">
+          <input type="text" placeholder="Your name" />
+          <input type="email" placeholder="Your email" />
+          <textarea rows="4" placeholder="Your message"></textarea>
+          <button type="button" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>Premium Posters Store</p>
+      <p>HTML / CSS / JS for GitHub Pages</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
