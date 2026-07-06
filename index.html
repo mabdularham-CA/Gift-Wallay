@@ -3,35 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chromaplate Clone | Premium Metal Posters</title>
+    <title>Gift Wallay - Premium Metal Posters</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="min-h-screen bg-white">
 
-    <!-- Header Navigation -->
-    <header>
-        <div class="logo" onclick="navigateTo('home')">
-            <span class="logo-white">CHROMA</span><span class="logo-gold">PLATE</span>
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 text-center text-sm">
+        <div class="flex items-center justify-between max-w-7xl mx-auto">
+            <button class="text-white hover:opacity-80">
+                <i data-lucide="chevron-down" class="rotate-90 w-5 h-5"></i>
+            </button>
+            <p class="font-medium">15% Discount For 4 Gift Wallay Posters!</p>
+            <button class="text-white hover:opacity-80">
+                <i data-lucide="chevron-down" class="-rotate-90 w-5 h-5"></i>
+            </button>
         </div>
-        <nav>
-            <span onclick="navigateTo('home')">Home</span>
-            <span onclick="navigateTo('shop')">Shop Art</span>
-            <span onclick="navigateTo('custom')">Custom Plate</span>
-        </nav>
-        <div class="cart-icon" onclick="navigateTo('cart')">
-            🛒 <span id="cart-count">0</span>
+    </div>
+
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="#" class="flex items-center space-x-1 text-2xl font-bold">
+                    <span class="text-black">Gift</span>
+                    <span class="text-yellow-600">Wallay</span>
+                </a>
+
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-gray-700 hover:text-yellow-600 transition-colors font-medium">Home</a>
+                    <a href="#" class="text-gray-700 hover:text-yellow-600 transition-colors font-medium">All Products</a>
+                    <a href="#" class="text-gray-700 hover:text-yellow-600 transition-colors font-medium">Custom Plate</a>
+                    
+                    <div class="relative group py-4">
+                        <button class="text-gray-700 hover:text-yellow-600 transition-colors font-medium flex items-center space-x-1">
+                            <span>Categories</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block top-full left-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2" id="desktop-categories-dropdown">
+                            </div>
+                    </div>
+
+                    <a href="#" class="text-gray-700 hover:text-yellow-600 transition-colors font-medium">Corporate Gifting</a>
+                    <a href="#" class="text-gray-700 hover:text-yellow-600 transition-colors font-medium">Apply as an Artist</a>
+                </nav>
+
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-700 hover:text-yellow-600 transition-colors">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                    </button>
+                    <button class="text-gray-700 hover:text-yellow-600 transition-colors">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </button>
+                    <button class="text-gray-700 hover:text-yellow-600 transition-colors relative">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span id="cart-count-badge" class="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                    <button class="md:hidden text-gray-700" id="mobile-menu-toggle">
+                        <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="md:hidden py-4 border-t border-gray-200 hidden" id="mobile-menu">
+                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-600">Home</a>
+                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-600">All Products</a>
+                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-600">Custom Plate</a>
+                <div class="py-2">
+                    <p class="font-medium text-gray-900 mb-2">Categories</p>
+                    <div id="mobile-categories-list">
+                        </div>
+                </div>
+                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-600">Corporate Gifting</a>
+                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-600">Apply as an Artist</a>
+            </div>
         </div>
     </header>
 
-    <!-- Main View Routing Container -->
-    <main id="view-container">
-        <!-- Dynamic content injects here via script.js -->
+    <main>
+        <section class="relative bg-gradient-to-br from-gray-50 via-yellow-50 to-white py-20 md:py-32">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <div class="inline-block">
+                            <span class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-semibold">New Trendy Posters</span>
+                        </div>
+                        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight">
+                            ELEVEATE<br />
+                            <span class="text-yellow-600">YOUR PLACE</span><br />
+                            WITH<br />
+                            STYLE
+                        </h1>
+                        <p class="text-lg text-gray-600 max-w-md">
+                            Transform your space with premium metal posters. High-quality materials, stunning designs.
+                        </p>
+                        <a href="#" class="inline-flex items-center gap-2 bg-yellow-600 text-white px-8 py-4 rounded-lg hover:bg-yellow-700 transition-colors text-lg font-semibold group">
+                            Browse Now
+                            <i data-lucide="arrow-right" class="group-hover:translate-x-1 transition-transform w-5 h-5"></i>
+                        </a>
+                    </div>
+                    <div class="relative">
+                        <div class="relative z-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-500">
+                            <img src="https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=800&q=80" alt="Featured Poster" class="w-full h-auto" />
+                        </div>
+                        <div class="absolute -bottom-8 -left-8 w-64 h-64 bg-yellow-400 rounded-full blur-3xl opacity-20"></div>
+                        <div class="absolute -top-8 -right-8 w-64 h-64 bg-blue-400 rounded-full blur-3xl opacity-20"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" id="categories-grid">
+                    </div>
+            </div>
+        </section>
+
+        <section class="py-20 bg-gradient-to-b from-white to-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Newly Added!</h2>
+                    <p class="text-gray-600 text-lg">Check out our latest collection of metal posters</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="products-grid">
+                    </div>
+                <div class="text-center mt-12">
+                    <a href="#" class="inline-flex items-center gap-2 bg-yellow-600 text-white px-8 py-3 rounded-lg hover:bg-yellow-700 transition-colors font-semibold">
+                        View All Products
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <h2 class="text-5xl font-bold text-gray-900">METAL<br />POSTERS</h2>
+                        <p class="text-xl text-gray-500 italic">This Season</p>
+                        <p class="text-gray-700 text-lg leading-relaxed">
+                            At Gift Wallay, we offer a wide range of metal posters that are perfect for any room in your home. 
+                            Our posters are printed on high-quality materials and come in a variety of styles, including modern, 
+                            vintage, and abstract!
+                        </p>
+                    </div>
+                    <div class="relative">
+                        <div class="bg-white rounded-2xl shadow-2xl p-8 transform hover:rotate-2 transition-transform duration-500">
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Metal Poster" class="w-full h-auto rounded-lg shadow-xl" />
+                            <div class="absolute top-4 right-4 bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold text-xl transform rotate-12">Metal!</div>
+                            <div class="absolute bottom-4 left-4 bg-white border-2 border-yellow-600 text-yellow-600 px-4 py-2 rounded-lg font-bold transform -rotate-6">Magnet!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Universal Footer -->
-    <footer>
-        <p>&copy; 2026 <span class="text-gold">Chromaplate Clone</span>. Premium Metallic Art Delivery.</p>
+    <footer class="bg-gradient-to-br from-gray-50 to-gray-100 mt-20">
+        <div class="bg-gradient-to-r from-yellow-600 to-yellow-500 py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Subscribe to our emails</h2>
+                <p class="text-white/90 mb-8 text-lg">Be the first to know about new collections and exclusive offers.</p>
+                <form id="newsletter-form" class="max-w-md mx-auto flex gap-2">
+                    <input type="email" placeholder="Email" id="newsletter-email" class="flex-1 px-4 py-3 rounded-lg border-2 border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder-white/70 focus:outline-none focus:border-white" required />
+                    <button type="submit" class="px-6 py-3 bg-white text-yellow-600 rounded-lg hover:bg-gray-100 transition-colors font-medium flex items-center gap-2">
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </form>
+                <div class="flex justify-center gap-6 mt-8">
+                    <a href="#" class="text-white hover:text-white/80 transition-colors"><i data-lucide="instagram" class="w-6 h-6"></i></a>
+                    <a href="#" class="text-white hover:text-white/80 transition-colors"><i data-lucide="youtube" class="w-6 h-6"></i></a>
+                    <a href="#" class="text-white hover:text-white/80 transition-colors"><i data-lucide="music-2" class="w-6 h-6"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-4 text-gray-900">Shop</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">All Products</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">Anime</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">Comics</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">Gaming</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4 text-gray-900">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">FAQ</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">Shipping Info</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">Returns</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4 text-gray-900">Company</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">About Us</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">Become an Artist</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">Corporate Gifting</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4 text-gray-900">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-yellow-600">Refund Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-300 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center space-x-1 text-xl font-bold">
+                    <span class="text-black">Gift</span>
+                    <span class="text-yellow-600">Wallay</span>
+                </div>
+                <p class="text-gray-600 text-sm">&copy; 2025 Gift Wallay. All rights reserved.</p>
+                <div class="flex gap-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" class="h-8" />
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" alt="Mastercard" class="h-8" />
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="Amex" class="h-8" />
+                </div>
+            </div>
+        </div>
     </footer>
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
 
     <script src="script.js"></script>
 </body>
