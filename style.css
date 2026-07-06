@@ -1,36 +1,141 @@
-/* Custom Premium Visual Pipelines */
-input[type="file"]::-webkit-file-upload-button {
-    background: white;
-    color: black;
-    padding: 0.5rem 1rem;
-    border: none;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Premium Posters Store</title>
+  <meta name="description" content="Premium static storefront for posters and wall art." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <span>Free shipping above Rs. 6,000</span>
+      <span>Premium metal posters and wall art</span>
+    </div>
+  </header>
 
-.view-transition {
-    animation: viewFadeIn 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="logo">PREMIUM POSTERS</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#sale">On Sale</a></li>
+        <li><a href="#best">Best Sellers</a></li>
+        <li><a href="#anime">Anime</a></li>
+        <li><a href="#movies">Movies</a></li>
+        <li><a href="#cars">Cars</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <input type="search" id="searchInput" placeholder="Search products..." />
+        <button class="cart-btn">Cart <span id="cartCount">0</span></button>
+      </div>
+    </div>
+  </nav>
 
-@keyframes viewFadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">This Season</p>
+          <h1>Premium wall art for modern spaces.</h1>
+          <p>
+            Build your business on a premium storefront with category sections, product cards,
+            search, cart, and a polished layout.
+          </p>
+          <div class="hero-actions">
+            <a href="#sale" class="btn btn-primary">Shop Sale</a>
+            <a href="#best" class="btn btn-secondary">View Best Sellers</a>
+          </div>
+        </div>
 
-/* Custom Scrollbar Optimization */
-::-webkit-scrollbar {
-    width: 6px;
-}
-::-webkit-scrollbar-track {
-    background: #0a0a0a;
-}
-::-webkit-scrollbar-thumb {
-    background: #262626;
-    border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #404040;
-}
+        <div class="hero-visual">
+          <div class="hero-panel">
+            <div class="poster poster-1"></div>
+            <div class="poster poster-2"></div>
+            <div class="poster poster-3"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sale">
+      <div class="container">
+        <div class="section-head">
+          <h2>On Sale</h2>
+          <p>Featured posters in a premium storefront layout.</p>
+        </div>
+        <div class="grid" id="saleGrid"></div>
+      </div>
+    </section>
+
+    <section class="section alt" id="best">
+      <div class="container">
+        <div class="section-head">
+          <h2>Best Sellers</h2>
+          <p>Top products for a high-converting homepage.</p>
+        </div>
+        <div class="grid" id="bestGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="anime">
+      <div class="container">
+        <div class="section-head">
+          <h2>Anime Posters</h2>
+          <p>Anime-inspired category section.</p>
+        </div>
+        <div class="grid" id="animeGrid"></div>
+      </div>
+    </section>
+
+    <section class="section alt" id="movies">
+      <div class="container">
+        <div class="section-head">
+          <h2>Movie Posters</h2>
+          <p>Cinematic category section.</p>
+        </div>
+        <div class="grid" id="movieGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="cars">
+      <div class="container">
+        <div class="section-head">
+          <h2>Cars Posters</h2>
+          <p>Motorsport and supercar-themed cards.</p>
+        </div>
+        <div class="grid" id="carGrid"></div>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <div class="container contact-grid">
+        <div>
+          <h2>Contact Us</h2>
+          <p>Use this for customer support, bulk orders, and custom artwork requests.</p>
+        </div>
+        <form class="contact-form">
+          <input type="text" placeholder="Your name" />
+          <input type="email" placeholder="Your email" />
+          <textarea rows="4" placeholder="Your message"></textarea>
+          <button type="button" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>Premium Posters Store</p>
+      <p>HTML / CSS / JS for GitHub Pages</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
