@@ -1,33 +1,36 @@
-/* Custom Aspect Ratio preservation helper configurations */
-.aspect-square {
-    aspect-ratio: 1 / 1;
+/* Custom Premium Visual Pipelines */
+input[type="file"]::-webkit-file-upload-button {
+    background: white;
+    color: black;
+    padding: 0.5rem 1rem;
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
 }
 
-/* Custom CSS micro-interactions mimicking React's hover states */
-.group:hover .group-hover\:scale-110 {
-    transform: scale(1.1);
+.view-transition {
+    animation: viewFadeIn 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
-.group:hover .group-hover\:brightness-50 {
-    filter: brightness(0.5);
+@keyframes viewFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.group:hover .group-hover\:translate-x-1 {
-    transform: translateX(0.25rem);
+/* Custom Scrollbar Optimization */
+::-webkit-scrollbar {
+    width: 6px;
 }
-
-/* Toast Element Animation styles */
-.toast-notice {
-    animation: slideIn 0.3s ease-out forwards;
+::-webkit-scrollbar-track {
+    background: #0a0a0a;
 }
-
-@keyframes slideIn {
-    from {
-        transform: translateY(1rem);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+::-webkit-scrollbar-thumb {
+    background: #262626;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #404040;
 }
