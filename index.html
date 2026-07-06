@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Premium Posters Store</title>
-  <meta name="description" content="Premium static storefront for metal posters and wall art." />
+  <meta name="description" content="Premium static storefront for posters and wall art." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
   <nav class="navbar">
     <div class="container nav-inner">
       <a href="#" class="logo">PREMIUM POSTERS</a>
-      <button class="menu-btn" id="menuBtn">☰</button>
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
       <ul class="nav-links" id="navLinks">
         <li><a href="#sale">On Sale</a></li>
         <li><a href="#best">Best Sellers</a></li>
@@ -44,8 +44,8 @@
           <p class="eyebrow">This Season</p>
           <h1>Premium wall art for modern spaces.</h1>
           <p>
-            Explore a polished storefront layout built for your business, with category sections,
-            product cards, and a premium storefront feel.
+            Build your business on a premium storefront with category sections, product cards,
+            search, cart, and a polished layout.
           </p>
           <div class="hero-actions">
             <a href="#sale" class="btn btn-primary">Shop Sale</a>
@@ -67,7 +67,7 @@
       <div class="container">
         <div class="section-head">
           <h2>On Sale</h2>
-          <p>Featured posters inspired by the public storefront structure.</p>
+          <p>Featured posters in a premium storefront layout.</p>
         </div>
         <div class="grid" id="saleGrid"></div>
       </div>
@@ -77,7 +77,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Best Sellers</h2>
-          <p>Popular items for a strong premium store homepage.</p>
+          <p>Top products for a high-converting homepage.</p>
         </div>
         <div class="grid" id="bestGrid"></div>
       </div>
@@ -87,7 +87,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Anime Posters</h2>
-          <p>Static cards for anime-inspired designs.</p>
+          <p>Anime-inspired category section.</p>
         </div>
         <div class="grid" id="animeGrid"></div>
       </div>
@@ -97,7 +97,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Movie Posters</h2>
-          <p>Cinematic layouts for posters and wall art.</p>
+          <p>Cinematic category section.</p>
         </div>
         <div class="grid" id="movieGrid"></div>
       </div>
@@ -107,7 +107,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Cars Posters</h2>
-          <p>Motorsport and supercar-inspired visual cards.</p>
+          <p>Motorsport and supercar-themed cards.</p>
         </div>
         <div class="grid" id="carGrid"></div>
       </div>
@@ -117,7 +117,7 @@
       <div class="container contact-grid">
         <div>
           <h2>Contact Us</h2>
-          <p>Use this block for customer questions, bulk orders, and custom designs.</p>
+          <p>Use this for customer support, bulk orders, and custom artwork requests.</p>
         </div>
         <form class="contact-form">
           <input type="text" placeholder="Your name" />
