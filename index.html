@@ -1,141 +1,121 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Premium Posters Store</title>
-  <meta name="description" content="Premium static storefront for posters and wall art." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zarrar | Premium Gift Boutique Pakistan</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cloudflare.com">
 </head>
 <body>
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <span>Free shipping above Rs. 6,000</span>
-      <span>Premium metal posters and wall art</span>
+
+    <!-- Top Announcement Bar -->
+    <div class="announcement-bar">
+        <p>Premium Gift Wrapping & Nationwide Delivery Across Pakistan</p>
     </div>
-  </header>
 
-  <nav class="navbar">
-    <div class="container nav-inner">
-      <a href="#" class="logo">PREMIUM POSTERS</a>
-      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#sale">On Sale</a></li>
-        <li><a href="#best">Best Sellers</a></li>
-        <li><a href="#anime">Anime</a></li>
-        <li><a href="#movies">Movies</a></li>
-        <li><a href="#cars">Cars</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <div class="nav-actions">
-        <input type="search" id="searchInput" placeholder="Search products..." />
-        <button class="cart-btn">Cart <span id="cartCount">0</span></button>
-      </div>
-    </div>
-  </nav>
-
-  <main>
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow">This Season</p>
-          <h1>Premium wall art for modern spaces.</h1>
-          <p>
-            Build your business on a premium storefront with category sections, product cards,
-            search, cart, and a polished layout.
-          </p>
-          <div class="hero-actions">
-            <a href="#sale" class="btn btn-primary">Shop Sale</a>
-            <a href="#best" class="btn btn-secondary">View Best Sellers</a>
-          </div>
+    <!-- Navigation Header -->
+    <header class="main-header">
+        <div class="logo">
+            <a href="#">ZARRAR</a>
         </div>
-
-        <div class="hero-visual">
-          <div class="hero-panel">
-            <div class="poster poster-1"></div>
-            <div class="poster poster-2"></div>
-            <div class="poster poster-3"></div>
-          </div>
+        <nav class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#">Curated Boxes</a>
+            <a href="#">Corporate Gifts</a>
+            <a href="#">Occasions</a>
+            <a href="#">About Us</a>
+        </nav>
+        <div class="header-icons">
+            <a href="#"><i class="fas fa-search"></i></a>
+            <a href="#"><i class="fas fa-user"></i></a>
+            <a href="#"><i class="fas fa-shopping-bag"></i></a>
         </div>
-      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <span>The Art of Gifting</span>
+            <h1>Luxurious Gifts for Memorable Moments</h1>
+            <p>Handcrafted premium gift boxes delivered straight to their doorstep.</p>
+            <a href="#" class="btn-primary">Explore Collections</a>
+        </div>
     </section>
 
-    <section class="section" id="sale">
-      <div class="container">
-        <div class="section-head">
-          <h2>On Sale</h2>
-          <p>Featured posters in a premium storefront layout.</p>
+    <!-- Featured Categories -->
+    <section class="categories-section">
+        <h2 class="section-title">Shop by Category</h2>
+        <div class="category-grid">
+            <div class="category-card">
+                <div class="category-img" style="background-color: #eae6df;"></div>
+                <h3>For Her</h3>
+            </div>
+            <div class="category-card">
+                <div class="category-img" style="background-color: #dfedea;"></div>
+                <h3>For Him</h3>
+            </div>
+            <div class="category-card">
+                <div class="category-img" style="background-color: #ebdfe5;"></div>
+                <h3>Corporate Luxury</h3>
+            </div>
         </div>
-        <div class="grid" id="saleGrid"></div>
-      </div>
     </section>
 
-    <section class="section alt" id="best">
-      <div class="container">
-        <div class="section-head">
-          <h2>Best Sellers</h2>
-          <p>Top products for a high-converting homepage.</p>
+    <!-- Premium Products Section -->
+    <section class="products-section">
+        <h2 class="section-title">Best Sellers</h2>
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-img-wrapper">
+                    <div class="product-placeholder"></div>
+                    <span class="tag">Premium</span>
+                </div>
+                <div class="product-info">
+                    <h3>The Royal Oud & Floral Box</h3>
+                    <p class="price">Rs. 12,500</p>
+                    <button class="btn-secondary">Add to Bag</button>
+                </div>
+            </div>
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-img-wrapper">
+                    <div class="product-placeholder"></div>
+                </div>
+                <div class="product-info">
+                    <h3>Executive Leather Gift Set</h3>
+                    <p class="price">Rs. 8,900</p>
+                    <button class="btn-secondary">Add to Bag</button>
+                </div>
+            </div>
         </div>
-        <div class="grid" id="bestGrid"></div>
-      </div>
     </section>
 
-    <section class="section" id="anime">
-      <div class="container">
-        <div class="section-head">
-          <h2>Anime Posters</h2>
-          <p>Anime-inspired category section.</p>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h2>ZARRAR</h2>
+                <p>Crafting premium gifting experiences nationwide.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Customer Care</h4>
+                <a href="#">Track Order</a>
+                <a href="#">Shipping & Returns</a>
+                <a href="#">FAQs</a>
+            </div>
+            <div class="footer-links">
+                <h4>Contact Us</h4>
+                <p><i class="fas fa-envelope"></i> support@zarrargifts.pk</p>
+                <p><i class="fas fa-phone"></i> +92 300 1234567</p>
+            </div>
         </div>
-        <div class="grid" id="animeGrid"></div>
-      </div>
-    </section>
-
-    <section class="section alt" id="movies">
-      <div class="container">
-        <div class="section-head">
-          <h2>Movie Posters</h2>
-          <p>Cinematic category section.</p>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Zarrar Gifts Pakistan. All Rights Reserved.</p>
         </div>
-        <div class="grid" id="movieGrid"></div>
-      </div>
-    </section>
+    </footer>
 
-    <section class="section" id="cars">
-      <div class="container">
-        <div class="section-head">
-          <h2>Cars Posters</h2>
-          <p>Motorsport and supercar-themed cards.</p>
-        </div>
-        <div class="grid" id="carGrid"></div>
-      </div>
-    </section>
-
-    <section class="section contact" id="contact">
-      <div class="container contact-grid">
-        <div>
-          <h2>Contact Us</h2>
-          <p>Use this for customer support, bulk orders, and custom artwork requests.</p>
-        </div>
-        <form class="contact-form">
-          <input type="text" placeholder="Your name" />
-          <input type="email" placeholder="Your email" />
-          <textarea rows="4" placeholder="Your message"></textarea>
-          <button type="button" class="btn btn-primary">Send Message</button>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p>Premium Posters Store</p>
-      <p>HTML / CSS / JS for GitHub Pages</p>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
 </body>
 </html>
