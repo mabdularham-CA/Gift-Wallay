@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart | Gift Wallay</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
+    </nav>
+
+    <div class="container animate-up">
+        <h1 class="font-serif text-center" style="margin-bottom: 3rem;">Your Shopping Bag</h1>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 2rem;">
+            <thead style="border-bottom: 1px solid #000;">
+                <tr style="text-align: left;">
+                    <th style="padding: 1rem;">Product</th>
+                    <th style="padding: 1rem;">Price</th>
+                    <th style="padding: 1rem;">Total</th>
+                </tr>
+            </thead>
+            <tbody id="cartItems">
+                <!-- Javascript will load items here -->
+            </tbody>
+        </table>
+
+        <div style="text-align: right;">
+            <h3>Total: <span id="cartTotal" class="text-gold">$0.00</span></h3>
+            <br>
+            <a href="checkout.html" class="btn btn-gold">Proceed to Checkout</a>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        // Custom Cart Logic
+        const container = document.getElementById('cartItems');
+        let total = 0;
+        
+        if(cart.length === 0) {
+            container.innerHTML = "<tr><td colspan='3' style='padding:2rem; text-align:center;'>Your cart is empty.</td></tr>";
+        } else {
+            cart.forEach(item => {
+                total += item.price;
+                container.innerHTML += `
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 1rem;">${item.name}</td>
+                        <td style="padding: 1rem;">$${item.price}</td>
+                        <td style="padding: 1rem;">$${item.price}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('cartTotal').innerText = "$" + total;
+        }
+    </script>
+</body>
+</html>
