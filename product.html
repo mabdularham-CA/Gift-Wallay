@@ -2,71 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Product | Gift Wallay</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Royal Emerald Watch | Gift Wallay</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        @media(max-width: 768px) { .split-layout { grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
+
+    <div class="promo-banner">WELCOME10 - 10% OFF FIRST ORDER</div>
     <nav>
         <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
-        <div class="nav-menu">
-            <a href="cart.html">Cart <span class="cart-count">(0)</span></a>
-        </div>
+        <div class="nav-links"><a href="checkout.html">Cart (1)</a></div>
     </nav>
 
-    <div class="container">
-        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 4rem;">
-            <!-- Image Area -->
-            <div style="background: #f9f9f9; height: 500px; display:flex; align-items:center; justify-content:center;">
-                <span class="font-serif" style="font-size:2rem; color:#ccc;">Product Image</span>
+    <div class="container section-pad split-layout">
+        <!-- Gallery -->
+        <div style="background: var(--gray); height: 500px; display: flex; align-items: center; justify-content: center;">
+            <span class="text-gold">Image Placeholder</span>
+        </div>
+
+        <!-- Details -->
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <span style="color: #999; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">Watches</span>
+            <h1 style="font-size: 2.5rem; margin: 10px 0;">Royal Emerald Watch</h1>
+            <h3 class="text-gold" style="font-size: 1.8rem; margin-bottom: 2rem;">Rs. 12,500</h3>
+            
+            <p style="line-height: 1.6; color: #555; margin-bottom: 2rem;">
+                A masterpiece of craftsmanship designed for the Pakistani gentleman. Features a scratch-resistant sapphire glass and a genuine leather strap. 
+                <br><br>
+                <strong>Delivery:</strong> 2-3 Working Days (Karachi, Lahore, Islamabad)
+            </p>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                <input type="number" value="1" style="width: 60px; margin:0;">
+                <button class="btn" style="flex-grow: 1; background: var(--black); color: var(--gold);">Add to Cart</button>
             </div>
             
-            <!-- Details -->
-            <div>
-                <h1 class="font-serif" style="font-size: 2.5rem;">Royal Gold Chronograph</h1>
-                <h2 class="text-gold" style="margin: 1rem 0;">$299.00</h2>
-                <p style="line-height: 1.6; margin-bottom: 2rem;">
-                    Meticulously crafted with 18k gold plating and sapphire crystal. 
-                    The perfect gift for those who value time.
-                </p>
-                <button class="btn" onclick="addToCart('Royal Gold Chronograph', 299)">Add to Cart</button>
-            </div>
+            <p style="font-size: 0.8rem; color: #888;">✓ Cash on Delivery Available</p>
+            <p style="font-size: 0.8rem; color: #888;">✓ 7-Day Return Policy</p>
         </div>
     </div>
 
-    <!-- REVIEWS SECTION -->
-    <div class="container" style="border-top: 1px solid #eee;">
-        <h3 class="font-serif">Customer Reviews</h3>
-        <br>
-        <div style="margin-bottom: 2rem;">
-            <strong>Sarah J.</strong> <span class="text-gold">★★★★★</span><br>
-            <p class="text-light">Absolutely stunning packaging. Arrived in 2 days.</p>
-        </div>
-        
-        <!-- Add Review Form -->
-        <h4 style="margin-bottom:1rem;">Write a Review</h4>
-        <form onsubmit="event.preventDefault(); showPopup('Review Submitted', 'Thank you! Your review is pending approval.');">
-            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <input type="text" placeholder="Your Name" required>
-                <select>
-                    <option>5 Stars</option>
-                    <option>4 Stars</option>
-                </select>
-            </div>
-            <textarea placeholder="Your experience..." rows="4"></textarea>
-            <button class="btn">Submit Review</button>
-        </form>
-    </div>
-
-    <!-- POPUP CONTAINER -->
-    <div id="globalPopup" class="popup-overlay">
-        <div class="popup-box">
-            <span class="close-popup" onclick="closePopup()">&times;</span>
-            <h3 id="popupTitle" class="font-serif"></h3>
-            <p id="popupMessage"></p>
-        </div>
-    </div>
-
-    <script src="main.js"></script>
 </body>
 </html>
