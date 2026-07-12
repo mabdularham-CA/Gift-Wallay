@@ -3,38 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <title>My Account | Gift Wallay</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
-        .tab-btn { padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; }
-        .tab-btn:hover { border-bottom: 2px solid var(--gold); }
+        .auth-container { max-width: 400px; margin: 5rem auto; text-align: center; }
+        .dashboard-container { display: none; /* Hidden by default */ }
+        
+        .tab-btns { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 2rem; }
+        .tab-btn { flex: 1; padding: 1rem; cursor: pointer; color: #888; }
+        .tab-btn.active { border-bottom: 2px solid var(--gold); color: var(--black); font-weight: bold; }
+        
+        .order-card { border: 1px solid #eee; padding: 1.5rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
+
     <nav>
         <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
-        <a href="admin.html" style="font-size: 0.8rem;">(Admin Login)</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="checkout.html">Cart</a>
+        </div>
     </nav>
 
-    <div class="container animate-up">
-        <h1 class="font-serif">Welcome, User</h1>
-        <br>
-        <div style="border-bottom: 1px solid #eee; margin-bottom: 2rem;">
-            <span class="tab-btn" onclick="openTab('orders')">My Orders</span>
-            <span class="tab-btn" onclick="openTab('settings')">Settings</span>
+    <!-- STATE 1: LOGIN / REGISTER -->
+    <div id="authSection" class="container auth-container">
+        <h2 style="margin-bottom: 2rem;">Welcome Back</h2>
+        
+        <div class="tab-btns">
+            <div class="tab-btn active" onclick="toggleAuth('login')">Login</div>
+            <div class="tab-btn" onclick="toggleAuth('register')">Register</div>
         </div>
 
-        <div id="orders" class="tab-content">
-            <div style="padding: 1rem; border: 1px solid #eee; display: flex; justify-content: space-between;">
-                <span><strong>Order #4421</strong> - Delivered</span>
-                <span class="text-gold">$129.00</span>
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="event.preventDefault(); loginSim();">
+            <input type="email" placeholder="Email Address" required>
+            <input type="password" placeholder="Password" required>
+            <button class="btn" style="width: 100%; background: var(--black); color: var(--gold);">Sign In</button>
+            <p style="margin-top: 1rem; font-size: 0.8rem; color: #888;">Forgot Password?</p>
+        </form>
+
+        <!-- Register Form (Hidden) -->
+        <form id="registerForm" style="display: none;">
+            <input type="text" placeholder="Full Name">
+            <input type="email" placeholder="Email Address">
+            <input type="password" placeholder="Create Password">
+            <button class="btn" style="width: 100%;">Create Account</button>
+        </form>
+    </div>
+
+    <!-- STATE 2: USER DASHBOARD -->
+    <div id="userDashboard" class="container section-pad dashboard-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+            <h1>My Profile</h1>
+            <button class="btn btn-small" onclick="logoutSim()">Log Out</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 4rem;">
+            <!-- Sidebar Info -->
+            <div style="background: var(--gray); padding: 2rem; height: fit-content;">
+                <h3 style="margin-bottom: 1rem;">Ali Khan</h3>
+                <p style="margin-bottom: 0.5rem; color: #666;">ali.khan@gmail.com</p>
+                <p style="margin-bottom: 2rem; color: #666;">Lahore, Pakistan</p>
+                <a href="#" style="color: var(--gold); text-decoration: underline;">Edit Address</a>
+            </div>
+
+            <!-- Orders -->
+            <div>
+                <h3 style="margin-bottom: 1.5rem;">Order History</h3>
+                
+                <div class="order-card">
+                    <div>
+                        <h4 style="margin-bottom: 5px;">Order #1001</h4>
+                        <span style="font-size: 0.8rem; color: #888;">Placed on July 10, 2026</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: bold;">PKR 12,500</div>
+                        <span style="color: green; font-size: 0.8rem;">Delivered</span>
+                    </div>
+                </div>
+
+                <div class="order-card">
+                    <div>
+                        <h4 style="margin-bottom: 5px;">Order #980</h4>
+                        <span style="font-size: 0.8rem; color: #888;">Placed on June 22, 2026</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: bold;">PKR 4,200</div>
+                        <span style="color: green; font-size: 0.8rem;">Delivered</span>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div id="settings" class="tab-content" style="display:none;">
-            <p>Update your password and shipping preferences here.</p>
-        </div>
     </div>
-    <script src="main.js"></script>
+
+    <script>
+        // Toggle Login/Register Tabs
+        function toggleAuth(mode) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if(mode === 'login') {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+            } else {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+            }
+        }
+
+        // Simulate Login
+        function loginSim() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('userDashboard').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        // Simulate Logout
+        function logoutSim() {
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('userDashboard').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
