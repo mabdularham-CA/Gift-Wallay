@@ -16,9 +16,9 @@
     <nav>
         <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
         <div class="nav-links">
-            <a href="#categories">Collections</a>
-            <a href="#recent">New In</a>
-            <a href="checkout.html">Cart (2)</a>
+            <a href="shop.html">New Arrivals</a>
+            <a href="account.html">My Account</a>
+            <a href="cart.html">Cart (2)</a>
         </div>
     </nav>
 
@@ -30,34 +30,26 @@
         <a href="#categories" class="btn" style="margin-top: 2rem;">Explore Store</a>
     </header>
 
-    <!-- 7 CATEGORIES AUTO-SCROLL -->
+    <!-- 7 CATEGORIES AUTO-SCROLL (FIXED LINKS) -->
     <section id="categories" style="padding: 4rem 0; border-bottom: 1px solid #eee;">
         <h2 class="text-center" style="margin-bottom: 1rem;">Our Collections</h2>
         <p class="text-center text-gold" style="margin-bottom: 3rem; font-size: 0.9rem;">SWIPE TO EXPLORE</p>
         
         <div class="scroll-wrapper">
-            <!-- We duplicate the list to create a seamless infinite loop effect -->
             <div class="scroll-track">
-                <!-- 1 -->
-                <div class="cat-card"><h3>Watches</h3></div>
-                <!-- 2 -->
-                <div class="cat-card" style="background: #111; color: var(--gold);"><h3>Perfumes</h3></div>
-                <!-- 3 -->
-                <div class="cat-card"><h3>Wallets</h3></div>
-                <!-- 4 -->
-                <div class="cat-card"><h3>Jewelry</h3></div>
-                <!-- 5 -->
-                <div class="cat-card"><h3>Sun Glasses</h3></div>
-                <!-- 6 -->
-                <div class="cat-card"><h3>Customized</h3></div>
-                <!-- 7 -->
-                <div class="cat-card"><h3>Gift Hampers</h3></div>
+                <!-- Items link to Dynamic Category Page -->
+                <a href="category.html?type=Watches" class="cat-card"><h3>Watches</h3></a>
+                <a href="category.html?type=Perfumes" class="cat-card" style="background: #111; color: var(--gold);"><h3>Perfumes</h3></a>
+                <a href="category.html?type=Wallets" class="cat-card"><h3>Wallets</h3></a>
+                <a href="category.html?type=Jewelry" class="cat-card"><h3>Jewelry</h3></a>
+                <a href="category.html?type=Glasses" class="cat-card"><h3>Sun Glasses</h3></a>
+                <a href="category.html?type=Customized" class="cat-card"><h3>Customized</h3></a>
+                <a href="category.html?type=Hampers" class="cat-card"><h3>Hampers</h3></a>
                 
-                <!-- DUPLICATES FOR LOOPING VISUAL -->
-                <div class="cat-card"><h3>Watches</h3></div>
-                <div class="cat-card" style="background: #111; color: var(--gold);"><h3>Perfumes</h3></div>
-                <div class="cat-card"><h3>Wallets</h3></div>
-                <div class="cat-card"><h3>Jewelry</h3></div>
+                <!-- DUPLICATES FOR LOOP -->
+                <a href="category.html?type=Watches" class="cat-card"><h3>Watches</h3></a>
+                <a href="category.html?type=Perfumes" class="cat-card" style="background: #111; color: var(--gold);"><h3>Perfumes</h3></a>
+                <a href="category.html?type=Wallets" class="cat-card"><h3>Wallets</h3></a>
             </div>
         </div>
     </section>
@@ -66,16 +58,14 @@
     <section id="recent" class="container section-pad">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
             <h2>Recently Added</h2>
-            <a href="#" style="border-bottom: 1px solid var(--black); padding-bottom: 5px;">View All</a>
+            <a href="shop.html" style="border-bottom: 1px solid var(--black); padding-bottom: 5px;">View All</a>
         </div>
 
         <div class="product-grid">
             <!-- Item 1 -->
             <div class="product-card">
                 <a href="product.html">
-                    <div class="p-image">
-                        <span class="badge-new">New Arrival</span>
-                    </div>
+                    <div class="p-image"><span class="badge-new">New Arrival</span>IMG</div>
                     <h4>Royal Emerald Watch</h4>
                     <p class="text-gold" style="margin-top: 5px;">Rs. 12,500</p>
                 </a>
@@ -83,7 +73,7 @@
             <!-- Item 2 -->
             <div class="product-card">
                 <a href="product.html">
-                    <div class="p-image"></div>
+                    <div class="p-image">IMG</div>
                     <h4>Oud Intense 100ml</h4>
                     <p class="text-gold" style="margin-top: 5px;">Rs. 4,800</p>
                 </a>
@@ -91,7 +81,7 @@
             <!-- Item 3 -->
             <div class="product-card">
                 <a href="product.html">
-                    <div class="p-image"></div>
+                    <div class="p-image">IMG</div>
                     <h4>Leather Travel Set</h4>
                     <p class="text-gold" style="margin-top: 5px;">Rs. 8,999</p>
                 </a>
@@ -99,7 +89,7 @@
             <!-- Item 4 -->
             <div class="product-card">
                 <a href="product.html">
-                    <div class="p-image"></div>
+                    <div class="p-image">IMG</div>
                     <h4>Gold Plated Cufflinks</h4>
                     <p class="text-gold" style="margin-top: 5px;">Rs. 3,500</p>
                 </a>
