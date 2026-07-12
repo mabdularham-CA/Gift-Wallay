@@ -2,64 +2,116 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gift Wallay | Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Wallay | Pakistan's Premium Gift Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 10% OFF AD -->
-    <div class="promo-bar">Exclusive: Get 10% OFF your first order with code <strong>GW10</strong></div>
+
+    <!-- TOP BANNER -->
+    <div class="promo-banner">WELCOME10 - 10% OFF FIRST ORDER • FREE DELIVERY IN PAKISTAN</div>
 
     <!-- NAV -->
     <nav>
         <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
-        <div class="nav-menu">
-            <a href="index.html">Home</a>
-            <a href="#categories">Categories</a>
-            <a href="account.html">Account</a>
-            <a href="cart.html">Cart <span class="cart-count">(0)</span></a>
+        <div class="nav-links">
+            <a href="#categories">Collections</a>
+            <a href="#recent">New In</a>
+            <a href="checkout.html">Cart (2)</a>
         </div>
     </nav>
 
     <!-- HERO -->
-    <header class="container text-center animate-up" style="padding: 6rem 0;">
-        <h1 class="font-serif" style="font-size: 4rem; margin-bottom: 1rem;">The Art of Gifting</h1>
-        <p style="margin-bottom: 2rem;">Premium collections for the discerning soul.</p>
-        <a href="#categories" class="btn">Shop Collections</a>
+    <header style="height: 85vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle, #fff 0%, #f9f9f9 100%);">
+        <h1 style="font-size: clamp(3rem, 5vw, 5rem); margin-bottom: 1rem; line-height: 1.1;">
+            Luxury Gifts <br> <span style="font-size: 0.5em; font-family: 'Lato'; letter-spacing: 5px; font-weight: 300;">FOR YOUR LOVED ONES</span>
+        </h1>
+        <a href="#categories" class="btn" style="margin-top: 2rem;">Explore Store</a>
     </header>
 
-    <!-- CATEGORIES -->
-    <section id="categories" class="container">
-        <h2 class="font-serif text-center" style="margin-bottom: 3rem;">Our Collections</h2>
-        <div class="grid">
-            <div class="product-card">
-                <div class="product-img">Watches</div>
-                <h3>Timepieces</h3>
-                <a href="product.html" class="text-gold">View Collection &rarr;</a>
-            </div>
-            <div class="product-card">
-                <div class="product-img">Leather</div>
-                <h3>Leather Goods</h3>
-                <a href="product.html" class="text-gold">View Collection &rarr;</a>
-            </div>
-            <div class="product-card">
-                <div class="product-img">Perfume</div>
-                <h3>Fragrances</h3>
-                <a href="product.html" class="text-gold">View Collection &rarr;</a>
+    <!-- 7 CATEGORIES AUTO-SCROLL -->
+    <section id="categories" style="padding: 4rem 0; border-bottom: 1px solid #eee;">
+        <h2 class="text-center" style="margin-bottom: 1rem;">Our Collections</h2>
+        <p class="text-center text-gold" style="margin-bottom: 3rem; font-size: 0.9rem;">SWIPE TO EXPLORE</p>
+        
+        <div class="scroll-wrapper">
+            <!-- We duplicate the list to create a seamless infinite loop effect -->
+            <div class="scroll-track">
+                <!-- 1 -->
+                <div class="cat-card"><h3>Watches</h3></div>
+                <!-- 2 -->
+                <div class="cat-card" style="background: #111; color: var(--gold);"><h3>Perfumes</h3></div>
+                <!-- 3 -->
+                <div class="cat-card"><h3>Wallets</h3></div>
+                <!-- 4 -->
+                <div class="cat-card"><h3>Jewelry</h3></div>
+                <!-- 5 -->
+                <div class="cat-card"><h3>Sun Glasses</h3></div>
+                <!-- 6 -->
+                <div class="cat-card"><h3>Customized</h3></div>
+                <!-- 7 -->
+                <div class="cat-card"><h3>Gift Hampers</h3></div>
+                
+                <!-- DUPLICATES FOR LOOPING VISUAL -->
+                <div class="cat-card"><h3>Watches</h3></div>
+                <div class="cat-card" style="background: #111; color: var(--gold);"><h3>Perfumes</h3></div>
+                <div class="cat-card"><h3>Wallets</h3></div>
+                <div class="cat-card"><h3>Jewelry</h3></div>
             </div>
         </div>
     </section>
 
-    <!-- GLOBAL POPUP CONTAINER -->
-    <div id="globalPopup" class="popup-overlay">
-        <div class="popup-box">
-            <span class="close-popup" onclick="closePopup()">&times;</span>
-            <h3 id="popupTitle" class="font-serif" style="margin-bottom:1rem;">Notification</h3>
-            <p id="popupMessage">Message goes here.</p>
-            <button class="btn" onclick="closePopup()" style="margin-top:2rem;">Continue</button>
+    <!-- RECENTLY ADDED -->
+    <section id="recent" class="container section-pad">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
+            <h2>Recently Added</h2>
+            <a href="#" style="border-bottom: 1px solid var(--black); padding-bottom: 5px;">View All</a>
         </div>
-    </div>
 
-    <script src="main.js"></script>
+        <div class="product-grid">
+            <!-- Item 1 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image">
+                        <span class="badge-new">New Arrival</span>
+                    </div>
+                    <h4>Royal Emerald Watch</h4>
+                    <p class="text-gold" style="margin-top: 5px;">Rs. 12,500</p>
+                </a>
+            </div>
+            <!-- Item 2 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"></div>
+                    <h4>Oud Intense 100ml</h4>
+                    <p class="text-gold" style="margin-top: 5px;">Rs. 4,800</p>
+                </a>
+            </div>
+            <!-- Item 3 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"></div>
+                    <h4>Leather Travel Set</h4>
+                    <p class="text-gold" style="margin-top: 5px;">Rs. 8,999</p>
+                </a>
+            </div>
+            <!-- Item 4 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"></div>
+                    <h4>Gold Plated Cufflinks</h4>
+                    <p class="text-gold" style="margin-top: 5px;">Rs. 3,500</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="background: var(--black); color: white; padding: 3rem 5%; margin-top: 5rem;">
+        <div class="brand">Gift<span class="text-gold">Wallay</span></div>
+        <p style="color: #666; font-size: 0.8rem; margin-top: 1rem;">&copy; 2026 Gift Wallay Pakistan. All rights reserved.</p>
+    </footer>
+
 </body>
 </html>
