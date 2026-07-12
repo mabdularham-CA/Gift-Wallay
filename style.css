@@ -1,4 +1,4 @@
-/* style.css */
+/* style.css - Premium Black & Gold Theme */
 :root {
     --gold: #D4AF37;
     --black: #000000;
@@ -17,7 +17,7 @@ body {
     font-family: var(--font-body);
     color: var(--black);
     padding-top: 40px; /* Space for Top Banner */
-    overflow-x: hidden; /* Prevent horizontal scrollbar on body */
+    overflow-x: hidden;
 }
 
 /* --- UTILITIES --- */
@@ -28,6 +28,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 700; }
 a { text-decoration: none; color: inherit; transition: var(--transition); }
 img { max-width: 100%; display: block; }
 .section-pad { padding: 5rem 0; }
+.page-header { background: var(--gray); padding: 4rem 5%; text-align: center; margin-bottom: 3rem; }
 
 /* --- 10% OFF BANNER --- */
 .promo-banner {
@@ -67,45 +68,24 @@ nav {
     background: var(--white);
     position: relative;
 }
-
-.scroll-track {
-    display: inline-flex;
-    gap: 2rem;
-    animation: scrollLeft 25s linear infinite;
-}
-
+.scroll-track { display: inline-flex; gap: 2rem; animation: scrollLeft 25s linear infinite; }
 .scroll-track:hover { animation-play-state: paused; }
 
 .cat-card {
-    min-width: 250px;
-    height: 300px;
-    background: var(--gray);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid transparent;
-    transition: var(--transition);
-    position: relative;
+    min-width: 250px; height: 300px; background: var(--gray);
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid transparent; transition: var(--transition);
 }
-
 .cat-card:hover { border-color: var(--gold); transform: translateY(-5px); }
 .cat-card h3 { z-index: 2; position: relative; color: var(--black); }
 
-@keyframes scrollLeft {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); } /* Adjust based on content width */
-}
+@keyframes scrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
 /* --- PRODUCT GRID --- */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 3rem;
-    margin-top: 3rem;
-}
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 3rem; margin-top: 3rem; }
 .product-card { text-align: center; transition: var(--transition); }
 .product-card:hover { transform: translateY(-5px); }
-.p-image { height: 350px; background: var(--gray); margin-bottom: 1rem; position: relative; overflow: hidden; }
+.p-image { height: 350px; background: var(--gray); margin-bottom: 1rem; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; color: #ccc; }
 .badge-new { 
     position: absolute; top: 10px; left: 10px; 
     background: var(--black); color: var(--gold); 
@@ -118,3 +98,9 @@ input, select, textarea {
     border: 1px solid #ddd; outline: none; font-family: var(--font-body);
 }
 input:focus { border-color: var(--gold); }
+
+/* --- TABLES & CARTS --- */
+.cart-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+.cart-table th { text-align: left; padding: 1rem; border-bottom: 2px solid var(--black); }
+.cart-table td { padding: 1rem; border-bottom: 1px solid #eee; vertical-align: middle; }
+.cart-thumb { width: 80px; height: 80px; background: #f0f0f0; object-fit: cover; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #888; }
