@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Collection | Gift Wallay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
+        <div class="nav-links"><a href="cart.html">Cart</a></div>
+    </nav>
+
+    <!-- Dynamic Header -->
+    <div class="page-header">
+        <h1 id="catTitle">Collection</h1>
+        <p style="color: #666; margin-top: 10px;">Premium selections for the discerning individual.</p>
+    </div>
+
+    <div class="container" style="margin-bottom: 5rem;">
+        <div class="product-grid">
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image">IMG</div>
+                    <h4>Premium Item 01</h4>
+                    <p class="text-gold">Rs. 8,500</p>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image">IMG</div>
+                    <h4>Premium Item 02</h4>
+                    <p class="text-gold">Rs. 14,200</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Change title based on URL (e.g., category.html?type=Watches)
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type');
+        if(type) {
+            document.getElementById('catTitle').innerText = type + " Collection";
+            document.title = type + " | Gift Wallay";
+        }
+    </script>
+</body>
+</html>
