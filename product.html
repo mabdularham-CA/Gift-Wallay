@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product | Gift Wallay</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
+        <div class="nav-menu">
+            <a href="cart.html">Cart <span class="cart-count">(0)</span></a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 4rem;">
+            <!-- Image Area -->
+            <div style="background: #f9f9f9; height: 500px; display:flex; align-items:center; justify-content:center;">
+                <span class="font-serif" style="font-size:2rem; color:#ccc;">Product Image</span>
+            </div>
+            
+            <!-- Details -->
+            <div>
+                <h1 class="font-serif" style="font-size: 2.5rem;">Royal Gold Chronograph</h1>
+                <h2 class="text-gold" style="margin: 1rem 0;">$299.00</h2>
+                <p style="line-height: 1.6; margin-bottom: 2rem;">
+                    Meticulously crafted with 18k gold plating and sapphire crystal. 
+                    The perfect gift for those who value time.
+                </p>
+                <button class="btn" onclick="addToCart('Royal Gold Chronograph', 299)">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REVIEWS SECTION -->
+    <div class="container" style="border-top: 1px solid #eee;">
+        <h3 class="font-serif">Customer Reviews</h3>
+        <br>
+        <div style="margin-bottom: 2rem;">
+            <strong>Sarah J.</strong> <span class="text-gold">★★★★★</span><br>
+            <p class="text-light">Absolutely stunning packaging. Arrived in 2 days.</p>
+        </div>
+        
+        <!-- Add Review Form -->
+        <h4 style="margin-bottom:1rem;">Write a Review</h4>
+        <form onsubmit="event.preventDefault(); showPopup('Review Submitted', 'Thank you! Your review is pending approval.');">
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <input type="text" placeholder="Your Name" required>
+                <select>
+                    <option>5 Stars</option>
+                    <option>4 Stars</option>
+                </select>
+            </div>
+            <textarea placeholder="Your experience..." rows="4"></textarea>
+            <button class="btn">Submit Review</button>
+        </form>
+    </div>
+
+    <!-- POPUP CONTAINER -->
+    <div id="globalPopup" class="popup-overlay">
+        <div class="popup-box">
+            <span class="close-popup" onclick="closePopup()">&times;</span>
+            <h3 id="popupTitle" class="font-serif"></h3>
+            <p id="popupMessage"></p>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
