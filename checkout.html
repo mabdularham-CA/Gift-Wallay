@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout | Gift Wallay</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container animate-up" style="max-width: 600px;">
+        <h1 class="font-serif text-center">Secure Checkout</h1>
+        <br>
+        <form onsubmit="event.preventDefault(); window.location.href='index.html'; alert('Order Placed Successfully!');">
+            <h3>Shipping Details</h3>
+            <div class="grid" style="gap: 1rem; grid-template-columns: 1fr 1fr;">
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name" required>
+            </div>
+            <input type="text" placeholder="Address" required>
+            <input type="text" placeholder="City" required>
+            
+            <h3 style="margin-top: 2rem;">Payment</h3>
+            <div style="padding: 1rem; border: 1px solid #ddd; margin-bottom: 1rem;">
+                Credit Card (Stripe Integration Mockup)
+            </div>
+            
+            <button class="btn btn-gold" style="width: 100%;">Place Order</button>
+        </form>
+    </div>
+</body>
+</html>
