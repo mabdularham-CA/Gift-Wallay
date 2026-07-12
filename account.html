@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Account | Gift Wallay</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        .tab-btn { padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; }
+        .tab-btn:hover { border-bottom: 2px solid var(--gold); }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
+        <a href="admin.html" style="font-size: 0.8rem;">(Admin Login)</a>
+    </nav>
+
+    <div class="container animate-up">
+        <h1 class="font-serif">Welcome, User</h1>
+        <br>
+        <div style="border-bottom: 1px solid #eee; margin-bottom: 2rem;">
+            <span class="tab-btn" onclick="openTab('orders')">My Orders</span>
+            <span class="tab-btn" onclick="openTab('settings')">Settings</span>
+        </div>
+
+        <div id="orders" class="tab-content">
+            <div style="padding: 1rem; border: 1px solid #eee; display: flex; justify-content: space-between;">
+                <span><strong>Order #4421</strong> - Delivered</span>
+                <span class="text-gold">$129.00</span>
+            </div>
+        </div>
+
+        <div id="settings" class="tab-content" style="display:none;">
+            <p>Update your password and shipping preferences here.</p>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
