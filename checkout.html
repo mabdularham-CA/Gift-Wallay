@@ -7,27 +7,29 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .checkout-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 4rem; }
-        @media(max-width: 768px) { .checkout-grid { grid-template-columns: 1fr; } }
-        .summary { background: var(--gray); padding: 2rem; height: fit-content; }
+        .summary-item { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid #ddd; padding-bottom: 1rem; }
     </style>
 </head>
 <body>
 
-    <nav><a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a></nav>
+    <nav>
+        <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
+        <a href="cart.html">Back to Cart</a>
+    </nav>
 
     <div class="container section-pad">
         <h1 class="text-center" style="margin-bottom: 3rem;">Secure Checkout</h1>
 
         <div class="checkout-grid">
             <!-- FORM -->
-            <form>
-                <h3 style="margin-bottom: 1.5rem;">Shipping Details</h3>
+            <form action="success.html">
+                <h3 style="margin-bottom: 1.5rem;">Shipping Information</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <input type="text" placeholder="First Name">
-                    <input type="text" placeholder="Last Name">
+                    <input type="text" placeholder="First Name" required>
+                    <input type="text" placeholder="Last Name" required>
                 </div>
-                <input type="text" placeholder="Phone (e.g. 0300-1234567)">
-                <input type="text" placeholder="Street Address / House No.">
+                <input type="text" placeholder="Phone (e.g. 0300-1234567)" required>
+                <input type="text" placeholder="Street Address / House No." required>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <select>
@@ -36,39 +38,59 @@
                         <option>KPK</option>
                         <option>Balochistan</option>
                     </select>
-                    <input type="text" placeholder="City">
+                    <input type="text" placeholder="City" required>
                 </div>
 
-                <h3 style="margin: 2rem 0 1rem;">Payment</h3>
-                <label style="display: block; padding: 1rem; border: 1px solid var(--gold); background: #fffaf0; margin-bottom: 1rem;">
-                    <input type="radio" checked> <strong>Cash on Delivery (COD)</strong>
-                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Pay with cash upon delivery.</p>
-                </label>
-                <label style="display: block; padding: 1rem; border: 1px solid #ddd;">
-                    <input type="radio" disabled> Credit / Debit Card (Coming Soon)
-                </label>
+                <h3 style="margin: 2rem 0 1rem;">Payment Method</h3>
+                <div style="border: 1px solid var(--gold); background: #fffaf0; padding: 1rem;">
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="radio" checked> <strong>Cash on Delivery (COD)</strong>
+                    </label>
+                </div>
+
+                <button class="btn" style="width: 100%; margin-top: 2rem; background: var(--black); color: var(--gold);">Place Order (Rs. 17,550)</button>
             </form>
 
             <!-- SUMMARY -->
-            <div class="summary">
+            <div style="background: var(--gray); padding: 2rem; height: fit-content;">
                 <h3 style="margin-bottom: 1.5rem;">Order Summary</h3>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                    <span>Royal Emerald Watch x1</span>
-                    <span>Rs. 12,500</span>
+                
+                <!-- Item 1 -->
+                <div class="summary-item">
+                    <div class="cart-thumb">IMG</div>
+                    <div>
+                        <h4 style="font-size: 0.9rem;">Royal Watch</h4>
+                        <p class="text-gold">Rs. 12,500</p>
+                        <small>Qty: 1</small>
+                    </div>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                    <span>Delivery Charges</span>
-                    <span>Rs. 250</span>
+
+                <!-- Item 2 -->
+                <div class="summary-item">
+                    <div class="cart-thumb" style="background:#333; color:gold;">IMG</div>
+                    <div>
+                        <h4 style="font-size: 0.9rem;">Oud Intense</h4>
+                        <p class="text-gold">Rs. 4,800</p>
+                        <small>Qty: 1</small>
+                    </div>
                 </div>
-                <div style="border-top: 1px solid #ccc; margin: 1rem 0;"></div>
-                <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700;">
-                    <span>Total</span>
-                    <span class="text-gold">Rs. 12,750</span>
+
+                <div style="border-top: 2px solid var(--black); padding-top: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Subtotal</span>
+                        <span>Rs. 17,300</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Delivery</span>
+                        <span>Rs. 250</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-top: 1rem;">
+                        <span>Total</span>
+                        <span class="text-gold">Rs. 17,550</span>
+                    </div>
                 </div>
-                <button class="btn" style="width: 100%; background: var(--black); color: var(--gold); margin-top: 2rem;">Complete Order</button>
             </div>
         </div>
     </div>
-
 </body>
 </html>
