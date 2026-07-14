@@ -3,105 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gift Wallay | Pakistan's Premium Gift Store</title>
+    <title>Gift Wallay | Premium Gifts Pakistan</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- TOP BANNER -->
-    <div class="promo-banner">WELCOME10 - 10% OFF FIRST ORDER • FREE DELIVERY IN PAKISTAN</div>
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <a href="index.html" class="brand">Gift<span>Wallay</span></a>
+        <a href="cart.html" class="cart-icon">🛒 <span class="cart-count">2</span></a>
+    </div>
 
-    <!-- NAV -->
-    <nav>
-        <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
-        <div class="nav-links">
-            <a href="shop.html">New Arrivals</a>
-            <a href="account.html">My Account</a>
-            <a href="cart.html">Cart (2)</a>
-        </div>
-    </nav>
+    <!-- SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMenu()"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <h2 style="margin-bottom: 2rem;">Menu</h2>
+        <a href="index.html" class="sidebar-link">Home</a>
+        <a href="shop.html" class="sidebar-link">Shop All</a>
+        <a href="account.html" class="sidebar-link">My Account</a>
+        <a href="admin.html" class="sidebar-link">Admin Portal</a>
+        <a href="#" class="sidebar-link" onclick="toggleMenu()">✕ Close</a>
+    </div>
 
     <!-- HERO -->
-    <header style="height: 85vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle, #fff 0%, #f9f9f9 100%);">
-        <h1 style="font-size: clamp(3rem, 5vw, 5rem); margin-bottom: 1rem; line-height: 1.1;">
-            Luxury Gifts <br> <span style="font-size: 0.5em; font-family: 'Lato'; letter-spacing: 5px; font-weight: 300;">FOR YOUR LOVED ONES</span>
-        </h1>
-        <a href="#categories" class="btn" style="margin-top: 2rem;">Explore Store</a>
+    <header style="height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle, #fff 0%, #f7f7f7 100%);">
+        <h1 style="font-size: clamp(2.5rem, 5vw, 5rem); margin-bottom: 1rem;">The Art of Giving</h1>
+        <p style="color: #666; letter-spacing: 2px; margin-bottom: 2rem;">PREMIUM GIFTS IN PAKISTAN</p>
+        <a href="shop.html" class="btn">Explore Collection</a>
     </header>
 
-    <!-- 7 CATEGORIES AUTO-SCROLL (FIXED LINKS) -->
-    <section id="categories" style="padding: 4rem 0; border-bottom: 1px solid #eee;">
-        <h2 class="text-center" style="margin-bottom: 1rem;">Our Collections</h2>
-        <p class="text-center text-gold" style="margin-bottom: 3rem; font-size: 0.9rem;">SWIPE TO EXPLORE</p>
-        
-        <div class="scroll-wrapper">
-            <div class="scroll-track">
-                <!-- Items link to Dynamic Category Page -->
-                <a href="category.html?type=Watches" class="cat-card"><h3>Watches</h3></a>
-                <a href="category.html?type=Perfumes" class="cat-card" style="background: #111; color: var(--gold);"><h3>Perfumes</h3></a>
-                <a href="category.html?type=Wallets" class="cat-card"><h3>Wallets</h3></a>
-                <a href="category.html?type=Jewelry" class="cat-card"><h3>Jewelry</h3></a>
-                <a href="category.html?type=Glasses" class="cat-card"><h3>Sun Glasses</h3></a>
-                <a href="category.html?type=Customized" class="cat-card"><h3>Customized</h3></a>
-                <a href="category.html?type=Hampers" class="cat-card"><h3>Hampers</h3></a>
-                
-                <!-- DUPLICATES FOR LOOP -->
-                <a href="category.html?type=Watches" class="cat-card"><h3>Watches</h3></a>
-                <a href="category.html?type=Perfumes" class="cat-card" style="background: #111; color: var(--gold);"><h3>Perfumes</h3></a>
-                <a href="category.html?type=Wallets" class="cat-card"><h3>Wallets</h3></a>
-            </div>
+    <!-- AUTO SCROLL CATEGORIES -->
+    <div class="scroll-wrapper">
+        <div class="scroll-track">
+            <!-- 7 Categories -->
+            <a href="category.html?type=Watches" class="cat-item">Watches</a>
+            <a href="category.html?type=Perfumes" class="cat-item">Perfumes</a>
+            <a href="category.html?type=Wallets" class="cat-item">Wallets</a>
+            <a href="category.html?type=Jewelry" class="cat-item">Jewelry</a>
+            <a href="category.html?type=Glasses" class="cat-item">Sun Glasses</a>
+            <a href="category.html?type=Custom" class="cat-item">Customized</a>
+            <a href="category.html?type=Hampers" class="cat-item">Gift Hampers</a>
+            <!-- Duplicate for loop -->
+            <a href="category.html?type=Watches" class="cat-item">Watches</a>
+            <a href="category.html?type=Perfumes" class="cat-item">Perfumes</a>
         </div>
-    </section>
+    </div>
 
     <!-- RECENTLY ADDED -->
-    <section id="recent" class="container section-pad">
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
-            <h2>Recently Added</h2>
-            <a href="shop.html" style="border-bottom: 1px solid var(--black); padding-bottom: 5px;">View All</a>
-        </div>
-
+    <section class="container section-pad">
+        <h2 style="text-align: center; margin-bottom: 3rem;">Recently Added</h2>
         <div class="product-grid">
-            <!-- Item 1 -->
             <div class="product-card">
                 <a href="product.html">
-                    <div class="p-image"><span class="badge-new">New Arrival</span>IMG</div>
-                    <h4>Royal Emerald Watch</h4>
-                    <p class="text-gold" style="margin-top: 5px;">Rs. 12,500</p>
+                    <div class="p-image">Watch Image</div>
+                    <h4>Royal Emerald</h4>
+                    <p class="text-gold">Rs. 12,500</p>
                 </a>
             </div>
-            <!-- Item 2 -->
             <div class="product-card">
                 <a href="product.html">
-                    <div class="p-image">IMG</div>
-                    <h4>Oud Intense 100ml</h4>
-                    <p class="text-gold" style="margin-top: 5px;">Rs. 4,800</p>
+                    <div class="p-image">Perfume Image</div>
+                    <h4>Oud Intense</h4>
+                    <p class="text-gold">Rs. 4,800</p>
                 </a>
             </div>
-            <!-- Item 3 -->
             <div class="product-card">
                 <a href="product.html">
-                    <div class="p-image">IMG</div>
-                    <h4>Leather Travel Set</h4>
-                    <p class="text-gold" style="margin-top: 5px;">Rs. 8,999</p>
+                    <div class="p-image">Wallet Image</div>
+                    <h4>Leather Classic</h4>
+                    <p class="text-gold">Rs. 2,500</p>
                 </a>
             </div>
-            <!-- Item 4 -->
-            <div class="product-card">
+             <div class="product-card">
                 <a href="product.html">
-                    <div class="p-image">IMG</div>
-                    <h4>Gold Plated Cufflinks</h4>
-                    <p class="text-gold" style="margin-top: 5px;">Rs. 3,500</p>
+                    <div class="p-image">Glasses Image</div>
+                    <h4>Aviator Gold</h4>
+                    <p class="text-gold">Rs. 3,500</p>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer style="background: var(--black); color: white; padding: 3rem 5%; margin-top: 5rem;">
-        <div class="brand">Gift<span class="text-gold">Wallay</span></div>
-        <p style="color: #666; font-size: 0.8rem; margin-top: 1rem;">&copy; 2026 Gift Wallay Pakistan. All rights reserved.</p>
-    </footer>
-
+    <script src="main.js"></script>
 </body>
 </html>
