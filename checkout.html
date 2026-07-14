@@ -3,292 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Checkout | Gift Wallay</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .checkout-title-section {
-            text-align: center;
-            margin-bottom: 3.5rem;
-            animation: fadeIn 0.8s ease;
-        }
-        .checkout-title-section h1 {
-            font-family: var(--font-head);
-            font-size: 2.2rem;
-            letter-spacing: 3px;
-            color: var(--black);
-            text-transform: uppercase;
-        }
-        .checkout-title-section p {
-            color: #888;
-            font-size: 0.9rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-top: 0.5rem;
-        }
-        
-        .checkout-container { 
-            display: grid; 
-            grid-template-columns: 1.4fr 1fr; 
-            gap: 5rem; 
-            animation: fadeUp 0.8s ease forwards;
-        }
-        @media(max-width: 992px) { 
-            .checkout-container { 
-                grid-template-columns: 1fr; 
-                gap: 3rem; 
-            } 
-        }
-
-        .checkout-form-card {
-            background: var(--white);
-            padding: 2.5rem;
-            border: 1px solid rgba(0,0,0,0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-        }
-
-        .checkout-summary-card {
-            background: #fafafa; 
-            padding: 2.5rem; 
-            height: fit-content;
-            border: 1px solid rgba(0,0,0,0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-            position: sticky;
-            top: 130px;
-        }
-        
-        /* Premium Input Styling */
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        @media(max-width: 576px) {
-            .form-row {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-        }
-
-        .checkout-label {
-            display: block;
-            font-family: var(--font-body);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #555;
-            margin-bottom: 8px;
-        }
-
-        .checkout-input, .checkout-select {
-            width: 100%;
-            padding: 14px 18px;
-            border: 1px solid rgba(0,0,0,0.1);
-            background: #fdfdfd;
-            font-family: var(--font-body);
-            font-size: 0.95rem;
-            color: var(--black);
-            transition: all 0.3s ease;
-            margin-bottom: 1.8rem;
-        }
-        .checkout-input:focus, .checkout-select:focus {
-            border-color: var(--gold);
-            background: var(--white);
-            outline: none;
-            box-shadow: 0 4px 12px rgba(212,175,55,0.08);
-        }
-
-        /* Custom Payment Option */
-        .pay-option {
-            border: 1px solid rgba(0,0,0,0.08); 
-            padding: 1.5rem; 
-            margin-bottom: 1.2rem;
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            cursor: pointer; 
-            transition: all 0.3s ease;
-            background: #fdfdfd;
-        }
-        .pay-option:hover { 
-            border-color: var(--gold); 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
-        }
-        .pay-option.selected {
-            border-color: var(--gold);
-            background: #fffdf9;
-            box-shadow: 0 4px 15px rgba(212,175,55,0.08);
-        }
-        .pay-option div strong {
-            font-family: var(--font-head);
-            font-size: 0.95rem;
-            letter-spacing: 0.5px;
-            color: var(--black);
-        }
-        .pay-option div p {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 4px;
-        }
-        
-        /* Radio Button on Right */
-        .pay-option input { 
-            width: auto; 
-            margin: 0; 
-            accent-color: var(--gold);
-        }
-        
-        /* Thumbnail */
-        .summ-thumb { 
-            width: 65px; 
-            height: 65px; 
-            background: #eee; 
-            border-radius: 0; 
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .section-header {
-            font-family: var(--font-head);
-            font-size: 1.3rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(0,0,0,0.08);
-            padding-bottom: 12px;
-            margin-bottom: 2rem;
-            color: var(--black);
-        }
-    </style>
+    <title>Checkout - Your Store</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="checkout-container">
+        <!-- Header -->
+        <header class="checkout-header">
+            <div class="header-content">
+                <h1>Checkout</h1>
+                <p class="step-indicator">Step <span id="currentStep">1</span> of 3</p>
+            </div>
+        </header>
 
-    <!-- NAVBAR INJECTED BY MAIN.JS -->
-    <nav class="navbar"></nav>
-
-    <div class="container section-pad">
-        
-        <!-- HEADER BLOCK -->
-        <div class="checkout-title-section">
-            <h1>Secure Checkout</h1>
-            <p>Complete your premium order</p>
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
         </div>
 
-        <div class="checkout-container">
-            
-            <!-- LEFT: FORM -->
-            <div class="checkout-form-card">
-                <form id="checkoutForm">
-                    <h3 class="section-header">1. Shipping Details</h3>
-                    
-                    <div class="form-row">
-                        <div>
-                            <label class="checkout-label">First Name</label>
-                            <input type="text" id="checkoutFirstName" class="checkout-input" placeholder="E.g., Zain" required>
+        <!-- Main Checkout Form -->
+        <main class="checkout-main">
+            <div class="checkout-content">
+                <!-- Form Section -->
+                <form id="checkoutForm" class="checkout-form">
+                    <!-- Step 1: Shipping Information -->
+                    <section class="form-step active" id="step1">
+                        <h2>Shipping Address</h2>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required placeholder="you@example.com">
                         </div>
-                        <div>
-                            <label class="checkout-label">Last Name</label>
-                            <input type="text" id="checkoutLastName" class="checkout-input" placeholder="E.g., Ahmed" required>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" name="firstName" required placeholder="John">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" required placeholder="Doe">
+                            </div>
                         </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input type="text" id="address" name="address" required placeholder="123 Main St">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city" required placeholder="New York">
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <input type="text" id="state" name="state" required placeholder="NY">
+                            </div>
+                            <div class="form-group">
+                                <label for="zip">Zip Code</label>
+                                <input type="text" id="zip" name="zip" required placeholder="10001">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <input type="text" id="country" name="country" required placeholder="United States">
+                        </div>
+                    </section>
+
+                    <!-- Step 2: Shipping Method -->
+                    <section class="form-step" id="step2">
+                        <h2>Shipping Method</h2>
+                        <div class="shipping-options">
+                            <label class="shipping-option">
+                                <input type="radio" name="shipping" value="standard" checked>
+                                <div class="shipping-content">
+                                    <span class="shipping-name">Standard Shipping</span>
+                                    <span class="shipping-desc">5-7 business days</span>
+                                </div>
+                                <span class="shipping-price">$5.00</span>
+                            </label>
+                            <label class="shipping-option">
+                                <input type="radio" name="shipping" value="express">
+                                <div class="shipping-content">
+                                    <span class="shipping-name">Express Shipping</span>
+                                    <span class="shipping-desc">2-3 business days</span>
+                                </div>
+                                <span class="shipping-price">$15.00</span>
+                            </label>
+                            <label class="shipping-option">
+                                <input type="radio" name="shipping" value="overnight">
+                                <div class="shipping-content">
+                                    <span class="shipping-name">Overnight Shipping</span>
+                                    <span class="shipping-desc">Next business day</span>
+                                </div>
+                                <span class="shipping-price">$30.00</span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <!-- Step 3: Payment Information -->
+                    <section class="form-step" id="step3">
+                        <h2>Payment Information</h2>
+                        <div class="form-group">
+                            <label for="cardName">Name on Card</label>
+                            <input type="text" id="cardName" name="cardName" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="text" id="cardNumber" name="cardNumber" required placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiry">Expiry Date</label>
+                                <input type="text" id="expiry" name="expiry" required placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" name="cvv" required placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                        <label class="checkbox">
+                            <input type="checkbox" name="sameAsShipping" id="sameAsShipping">
+                            <span>Billing address same as shipping</span>
+                        </label>
+                    </section>
+
+                    <!-- Form Navigation -->
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;" onclick="previousStep()">
+                            ← Previous
+                        </button>
+                        <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+                            Next →
+                        </button>
+                        <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">
+                            Place Order
+                        </button>
                     </div>
-
-                    <div>
-                        <label class="checkout-label">Street Address</label>
-                        <input type="text" id="checkoutAddress" class="checkout-input" placeholder="Apartment, suite, unit, house no, street name" required>
-                    </div>
-
-                    <div class="form-row">
-                        <div>
-                            <label class="checkout-label">Province</label>
-                            <select id="checkoutProvince" class="checkout-select" style="height: 52px;">
-                                <option>Punjab</option>
-                                <option>Sindh</option>
-                                <option>KPK</option>
-                                <option>Balochistan</option>
-                                <option>Federal Capital</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="checkout-label">City</label>
-                            <input type="text" id="checkoutCity" class="checkout-input" placeholder="E.g., Lahore" required>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="checkout-label">Phone Number</label>
-                        <input type="text" id="checkoutPhone" class="checkout-input" placeholder="E.g., 03211234567" required>
-                    </div>
-
-                    <h3 class="section-header" style="margin-top: 3rem;">2. Payment Method</h3>
-                    
-                    <!-- Online Payment -->
-                    <label class="pay-option" onclick="selectPay(this, 'online')">
-                        <div>
-                            <strong>Online Payment (Card)</strong>
-                            <p>Visa / Mastercard / UnionPay secure transfer</p>
-                        </div>
-                        <input type="radio" name="payment" value="online">
-                    </label>
-
-                    <!-- COD Payment -->
-                    <label class="pay-option selected" onclick="selectPay(this, 'cod')">
-                        <div>
-                            <strong>Cash on Delivery (COD)</strong>
-                            <p>Pay upon delivery at your doorstep</p>
-                        </div>
-                        <input type="radio" name="payment" value="cod" checked>
-                    </label>
-
-                    <!-- 50% Advance Warning -->
-                    <div id="codWarning" class="advance-msg" style="display: block; background: #fffcf0; border: 1px solid #fce8b2; color: #8a6d1c; padding: 1.2rem; font-size: 0.85rem; line-height: 1.6; margin-top: 1.5rem; letter-spacing: 0.3px;">
-                        ⚠️ <strong>Important Note:</strong> High-value orders require a 50% Advance Bank Transfer. Our premium support specialists will reach out via call/WhatsApp to assist with bank details shortly.
-                    </div>
-
-                    <button type="button" id="completeOrderBtn" class="btn" style="width: 100%; margin-top: 3rem; padding: 18px; font-weight: 700; letter-spacing: 2px;">Complete Order</button>
                 </form>
             </div>
 
-            <!-- RIGHT: SUMMARY -->
-            <div class="checkout-summary-card">
-                <!-- Reactively filled by main.js loadCheckoutPage() -->
-                <h3 class="section-header">Order Summary</h3>
-                
-                <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem;">
-                    <div class="summ-thumb"></div>
-                    <div style="flex: 1;">
-                        <strong style="color: var(--black); font-size: 0.95rem;">Royal Watch</strong>
-                        <p class="text-gold" style="font-size: 0.9rem; margin-top: 3px;">Rs. 12,500</p>
-                        <small style="color: #666;">Qty: 1</small>
+            <!-- Order Summary Sidebar -->
+            <aside class="order-summary">
+                <h3>Order Summary</h3>
+                <div class="cart-items">
+                    <div class="cart-item">
+                        <div class="item-details">
+                            <span class="item-name">Product 1</span>
+                            <span class="item-qty">Qty: 2</span>
+                        </div>
+                        <span class="item-price">$49.98</span>
+                    </div>
+                    <div class="cart-item">
+                        <div class="item-details">
+                            <span class="item-name">Product 2</span>
+                            <span class="item-qty">Qty: 1</span>
+                        </div>
+                        <span class="item-price">$29.99</span>
                     </div>
                 </div>
 
-                <div style="border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1.5rem; margin-top: 2rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span>Subtotal</span>
-                        <span>Rs. 12,500</span>
-                    </div>
-                    
-                    <div id="taxRow" class="tax-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span>COD Surcharge (9%)</span>
-                        <span>Rs. 1,125</span>
-                    </div>
+                <div class="summary-divider"></div>
 
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span>Shipping</span>
-                        <span>Rs. 250</span>
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.25rem; margin-top: 1.5rem; border-top: 1px solid var(--black); padding-top: 1rem;">
-                        <span>Total</span>
-                        <span class="text-gold">Rs. 13,875</span>
-                    </div>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal">$79.97</span>
                 </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span id="shippingCost">$5.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax</span>
+                    <span id="tax">$6.40</span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span id="total">$91.37</span>
+                </div>
+
+                <div class="promo-section">
+                    <input type="text" id="promoCode" placeholder="Enter promo code" class="promo-input">
+                    <button type="button" class="btn-promo" onclick="applyPromoCode()">Apply</button>
+                </div>
+
+                <div class="security-badges">
+                    <div class="badge">🔒 Secure Checkout</div>
+                    <div class="badge">✓ SSL Encrypted</div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Success Modal -->
+        <div class="modal" id="successModal">
+            <div class="modal-content">
+                <div class="success-icon">✓</div>
+                <h2>Order Placed Successfully!</h2>
+                <p>Thank you for your purchase.</p>
+                <p class="order-number">Order #<span id="orderNumber">123456</span></p>
+                <p class="confirmation-email">A confirmation email has been sent to your email address.</p>
+                <button type="button" class="btn btn-primary" onclick="continueShopping()">Continue Shopping</button>
             </div>
-
         </div>
     </div>
 
-    <script src="main.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
