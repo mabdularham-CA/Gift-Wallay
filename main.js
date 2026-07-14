@@ -1,41 +1,57 @@
-/* main.js */
+// main.js
 
-// 1. Simple Cart System using LocalStorage
-let cart = JSON.parse(localStorage.getItem('gw-cart')) || [];
-
-function addToCart(productName, price) {
-    cart.push({ name: productName, price: price });
-    localStorage.setItem('gw-cart', JSON.stringify(cart));
-    updateCartCount();
-    showPopup('Added to Cart', `${productName} is now in your bag.`);
+// 1. Sidebar Toggle
+function toggleMenu() {
+    const menu = document.getElementById('sidebarMenu');
+    const overlay = document.getElementById('sidebarOverlay');
+    menu.classList.toggle('active');
+    overlay.classList.toggle('active');
 }
 
-function updateCartCount() {
-    const count = document.querySelectorAll('.cart-count');
-    count.forEach(el => el.textContent = `(${cart.length})`);
+// 2. Cart: Delete Item Simulation
+function deleteItem(btn) {
+    if(confirm("Remove this item from cart?")) {
+        // Remove the row
+        const row = btn.closest('tr');
+        row.remove();
+        // Update Subtotal (Simulation)
+        updateCartTotal(); 
+    }
 }
 
-// 2. Global Popup System
-function showPopup(title, message) {
-    const overlay = document.getElementById('globalPopup');
-    const titleEl = document.getElementById('popupTitle');
-    const msgEl = document.getElementById('popupMessage');
+function updateCartTotal() {
+    // This is a visual simulation for the prototype
+    // In a real app, you would loop through rows and recalculate
+    alert("Item removed. Total updated (Simulated).");
+}
+
+// 3. Checkout: COD Logic (9% Tax + 50% Advance)
+function togglePaymentMethod(method) {
+    const taxRow = document.getElementById('taxRow');
+    const advanceMsg = document.getElementById('advanceMsg');
+    const totalDisplay = document.getElementById('finalTotal');
     
-    titleEl.textContent = title;
-    msgEl.textContent = message;
-    overlay.style.display = 'flex';
-}
+    // Base amount (Hardcoded for prototype example)
+    let baseTotal = 17550; 
 
-function closePopup() {
-    document.getElementById('globalPopup').style.display = 'none';
+    if (method === 'cod') {
+        // Show Tax & Warning
+        taxRow.style.display = 'flex';
+        advanceMsg.style.display = 'block';
+        
+        // Calculate 9% Tax
+        let tax = baseTotal * 0.09;
+        let final = baseTotal + tax;
+        
+        totalDisplay.innerText = "Rs. " + final.toLocaleString();
+        document.getElementById('taxAmount').innerText = "Rs. " + tax.toLocaleString();
+        
+    } else {
+        // Hide Tax & Warning
+        taxRow.style.display = 'none';
+        advanceMsg.style.display = 'none';
+        
+        // Revert Total
+        totalDisplay.innerText = "Rs. " + baseTotal.toLocaleString();
+    }
 }
-
-// 3. Tab System (For Account/Admin pages)
-function openTab(tabName) {
-    const contents = document.querySelectorAll('.tab-content');
-    contents.forEach(c => c.style.display = 'none');
-    document.getElementById(tabName).style.display = 'block';
-}
-
-// Initialize
-document.addEventListener('DOMContentLoaded', updateCartCount);
