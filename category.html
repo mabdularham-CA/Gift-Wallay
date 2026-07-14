@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection | Gift Wallay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="loadCategory()">
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <!-- Settings / Menu Button -->
+        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+        
+        <a href="index.html" class="brand">Gift<span>Wallay</span></a>
+        
+        <a href="cart.html" class="cart-icon">🛒<span class="cart-count">2</span></a>
+    </nav>
+
+    <!-- SIDEBAR MENU -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div style="text-align: right; font-size: 1.5rem; cursor: pointer;" onclick="toggleSidebar()">×</div>
+        <div style="margin-top: 2rem;">
+            <a href="index.html" class="sidebar-link">Home</a>
+            <a href="shop.html" class="sidebar-link">Shop All</a>
+            <a href="account.html" class="sidebar-link">My Account</a>
+            <!-- Categories in Settings -->
+            <hr style="margin: 1rem 0; border: 0; border-top: 1px solid #eee;">
+            <a href="category.html?type=Watches" class="sidebar-link" style="font-size: 0.9rem;">Watches</a>
+            <a href="category.html?type=Perfumes" class="sidebar-link" style="font-size: 0.9rem;">Perfumes</a>
+            <a href="category.html?type=Wallets" class="sidebar-link" style="font-size: 0.9rem;">Wallets</a>
+        </div>
+    </div>
+
+    <!-- DYNAMIC HEADER -->
+    <div style="background: var(--gray); padding: 5rem 0; text-align: center; margin-bottom: 3rem;">
+        <h1 id="catTitle">Collection</h1>
+        <p style="margin-top: 10px; color: #666;">Premium Selections</p>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="container section-pad">
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>IMG</span></div>
+                    <h4>Luxury Item 01</h4>
+                    <p class="text-gold">Rs. 8,500</p>
+                </a>
+            </div>
+            <!-- Product 2 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>IMG</span></div>
+                    <h4>Luxury Item 02</h4>
+                    <p class="text-gold">Rs. 12,000</p>
+                </a>
+            </div>
+            <!-- Product 3 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>IMG</span></div>
+                    <h4>Luxury Item 03</h4>
+                    <p class="text-gold">Rs. 5,500</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

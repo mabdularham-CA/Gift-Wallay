@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Wallay | Premium Gifts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* HERO IMAGE CONFIGURATION */
+        .hero-section {
+            height: 90vh;
+            background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=1600&auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            background-color: #111; /* Fallback color */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 5vw, 6rem);
+            margin-bottom: 1rem;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: fadeUp 1s ease 0.5s forwards;
+            opacity: 0; transform: translateY(20px);
+        }
+
+        .hero-btn {
+            padding: 15px 40px;
+            background: white; color: black;
+            border: none;
+            font-family: 'Lato', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+            animation: fadeUp 1s ease 0.8s forwards;
+            opacity: 0; transform: translateY(20px);
+        }
+        .hero-btn:hover { background: var(--gold); color: white; }
+
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BANNER -->
+    <div style="background: black; color: var(--gold); text-align: center; padding: 10px; font-size: 0.8rem; letter-spacing: 1px;">
+        WELCOME10 - GET 10% OFF YOUR FIRST ORDER
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" style="top: 35px;"> <!-- Offset for banner -->
+        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+        <a href="index.html" class="brand" id="brandLogo" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+            <div class="logo-container" style="display: flex; align-items: center; gap: 12px;">
+                <!-- Beautiful SVG Gift Box Icon with GW inside -->
+                <svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.06));">
+                    <!-- Gift Box Base -->
+                    <rect x="20" y="45" width="60" height="45" rx="4" fill="#ffffff" stroke="var(--gold)" stroke-width="4.5"/>
+                    <rect x="18" y="38" width="64" height="10" rx="2" fill="var(--gold)"/>
+                    <!-- Golden Ribbon Vertical -->
+                    <rect x="47" y="38" width="6" height="52" fill="var(--gold)"/>
+                    <!-- GW Letters inside box -->
+                    <text x="31" y="70" font-family="'Cinzel', serif" font-size="20" font-weight="bold" fill="#000000">G</text>
+                    <text x="53" y="70" font-family="'Cinzel', serif" font-size="20" font-weight="bold" fill="var(--gold)">W</text>
+                    <!-- Heart in the middle of G -->
+                    <path d="M41 59.5 C41 58.5, 42 57.5, 43 58.5 C44 57.5, 45 58.5, 45 59.5 C45 61, 43 62, 43 62 C43 62, 41 61, 41 59.5 Z" fill="var(--gold)"/>
+                    <!-- Golden Bow Ribbon on Top -->
+                    <path d="M50 38 C40 25, 30 35, 48 38 Z" fill="var(--gold)" stroke="var(--gold)" stroke-width="1.5"/>
+                    <path d="M50 38 C60 25, 70 35, 52 38 Z" fill="var(--gold)" stroke="var(--gold)" stroke-width="1.5"/>
+                    <!-- Heart in the center of bow -->
+                    <path d="M47 34 C47 32, 48.5 31, 50 32.5 C51.5 31, 53 32, 53 34 C53 36, 50 38, 50 38 C50 38, 47 36, 47 34 Z" fill="#000000"/>
+                </svg>
+                <!-- Brand Text with Logo fonts -->
+                <div style="display: flex; flex-direction: column; align-items: start; line-height: 1.1; text-align: left;">
+                    <span style="font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; color: #000000; letter-spacing: 1px; text-transform: uppercase;">Gift<span style="color: var(--gold);">Wallay</span></span>
+                    <span style="font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 1.8px; color: #555; text-transform: uppercase; margin-top: 2px; font-weight: bold;">Har Thofa, Dil Se</span>
+                </div>
+            </div>
+        </a>
+        <a href="cart.html" class="cart-icon">🛒<span class="cart-count">2</span></a>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div style="text-align: right; font-size: 1.5rem; cursor: pointer;" onclick="toggleSidebar()">×</div>
+        <div style="margin-top: 2rem;">
+            <a href="index.html" class="sidebar-link">Home</a>
+            <a href="shop.html" class="sidebar-link">Shop All</a>
+            <a href="account.html" class="sidebar-link">My Account</a>
+            <hr style="margin: 1rem 0; border-color: #eee;">
+            <a href="admin.html" class="sidebar-link" style="font-size: 0.9rem;">Admin Access</a>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <h1 class="hero-title">The Art of Giving</h1>
+        <p style="font-size: 1.2rem; margin-bottom: 2rem; font-weight: 300; letter-spacing: 1px;">PREMIUM • TIMELESS • ELEGANT</p>
+        <a href="shop.html"><button class="hero-btn">Explore Collection</button></a>
+    </section>
+
+    <!-- ENDLESS CATEGORIES (7 Items) -->
+    <section style="padding: 4rem 0; overflow: hidden;">
+        <h2 class="text-center" style="margin-bottom: 3rem;">Our Collections</h2>
+        
+        <div class="scroll-wrapper">
+            <!-- We duplicate the list to create a seamless loop -->
+            <div class="scroll-track">
+                <!-- SET 1 -->
+                <a href="category.html?type=Watches" class="cat-item">Watches</a>
+                <a href="category.html?type=Perfumes" class="cat-item">Perfumes</a>
+                <a href="category.html?type=Wallets" class="cat-item">Wallets</a>
+                <a href="category.html?type=Jewelry" class="cat-item">Jewelry</a>
+                <a href="category.html?type=Glasses" class="cat-item">Sun Glasses</a>
+                <a href="category.html?type=Customized" class="cat-item">Customized</a>
+                <a href="category.html?type=Hampers" class="cat-item">Gift Hampers</a>
+
+                <!-- SET 2 (Duplicate for Loop) -->
+                <a href="category.html?type=Watches" class="cat-item">Watches</a>
+                <a href="category.html?type=Perfumes" class="cat-item">Perfumes</a>
+                <a href="category.html?type=Wallets" class="cat-item">Wallets</a>
+                <a href="category.html?type=Jewelry" class="cat-item">Jewelry</a>
+                <a href="category.html?type=Glasses" class="cat-item">Sun Glasses</a>
+                <a href="category.html?type=Customized" class="cat-item">Customized</a>
+                <a href="category.html?type=Hampers" class="cat-item">Gift Hampers</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECENTLY ADDED -->
+    <section class="container section-pad">
+        <h2 style="margin-bottom: 2rem;">Recently Added</h2>
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image">
+                        <span style="position: absolute; top: 10px; left: 10px; background: black; color: var(--gold); padding: 5px 10px; font-size: 0.7rem;">NEW</span>
+                        <span>WATCH IMG</span>
+                    </div>
+                    <h4>Royal Emerald Watch</h4>
+                    <p class="text-gold">Rs. 12,500</p>
+                </a>
+            </div>
+            <!-- Product 2 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>PERFUME IMG</span></div>
+                    <h4>Oud Intense</h4>
+                    <p class="text-gold">Rs. 4,800</p>
+                </a>
+            </div>
+             <!-- Product 3 -->
+             <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>WALLET IMG</span></div>
+                    <h4>Leather Set</h4>
+                    <p class="text-gold">Rs. 3,500</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script src="main.js"></script>
+    <script>
+        // Check for Login Success Parameter
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('login') === 'success') {
+                // Premium SweetAlert style (Standard JS Alert for now)
+                setTimeout(() => {
+                    alert("✓ Login Successful! Welcome back to Gift Wallay.");
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>

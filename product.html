@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Watch | Gift Wallay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        @media(max-width: 768px) { .split-layout { grid-template-columns: 1fr; } }
+        
+        .qty-box { display: flex; align-items: center; border: 1px solid #ddd; width: fit-content; margin-bottom: 2rem; }
+        .qty-btn { padding: 10px 15px; cursor: pointer; background: #eee; border: none; }
+        .qty-val { padding: 10px 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+        <a href="index.html" class="brand" id="brandLogo" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+            <div class="logo-container" style="display: flex; align-items: center; gap: 12px;">
+                <!-- Beautiful SVG Gift Box Icon with GW inside -->
+                <svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.06));">
+                    <!-- Gift Box Base -->
+                    <rect x="20" y="45" width="60" height="45" rx="4" fill="#ffffff" stroke="var(--gold)" stroke-width="4.5"/>
+                    <rect x="18" y="38" width="64" height="10" rx="2" fill="var(--gold)"/>
+                    <!-- Golden Ribbon Vertical -->
+                    <rect x="47" y="38" width="6" height="52" fill="var(--gold)"/>
+                    <!-- GW Letters inside box -->
+                    <text x="31" y="70" font-family="'Cinzel', serif" font-size="20" font-weight="bold" fill="#000000">G</text>
+                    <text x="53" y="70" font-family="'Cinzel', serif" font-size="20" font-weight="bold" fill="var(--gold)">W</text>
+                    <!-- Heart in the middle of G -->
+                    <path d="M41 59.5 C41 58.5, 42 57.5, 43 58.5 C44 57.5, 45 58.5, 45 59.5 C45 61, 43 62, 43 62 C43 62, 41 61, 41 59.5 Z" fill="var(--gold)"/>
+                    <!-- Golden Bow Ribbon on Top -->
+                    <path d="M50 38 C40 25, 30 35, 48 38 Z" fill="var(--gold)" stroke="var(--gold)" stroke-width="1.5"/>
+                    <path d="M50 38 C60 25, 70 35, 52 38 Z" fill="var(--gold)" stroke="var(--gold)" stroke-width="1.5"/>
+                    <!-- Heart in the center of bow -->
+                    <path d="M47 34 C47 32, 48.5 31, 50 32.5 C51.5 31, 53 32, 53 34 C53 36, 50 38, 50 38 C50 38, 47 36, 47 34 Z" fill="#000000"/>
+                </svg>
+                <!-- Brand Text with Logo fonts -->
+                <div style="display: flex; flex-direction: column; align-items: start; line-height: 1.1; text-align: left;">
+                    <span style="font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; color: #000000; letter-spacing: 1px; text-transform: uppercase;">Gift<span style="color: var(--gold);">Wallay</span></span>
+                    <span style="font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 1.8px; color: #555; text-transform: uppercase; margin-top: 2px; font-weight: bold;">Har Thofa, Dil Se</span>
+                </div>
+            </div>
+        </a>
+        <a href="cart.html" class="cart-icon">🛒<span class="cart-count">2</span></a>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div style="text-align: right; font-size: 1.5rem; cursor: pointer;" onclick="toggleSidebar()">×</div>
+        <div style="margin-top: 2rem;">
+            <a href="index.html" class="sidebar-link">Home</a>
+            <a href="shop.html" class="sidebar-link">Shop All</a>
+            <a href="account.html" class="sidebar-link">My Account</a>
+        </div>
+    </div>
+
+    <!-- MAIN PRODUCT AREA -->
+    <div class="container section-pad split-layout">
+        
+        <!-- Image -->
+        <div style="background: #f4f4f4; height: 500px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #ccc;">
+            PRODUCT IMAGE
+        </div>
+
+        <!-- Details -->
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <div style="color: #888; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 10px;">Watches</div>
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Royal Emerald Watch</h1>
+            <div class="stars" style="margin-bottom: 1rem;">★★★★★ <span style="color: #888; font-size: 0.8rem;">(12 Reviews)</span></div>
+            <h2 class="text-gold" style="margin-bottom: 2rem;">Rs. 12,500</h2>
+            
+            <p style="line-height: 1.6; color: #555; margin-bottom: 2rem;">
+                A masterpiece of craftsmanship designed for the Pakistani gentleman. Features a scratch-resistant sapphire glass, 24K gold plated bezel, and a genuine leather strap. 
+            </p>
+
+            <!-- Quantity -->
+            <div class="qty-box">
+                <button class="qty-btn" onclick="changeQty(-1)">-</button>
+                <span class="qty-val" id="qtyDisplay">1</span>
+                <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+
+            <button class="btn" onclick="addToCart('Royal Watch', 12500)" style="width: 100%; padding: 15px;">Add to Cart</button>
+            
+            <div style="margin-top: 2rem; font-size: 0.8rem; color: #666;">
+                <p>✓ Free Delivery in Pakistan</p>
+                <p>✓ 1-Year International Warranty</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- REVIEWS SECTION -->
+    <div class="container" style="padding-bottom: 5rem; border-top: 1px solid #eee; padding-top: 3rem;">
+        <h3 style="margin-bottom: 2rem;">Customer Reviews</h3>
+        
+        <div class="review-box">
+            <div style="display: flex; justify-content: space-between;">
+                <strong>Ahmed K.</strong>
+                <span class="stars">★★★★★</span>
+            </div>
+            <p style="color: #666; margin-top: 0.5rem;">"Absolutely stunning. The packaging was premium and the watch feels heavy and expensive. Highly recommended."</p>
+            <small style="color: #999;">Posted on July 10, 2026</small>
+        </div>
+
+        <div class="review-box">
+            <div style="display: flex; justify-content: space-between;">
+                <strong>Sarah J.</strong>
+                <span class="stars">★★★★☆</span>
+            </div>
+            <p style="color: #666; margin-top: 0.5rem;">"Great gift for my husband. Delivery took 3 days to Lahore."</p>
+            <small style="color: #999;">Posted on July 05, 2026</small>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        let quantity = 1;
+        function changeQty(diff) {
+            quantity += diff;
+            if(quantity < 1) quantity = 1;
+            document.getElementById('qtyDisplay').innerText = quantity;
+        }
+    </script>
+</body>
+</html>

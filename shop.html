@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop All | Gift Wallay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+        <a href="index.html" class="brand">Gift<span>Wallay</span></a>
+        <a href="cart.html" class="cart-icon">🛒<span class="cart-count">2</span></a>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div style="text-align: right; font-size: 1.5rem; cursor: pointer;" onclick="toggleSidebar()">×</div>
+        <div style="margin-top: 2rem;">
+            <a href="index.html" class="sidebar-link">Home</a>
+            <a href="shop.html" class="sidebar-link">Shop All</a>
+            <a href="account.html" class="sidebar-link">My Account</a>
+        </div>
+    </div>
+
+    <div style="text-align: center; padding: 4rem 0; background: var(--gray);">
+        <h1>All Products</h1>
+        <p style="color: #666; margin-top: 10px;">Browse our full catalog</p>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="container section-pad">
+        <div class="product-grid">
+            
+            <!-- Item 1 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>WATCH</span></div>
+                    <h4>Royal Gold Watch</h4>
+                    <p class="text-gold">Rs. 12,500</p>
+                </a>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>WALLET</span></div>
+                    <h4>Leather Wallet</h4>
+                    <p class="text-gold">Rs. 3,500</p>
+                </a>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>PERFUME</span></div>
+                    <h4>Oud Intense</h4>
+                    <p class="text-gold">Rs. 4,800</p>
+                </a>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>CUFFLINKS</span></div>
+                    <h4>Gold Cufflinks</h4>
+                    <p class="text-gold">Rs. 2,200</p>
+                </a>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>GLASSES</span></div>
+                    <h4>Aviator Series</h4>
+                    <p class="text-gold">Rs. 1,800</p>
+                </a>
+            </div>
+
+            <!-- Item 6 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>PEN</span></div>
+                    <h4>Custom Pen</h4>
+                    <p class="text-gold">Rs. 1,500</p>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
