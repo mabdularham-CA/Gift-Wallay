@@ -3,63 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details | Gift Wallay</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <title>Royal Watch | Gift Wallay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        @media(max-width: 768px) { .split-layout { grid-template-columns: 1fr; } }
+        
+        .qty-box { display: flex; align-items: center; border: 1px solid #ddd; width: fit-content; margin-bottom: 2rem; }
+        .qty-btn { padding: 10px 15px; cursor: pointer; background: #eee; border: none; }
+        .qty-val { padding: 10px 20px; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <nav class="navbar">
+        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
         <a href="index.html" class="brand">Gift<span>Wallay</span></a>
-        <a href="cart.html" class="cart-icon">🛒 <span class="cart-count">2</span></a>
-    </div>
+        <a href="cart.html" class="cart-icon">🛒<span class="cart-count">2</span></a>
+    </nav>
 
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMenu()"></div>
+    <!-- SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="sidebar-menu" id="sidebarMenu">
-        <!-- (Same Menu Content as Index) -->
-         <h2 style="margin-bottom: 2rem;">Menu</h2>
-         <a href="index.html" class="sidebar-link">Home</a>
-         <a href="#" class="sidebar-link" onclick="toggleMenu()">✕ Close</a>
+        <div style="text-align: right; font-size: 1.5rem; cursor: pointer;" onclick="toggleSidebar()">×</div>
+        <div style="margin-top: 2rem;">
+            <a href="index.html" class="sidebar-link">Home</a>
+            <a href="shop.html" class="sidebar-link">Shop All</a>
+            <a href="account.html" class="sidebar-link">My Account</a>
+        </div>
     </div>
 
-    <div class="container section-pad">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;">
-            <!-- Image -->
-            <div class="p-image" style="height: 500px;">
-                High Res Product Image
+    <!-- MAIN PRODUCT AREA -->
+    <div class="container section-pad split-layout">
+        
+        <!-- Image -->
+        <div style="background: #f4f4f4; height: 500px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #ccc;">
+            PRODUCT IMAGE
+        </div>
+
+        <!-- Details -->
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <div style="color: #888; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 10px;">Watches</div>
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Royal Emerald Watch</h1>
+            <div class="stars" style="margin-bottom: 1rem;">★★★★★ <span style="color: #888; font-size: 0.8rem;">(12 Reviews)</span></div>
+            <h2 class="text-gold" style="margin-bottom: 2rem;">Rs. 12,500</h2>
+            
+            <p style="line-height: 1.6; color: #555; margin-bottom: 2rem;">
+                A masterpiece of craftsmanship designed for the Pakistani gentleman. Features a scratch-resistant sapphire glass, 24K gold plated bezel, and a genuine leather strap. 
+            </p>
+
+            <!-- Quantity -->
+            <div class="qty-box">
+                <button class="qty-btn" onclick="changeQty(-1)">-</button>
+                <span class="qty-val" id="qtyDisplay">1</span>
+                <button class="qty-btn" onclick="changeQty(1)">+</button>
             </div>
-            <!-- Details -->
-            <div>
-                <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Royal Emerald Watch</h1>
-                <h3 class="text-gold" style="font-size: 1.5rem; margin-bottom: 2rem;">Rs. 12,500</h3>
-                <p style="color: #666; line-height: 1.6; margin-bottom: 2rem;">
-                    Exquisite craftsmanship tailored for the elite. This timepiece features a 24k gold plated dial and genuine leather straps. Comes with a 2-year warranty and a premium gift box.
-                </p>
-                <button class="btn" style="width: 100%;">Add to Cart</button>
+
+            <button class="btn" onclick="addToCart('Royal Watch', 12500)" style="width: 100%; padding: 15px;">Add to Cart</button>
+            
+            <div style="margin-top: 2rem; font-size: 0.8rem; color: #666;">
+                <p>✓ Free Delivery in Pakistan</p>
+                <p>✓ 1-Year International Warranty</p>
             </div>
         </div>
     </div>
 
-    <!-- REVIEWS SYSTEM -->
-    <div class="container" style="padding-bottom: 5rem;">
-        <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 1rem; margin-bottom: 2rem;">Customer Reviews</h2>
+    <!-- REVIEWS SECTION -->
+    <div class="container" style="padding-bottom: 5rem; border-top: 1px solid #eee; padding-top: 3rem;">
+        <h3 style="margin-bottom: 2rem;">Customer Reviews</h3>
         
         <div class="review-box">
-            <div class="stars">★★★★★</div>
-            <h4>Absolutely Stunning</h4>
-            <p style="color: #555; margin-top: 5px;">The watch looks even better in person. The packaging was very secure.</p>
-            <small style="color: #999;">- Ali Khan, Lahore</small>
+            <div style="display: flex; justify-content: space-between;">
+                <strong>Ahmed K.</strong>
+                <span class="stars">★★★★★</span>
+            </div>
+            <p style="color: #666; margin-top: 0.5rem;">"Absolutely stunning. The packaging was premium and the watch feels heavy and expensive. Highly recommended."</p>
+            <small style="color: #999;">Posted on July 10, 2026</small>
         </div>
 
         <div class="review-box">
-            <div class="stars">★★★★☆</div>
-            <h4>Great Quality</h4>
-            <p style="color: #555; margin-top: 5px;">Premium feel. Delivery took 3 days to Islamabad.</p>
-            <small style="color: #999;">- Sara Ahmed, Islamabad</small>
+            <div style="display: flex; justify-content: space-between;">
+                <strong>Sarah J.</strong>
+                <span class="stars">★★★★☆</span>
+            </div>
+            <p style="color: #666; margin-top: 0.5rem;">"Great gift for my husband. Delivery took 3 days to Lahore."</p>
+            <small style="color: #999;">Posted on July 05, 2026</small>
         </div>
     </div>
 
     <script src="main.js"></script>
+    <script>
+        let quantity = 1;
+        function changeQty(diff) {
+            quantity += diff;
+            if(quantity < 1) quantity = 1;
+            document.getElementById('qtyDisplay').innerText = quantity;
+        }
+    </script>
 </body>
 </html>
