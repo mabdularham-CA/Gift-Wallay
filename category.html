@@ -2,50 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Collection | Gift Wallay</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body onload="loadCategory()">
 
-    <nav>
-        <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
-        <div class="nav-links"><a href="cart.html">Cart</a></div>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+        <a href="index.html" class="brand">Gift<span>Wallay</span></a>
+        <a href="cart.html" class="cart-icon">🛒<span class="cart-count">2</span></a>
     </nav>
 
-    <!-- Dynamic Header -->
-    <div class="page-header">
-        <h1 id="catTitle">Collection</h1>
-        <p style="color: #666; margin-top: 10px;">Premium selections for the discerning individual.</p>
+    <!-- SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div style="text-align: right; font-size: 1.5rem; cursor: pointer;" onclick="toggleSidebar()">×</div>
+        <div style="margin-top: 2rem;">
+            <a href="index.html" class="sidebar-link">Home</a>
+            <a href="shop.html" class="sidebar-link">Shop All</a>
+            <a href="account.html" class="sidebar-link">My Account</a>
+        </div>
     </div>
 
-    <div class="container" style="margin-bottom: 5rem;">
+    <!-- HEADER -->
+    <div style="background: var(--gray); padding: 5rem 0; text-align: center; margin-bottom: 3rem;">
+        <h1 id="catTitle">Collection</h1>
+        <p style="margin-top: 10px;">Premium selections for you.</p>
+    </div>
+
+    <!-- GRID -->
+    <div class="container section-pad">
         <div class="product-grid">
+            <!-- Product 1 -->
             <div class="product-card">
                 <a href="product.html">
-                    <div class="p-image">IMG</div>
-                    <h4>Premium Item 01</h4>
+                    <div class="p-image">
+                        <img src="assets/watch.jpg" alt="Watch" style="display:none;"> <!-- Place real img here -->
+                        <span>IMAGE</span>
+                    </div>
+                    <h4>Luxury Item 01</h4>
                     <p class="text-gold">Rs. 8,500</p>
                 </a>
             </div>
+            <!-- Product 2 -->
             <div class="product-card">
                 <a href="product.html">
-                    <div class="p-image">IMG</div>
-                    <h4>Premium Item 02</h4>
-                    <p class="text-gold">Rs. 14,200</p>
+                    <div class="p-image"><span>IMAGE</span></div>
+                    <h4>Luxury Item 02</h4>
+                    <p class="text-gold">Rs. 12,000</p>
+                </a>
+            </div>
+            <!-- Product 3 -->
+            <div class="product-card">
+                <a href="product.html">
+                    <div class="p-image"><span>IMAGE</span></div>
+                    <h4>Luxury Item 03</h4>
+                    <p class="text-gold">Rs. 5,500</p>
                 </a>
             </div>
         </div>
     </div>
 
-    <script>
-        // Change title based on URL (e.g., category.html?type=Watches)
-        const params = new URLSearchParams(window.location.search);
-        const type = params.get('type');
-        if(type) {
-            document.getElementById('catTitle').innerText = type + " Collection";
-            document.title = type + " | Gift Wallay";
-        }
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>
