@@ -2,108 +2,106 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Account | Gift Wallay</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        .auth-container { max-width: 400px; margin: 5rem auto; text-align: center; }
-        .dashboard-container { display: none; /* Hidden by default */ }
-        
-        .tab-btns { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 2rem; }
-        .tab-btn { flex: 1; padding: 1rem; cursor: pointer; color: #888; }
-        .tab-btn.active { border-bottom: 2px solid var(--gold); color: var(--black); font-weight: bold; }
-        
-        .order-card { border: 1px solid #eee; padding: 1.5rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .auth-box { max-width: 400px; margin: 0 auto; text-align: center; }
+        .tab-group { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 2rem; }
+        .tab { flex: 1; padding: 1rem; cursor: pointer; color: #888; }
+        .tab.active { border-bottom: 2px solid var(--gold); color: var(--black); font-weight: bold; }
+        .dashboard { display: none; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="checkout.html">Cart</a>
-        </div>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+        <a href="index.html" class="brand">Gift<span>Wallay</span></a>
+        <a href="cart.html" class="cart-icon">🛒<span class="cart-count">0</span></a>
     </nav>
 
-    <!-- STATE 1: LOGIN / REGISTER -->
-    <div id="authSection" class="container auth-container">
-        <h2 style="margin-bottom: 2rem;">Welcome Back</h2>
+    <!-- SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div style="text-align: right; font-size: 1.5rem; cursor: pointer;" onclick="toggleSidebar()">×</div>
+        <div style="margin-top: 2rem;">
+            <a href="index.html" class="sidebar-link">Home</a>
+            <a href="shop.html" class="sidebar-link">Shop All</a>
+            <a href="account.html" class="sidebar-link">My Account</a>
+            <a href="admin.html" class="sidebar-link">Admin Portal</a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="container section-pad">
         
-        <div class="tab-btns">
-            <div class="tab-btn active" onclick="toggleAuth('login')">Login</div>
-            <div class="tab-btn" onclick="toggleAuth('register')">Register</div>
-        </div>
-
-        <!-- Login Form -->
-        <form id="loginForm" onsubmit="event.preventDefault(); loginSim();">
-            <input type="email" placeholder="Email Address" required>
-            <input type="password" placeholder="Password" required>
-            <button class="btn" style="width: 100%; background: var(--black); color: var(--gold);">Sign In</button>
-            <p style="margin-top: 1rem; font-size: 0.8rem; color: #888;">Forgot Password?</p>
-        </form>
-
-        <!-- Register Form (Hidden) -->
-        <form id="registerForm" style="display: none;">
-            <input type="text" placeholder="Full Name">
-            <input type="email" placeholder="Email Address">
-            <input type="password" placeholder="Create Password">
-            <button class="btn" style="width: 100%;">Create Account</button>
-        </form>
-    </div>
-
-    <!-- STATE 2: USER DASHBOARD -->
-    <div id="userDashboard" class="container section-pad dashboard-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
-            <h1>My Profile</h1>
-            <button class="btn btn-small" onclick="logoutSim()">Log Out</button>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 4rem;">
-            <!-- Sidebar Info -->
-            <div style="background: var(--gray); padding: 2rem; height: fit-content;">
-                <h3 style="margin-bottom: 1rem;">Ali Khan</h3>
-                <p style="margin-bottom: 0.5rem; color: #666;">ali.khan@gmail.com</p>
-                <p style="margin-bottom: 2rem; color: #666;">Lahore, Pakistan</p>
-                <a href="#" style="color: var(--gold); text-decoration: underline;">Edit Address</a>
-            </div>
-
-            <!-- Orders -->
-            <div>
-                <h3 style="margin-bottom: 1.5rem;">Order History</h3>
-                
-                <div class="order-card">
-                    <div>
-                        <h4 style="margin-bottom: 5px;">Order #1001</h4>
-                        <span style="font-size: 0.8rem; color: #888;">Placed on July 10, 2026</span>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-weight: bold;">PKR 12,500</div>
-                        <span style="color: green; font-size: 0.8rem;">Delivered</span>
-                    </div>
-                </div>
-
-                <div class="order-card">
-                    <div>
-                        <h4 style="margin-bottom: 5px;">Order #980</h4>
-                        <span style="font-size: 0.8rem; color: #888;">Placed on June 22, 2026</span>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-weight: bold;">PKR 4,200</div>
-                        <span style="color: green; font-size: 0.8rem;">Delivered</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Toggle Login/Register Tabs
-        function toggleAuth(mode) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        <!-- STATE 1: LOGIN / REGISTER -->
+        <div id="authSection" class="auth-box">
+            <h2 style="margin-bottom: 2rem;">Welcome</h2>
             
-            if(mode === 'login') {
+            <div class="tab-group">
+                <div class="tab active" onclick="switchAuth('login', this)">Login</div>
+                <div class="tab" onclick="switchAuth('register', this)">Register</div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="event.preventDefault(); loginSim();">
+                <input type="email" placeholder="Email Address" required style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd;">
+                <input type="password" placeholder="Password" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd;">
+                <button class="btn" style="width: 100%;">Sign In</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" style="display: none;">
+                <input type="text" placeholder="Full Name" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd;">
+                <input type="email" placeholder="Email" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd;">
+                <input type="password" placeholder="Create Password" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd;">
+                <button class="btn" style="width: 100%;">Create Account</button>
+            </form>
+        </div>
+
+        <!-- STATE 2: DASHBOARD (Hidden by default) -->
+        <div id="dashboardSection" class="dashboard">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+                <h1>My Profile</h1>
+                <button class="btn btn-outline" onclick="logoutSim()">Log Out</button>
+            </div>
+
+            <div style="background: var(--gray); padding: 2rem; margin-bottom: 2rem;">
+                <h3>Ali Khan</h3>
+                <p>Lahore, Pakistan</p>
+                <p class="text-gold">Gold Member</p>
+            </div>
+
+            <h3>Recent Orders</h3>
+            <table class="cart-table">
+                <tr>
+                    <th>Order #</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <td>#1092</td>
+                    <td>July 14, 2026</td>
+                    <td style="color: orange;">Processing</td>
+                    <td>Rs. 17,550</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        function switchAuth(type, tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            if(type === 'login') {
                 document.getElementById('loginForm').style.display = 'block';
                 document.getElementById('registerForm').style.display = 'none';
             } else {
@@ -112,17 +110,14 @@
             }
         }
 
-        // Simulate Login
         function loginSim() {
             document.getElementById('authSection').style.display = 'none';
-            document.getElementById('userDashboard').style.display = 'block';
-            window.scrollTo(0,0);
+            document.getElementById('dashboardSection').style.display = 'block';
         }
 
-        // Simulate Logout
         function logoutSim() {
             document.getElementById('authSection').style.display = 'block';
-            document.getElementById('userDashboard').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'none';
         }
     </script>
 </body>
