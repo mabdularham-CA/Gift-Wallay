@@ -2,59 +2,253 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal | Gift Wallay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        .login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; display: flex; justify-content: center; align-items: center; color: white; }
-        .dashboard { display: none; padding: 2rem; }
+        body { background: #f4f4f4; padding-top: 0; }
+        
+        /* LOGIN LOCK SCREEN */
+        #adminLock {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .login-box {
+            background: white; padding: 3rem; text-align: center;
+            border: 2px solid var(--gold); max-width: 400px; width: 90%;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* DASHBOARD LAYOUT */
+        .admin-wrapper { display: flex; min-height: 100vh; filter: blur(5px); transition: filter 0.3s; }
+        .admin-sidebar {
+            width: 260px; background: #111; color: white;
+            padding: 2rem; position: fixed; height: 100%;
+        }
+        .admin-content { margin-left: 260px; padding: 3rem; width: 100%; }
+
+        /* TABS */
+        .admin-nav { list-style: none; margin-top: 3rem; }
+        .admin-nav li { margin-bottom: 1rem; }
+        .admin-nav a {
+            color: #888; display: flex; align-items: center; gap: 10px;
+            padding: 12px; border-radius: 5px; text-decoration: none;
+            transition: 0.3s;
+        }
+        .admin-nav a.active, .admin-nav a:hover {
+            background: rgba(212, 175, 55, 0.15); color: var(--gold);
+        }
+
+        /* PANELS */
+        .panel { display: none; animation: slideUp 0.4s ease; }
+        .panel.active { display: block; }
+
+        /* PRODUCT FORM */
+        .add-product-form {
+            background: white; padding: 2rem; border-top: 3px solid var(--gold);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-bottom: 2rem;
+        }
+        .product-list-item {
+            background: white; padding: 1rem; margin-bottom: 10px;
+            display: flex; align-items: center; justify-content: space-between;
+            border-left: 4px solid var(--black);
+        }
+
+        /* SPREADSHEET */
+        .sheet-table {
+            width: 100%; border-collapse: collapse; background: white;
+            font-family: monospace; font-size: 0.9rem;
+        }
+        .sheet-table th, .sheet-table td {
+            border: 1px solid #ddd; padding: 10px; text-align: left;
+        }
+        .sheet-table th { background: #eee; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
-<body style="padding-top: 0;">
+<body>
 
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen" class="login-screen">
-        <div style="text-align: center; width: 300px;">
-            <h2 style="color: var(--gold); margin-bottom: 1rem;">Admin Access</h2>
-            <input type="text" id="aUser" placeholder="Username" style="background: #222; border: 1px solid #444; color: white;">
-            <input type="password" id="aPass" placeholder="Password" style="background: #222; border: 1px solid #444; color: white;">
-            <button class="btn" style="width: 100%; border-color: var(--gold);" onclick="adminLogin()">Login</button>
+    <!-- SECURITY LOCK -->
+    <div id="adminLock">
+        <div class="login-box">
+            <h2 class="brand" style="position:static; transform:none; margin-bottom: 1rem;">Gift<span>Wallay</span></h2>
+            <h4 style="margin-bottom: 2rem; color: #666;">Admin Restricted Area</h4>
+            <form onsubmit="event.preventDefault(); adminLogin();">
+                <input type="text" id="admUser" placeholder="Username" style="text-align: center;">
+                <input type="password" id="admPass" placeholder="Password" style="text-align: center;">
+                <button class="btn" style="width: 100%; margin-top: 1rem;">Unlock Access</button>
+            </form>
+            <p id="loginError" style="color: red; margin-top: 10px; font-size: 0.8rem; display: none;">Invalid Credentials</p>
         </div>
     </div>
 
-    <!-- DASHBOARD -->
-    <div id="dashboard" class="dashboard">
-        <h1>Welcome, Admin</h1>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
-            <!-- Add Product -->
-            <div style="background: #f4f4f4; padding: 2rem;">
-                <h3>Add Product</h3>
-                <input type="text" placeholder="Product Name">
-                <input type="number" placeholder="Price (PKR)">
-                <input type="text" placeholder="Image URL">
-                <button class="btn">Add to Store</button>
+    <!-- MAIN DASHBOARD -->
+    <div class="admin-wrapper" id="adminPanel">
+        
+        <!-- SIDEBAR -->
+        <div class="admin-sidebar">
+            <div class="brand" style="position:static; transform:none; color:white; font-size: 1.2rem;">GW <span class="text-gold">Admin</span></div>
+            <ul class="admin-nav">
+                <li><a href="#" onclick="showPanel('products', this)" class="active">📦 Products</a></li>
+                <li><a href="#" onclick="showPanel('users', this)">👥 User Database</a></li>
+                <li><a href="#" onclick="showPanel('orders', this)">📄 Active Orders</a></li>
+                <li style="margin-top: 4rem;"><a href="index.html" style="color: #d9534f;">⬅ Log Out</a></li>
+            </ul>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="admin-content">
+
+            <!-- TAB: PRODUCTS -->
+            <div id="products" class="panel active">
+                <h2 style="margin-bottom: 2rem;">Product Inventory Manager</h2>
+                
+                <div class="add-product-form">
+                    <h3 style="margin-bottom: 1rem; color: var(--gold);">+ Add New Product</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <input type="text" id="pName" placeholder="Product Name">
+                        <input type="number" id="pPrice" placeholder="Price (PKR)">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <select id="pCat">
+                            <option>Watches</option>
+                            <option>Perfumes</option>
+                            <option>Wallets</option>
+                            <option>Jewelry</option>
+                        </select>
+                        <input type="text" id="pImg" placeholder="Image URL (e.g., assets/watch.jpg)">
+                    </div>
+                    <button class="btn" onclick="addNewProduct()" style="margin-top: 1.5rem;">Upload to Store</button>
+                </div>
+
+                <h3>Current Stock</h3>
+                <div id="inventoryList">
+                    <!-- Demo Item -->
+                    <div class="product-list-item">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 50px; height: 50px; background: #ddd;"></div>
+                            <div>
+                                <strong>Royal Gold Watch</strong><br>
+                                <small>PKR 12,500</small>
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="this.parentElement.remove()">×</button>
+                    </div>
+                </div>
             </div>
-            <!-- Users Sheet -->
-            <div style="background: #f4f4f4; padding: 2rem;">
-                <h3>Registered Users</h3>
-                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
-                    <tr style="background: #ddd;"><th>ID</th><th>Name</th><th>City</th></tr>
-                    <tr><td>1</td><td>Ali Khan</td><td>Lahore</td></tr>
-                    <tr><td>2</td><td>Zara Sheikh</td><td>Karachi</td></tr>
+
+            <!-- TAB: USERS -->
+            <div id="users" class="panel">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2rem;">
+                    <h2>User Database</h2>
+                    <button class="btn btn-outline" style="font-size: 0.7rem;">Export CSV</button>
+                </div>
+                <table class="sheet-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Total Spent</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>101</td>
+                            <td>Ali Khan</td>
+                            <td>ali@gmail.com</td>
+                            <td>0300-1234567</td>
+                            <td>Rs. 45,000</td>
+                            <td><a href="#" style="color: blue;">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>102</td>
+                            <td>Sara Ahmed</td>
+                            <td>sara@hotmail.com</td>
+                            <td>0321-7654321</td>
+                            <td>Rs. 8,200</td>
+                            <td><a href="#" style="color: blue;">Edit</a></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
+
+            <!-- TAB: ORDERS -->
+            <div id="orders" class="panel">
+                <h2>Incoming Orders</h2>
+                <div style="margin-top: 2rem;">
+                    <div class="product-list-item" style="border-left-color: orange;">
+                        <div>
+                            <strong>Order #9921</strong> - <span style="color: #666;">Just Now</span><br>
+                            <small>By: Ali Khan | Total: Rs. 17,550 (COD)</small>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn" style="padding: 5px 10px; font-size: 0.7rem;">Accept</button>
+                            <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.7rem;">Reject</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
+        // 1. ADMIN LOGIN LOGIC
         function adminLogin() {
-            const u = document.getElementById('aUser').value;
-            const p = document.getElementById('aPass').value;
+            const u = document.getElementById('admUser').value;
+            const p = document.getElementById('admPass').value;
+
             if(u === 'admin' && p === 'gift123') {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('adminLock').style.display = 'none';
+                document.getElementById('adminPanel').style.filter = 'none';
             } else {
-                alert('Invalid Credentials');
+                document.getElementById('loginError').style.display = 'block';
             }
+        }
+
+        // 2. TAB SWITCHING
+        function showPanel(id, btn) {
+            // Hide all panels
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            // Show target
+            document.getElementById(id).classList.add('active');
+            // Update buttons
+            document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // 3. ADD PRODUCT SIMULATION
+        function addNewProduct() {
+            const name = document.getElementById('pName').value;
+            const price = document.getElementById('pPrice').value;
+
+            if(!name || !price) return alert("Please fill in Product Name and Price");
+
+            const item = `
+            <div class="product-list-item" style="animation: slideUp 0.3s ease;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 50px; height: 50px; background: #333; color: gold; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">NEW</div>
+                    <div>
+                        <strong>${name}</strong><br>
+                        <small>PKR ${price}</small>
+                    </div>
+                </div>
+                <button class="delete-btn" onclick="this.parentElement.remove()">×</button>
+            </div>`;
+
+            document.getElementById('inventoryList').insertAdjacentHTML('afterbegin', item);
+            
+            // Clear form
+            document.getElementById('pName').value = '';
+            document.getElementById('pPrice').value = '';
+            alert("Product Added Successfully!");
         }
     </script>
 </body>
