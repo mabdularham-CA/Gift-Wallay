@@ -2,95 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout | Gift Wallay</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <style>
-        .checkout-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 4rem; }
-        .summary-item { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid #ddd; padding-bottom: 1rem; }
-    </style>
 </head>
 <body>
 
-    <nav>
-        <a href="index.html" class="brand">Gift<span class="text-gold">Wallay</span></a>
-        <a href="cart.html">Back to Cart</a>
-    </nav>
+    <div class="navbar">
+        <a href="index.html" class="brand">Gift<span>Wallay</span></a>
+        <a href="cart.html" style="font-size: 0.9rem;">Back to Cart</a>
+    </div>
 
     <div class="container section-pad">
-        <h1 class="text-center" style="margin-bottom: 3rem;">Secure Checkout</h1>
-
-        <div class="checkout-grid">
-            <!-- FORM -->
-            <form action="success.html">
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 4rem;">
+            
+            <!-- Shipping Form -->
+            <form>
                 <h3 style="margin-bottom: 1.5rem;">Shipping Information</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <input type="text" placeholder="First Name" required>
-                    <input type="text" placeholder="Last Name" required>
+                    <input type="text" placeholder="First Name">
+                    <input type="text" placeholder="Last Name">
                 </div>
-                <input type="text" placeholder="Phone (e.g. 0300-1234567)" required>
-                <input type="text" placeholder="Street Address / House No." required>
+                <input type="text" placeholder="Address">
+                <input type="text" placeholder="Phone Number">
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <select>
-                        <option>Punjab</option>
-                        <option>Sindh</option>
-                        <option>KPK</option>
-                        <option>Balochistan</option>
-                    </select>
-                    <input type="text" placeholder="City" required>
-                </div>
-
                 <h3 style="margin: 2rem 0 1rem;">Payment Method</h3>
-                <div style="border: 1px solid var(--gold); background: #fffaf0; padding: 1rem;">
-                    <label style="display: flex; align-items: center; gap: 10px;">
-                        <input type="radio" checked> <strong>Cash on Delivery (COD)</strong>
-                    </label>
+                
+                <!-- Online Payment -->
+                <label style="display: block; padding: 1rem; border: 1px solid #ddd; margin-bottom: 1rem;">
+                    <input type="radio" name="payment" onclick="togglePaymentMethod('online')" checked> 
+                    <strong>Online Payment (Credit/Debit)</strong>
+                </label>
+
+                <!-- COD -->
+                <label style="display: block; padding: 1rem; border: 1px solid #ddd; background: #fffcf5;">
+                    <input type="radio" name="payment" onclick="togglePaymentMethod('cod')"> 
+                    <strong>Cash on Delivery (COD)</strong>
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Note: 9% Tax applies to COD orders.</p>
+                </label>
+                
+                <!-- Advance Warning -->
+                <div id="advanceMsg" class="advance-msg">
+                    <strong>⚠️ Action Required:</strong> For COD orders, you must pay <strong>50% in advance</strong> via Bank Transfer. Our team will contact you for confirmation.
                 </div>
 
-                <button class="btn" style="width: 100%; margin-top: 2rem; background: var(--black); color: var(--gold);">Place Order (Rs. 17,550)</button>
+                <button type="button" class="btn" style="width: 100%; margin-top: 2rem;">Place Order</button>
             </form>
 
-            <!-- SUMMARY -->
+            <!-- Order Summary -->
             <div style="background: var(--gray); padding: 2rem; height: fit-content;">
-                <h3 style="margin-bottom: 1.5rem;">Order Summary</h3>
+                <h3 style="margin-bottom: 1.5rem;">Summary</h3>
+                <!-- Item Thumbnails -->
+                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="width: 50px; height: 50px; background: #ddd;"></div>
+                    <div>
+                        <h4>Royal Watch</h4>
+                        <small>Rs. 12,500</small>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="width: 50px; height: 50px; background: #ddd;"></div>
+                    <div>
+                        <h4>Oud Intense</h4>
+                        <small>Rs. 4,800</small>
+                    </div>
+                </div>
                 
-                <!-- Item 1 -->
-                <div class="summary-item">
-                    <div class="cart-thumb">IMG</div>
-                    <div>
-                        <h4 style="font-size: 0.9rem;">Royal Watch</h4>
-                        <p class="text-gold">Rs. 12,500</p>
-                        <small>Qty: 1</small>
-                    </div>
+                <hr style="margin: 1rem 0; border: 0; border-top: 1px solid #ccc;">
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>Subtotal</span>
+                    <span>Rs. 17,300</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>Shipping</span>
+                    <span>Rs. 250</span>
+                </div>
+                
+                <!-- Dynamic Tax Row -->
+                <div id="taxRow" class="tax-row">
+                    <span>Tax (9% COD)</span>
+                    <span id="taxAmount">Rs. 0</span>
                 </div>
 
-                <!-- Item 2 -->
-                <div class="summary-item">
-                    <div class="cart-thumb" style="background:#333; color:gold;">IMG</div>
-                    <div>
-                        <h4 style="font-size: 0.9rem;">Oud Intense</h4>
-                        <p class="text-gold">Rs. 4,800</p>
-                        <small>Qty: 1</small>
-                    </div>
-                </div>
-
-                <div style="border-top: 2px solid var(--black); padding-top: 1rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>Subtotal</span>
-                        <span>Rs. 17,300</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>Delivery</span>
-                        <span>Rs. 250</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-top: 1rem;">
-                        <span>Total</span>
-                        <span class="text-gold">Rs. 17,550</span>
-                    </div>
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem; margin-top: 1rem;">
+                    <span>Total</span>
+                    <span class="text-gold" id="finalTotal">Rs. 17,550</span>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="main.js"></script>
 </body>
 </html>
