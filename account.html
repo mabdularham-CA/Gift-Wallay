@@ -7,101 +7,123 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        .auth-box { max-width: 400px; margin: 0 auto; text-align: center; }
-        .tab-group { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 2rem; }
-        .tab { flex: 1; padding: 1rem; cursor: pointer; color: #888; }
-        .tab.active { border-bottom: 2px solid var(--gold); color: var(--black); font-weight: bold; }
-        .dashboard { display: none; }
+        .auth-container {
+            max-width: 450px;
+            margin: 5rem auto;
+            background: white;
+            padding: 3rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--gold);
+            animation: fadeUp 0.8s ease;
+        }
+        .tab-nav { display: flex; border-bottom: 1px solid #eee; margin-bottom: 2rem; }
+        .tab-btn { 
+            flex: 1; padding: 1rem; text-align: center; cursor: pointer; 
+            font-family: var(--font-head); color: #888; transition: 0.3s;
+        }
+        .tab-btn.active { color: var(--black); border-bottom: 2px solid var(--gold); font-weight: bold; }
+        
+        .input-group { margin-bottom: 1.5rem; position: relative; }
+        .input-group label { display: block; font-size: 0.8rem; margin-bottom: 0.5rem; color: #666; }
+        .input-field { 
+            width: 100%; padding: 12px; border: 1px solid #ddd; 
+            font-family: var(--font-body); transition: 0.3s; 
+        }
+        .input-field:focus { border-color: var(--gold); outline: none; }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR (Included for navigation) -->
     <nav class="navbar">
-        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+        <div class="menu-btn" onclick="toggleSidebar()">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
         <a href="index.html" class="brand">Gift<span>Wallay</span></a>
-        <a href="cart.html" class="cart-icon">🛒<span class="cart-count">0</span></a>
+        <div class="nav-right">
+            <a href="cart.html" class="cart-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-7-4h7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2z"></path><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span class="cart-badge">2</span>
+            </a>
+        </div>
     </nav>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    <div class="sidebar-menu" id="sidebarMenu">
-        <div style="text-align: right; font-size: 1.5rem; cursor: pointer;" onclick="toggleSidebar()">×</div>
-        <div style="margin-top: 2rem;">
-            <a href="index.html" class="sidebar-link">Home</a>
-            <a href="shop.html" class="sidebar-link">Shop All</a>
-            <a href="account.html" class="sidebar-link">My Account</a>
-            <a href="admin.html" class="sidebar-link">Admin Portal</a>
+    <!-- SIDEBAR MENU -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <span class="close-btn" onclick="toggleSidebar()">×</span>
+        </div>
+        <div class="sidebar-content">
+            <a href="index.html">Home</a>
+            <a href="shop.html">Shop All</a>
+            <div class="sidebar-divider">Categories</div>
+            <a href="category.html?type=Watches">Watches</a>
+            <a href="category.html?type=Perfumes">Perfumes</a>
+            <a href="category.html?type=Wallets">Wallets</a>
+            <a href="category.html?type=Jewelry">Jewelry</a>
+            <div class="sidebar-divider">Account</div>
+            <a href="account.html">My Profile</a>
+            <a href="admin.html">Admin Panel</a>
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div class="container section-pad">
-        
-        <!-- STATE 1: LOGIN / REGISTER -->
-        <div id="authSection" class="auth-box">
-            <h2 style="margin-bottom: 2rem;">Welcome</h2>
-            
-            <div class="tab-group">
-                <div class="tab active" onclick="switchAuth('login', this)">Login</div>
-                <div class="tab" onclick="switchAuth('register', this)">Register</div>
+    <!-- MAIN LOGIN AREA -->
+    <div class="container">
+        <div class="auth-container">
+            <h2 style="text-align: center; margin-bottom: 0.5rem; font-family: var(--font-head);">Welcome Back</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem; font-size: 0.9rem;">Sign in to access your premium dashboard.</p>
+
+            <div class="tab-nav">
+                <div class="tab-btn active" onclick="switchTab('login')">Login</div>
+                <div class="tab-btn" onclick="switchTab('register')">Register</div>
             </div>
 
-            <!-- Login Form -->
-            <form id="loginForm" onsubmit="event.preventDefault(); loginSim();">
-                <input type="email" placeholder="Email Address" required style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd;">
-                <input type="password" placeholder="Password" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd;">
-                <button class="btn" style="width: 100%;">Sign In</button>
+            <!-- LOGIN FORM -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" class="input-field" placeholder="user@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" class="input-field" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-block">Secure Login</button>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.8rem;">
+                    <a href="#" style="color: #888;">Forgot Password?</a>
+                </p>
             </form>
 
-            <!-- Register Form -->
-            <form id="registerForm" style="display: none;">
-                <input type="text" placeholder="Full Name" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd;">
-                <input type="email" placeholder="Email" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd;">
-                <input type="password" placeholder="Create Password" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd;">
-                <button class="btn" style="width: 100%;">Create Account</button>
+            <!-- REGISTER FORM (Hidden) -->
+            <form id="registerForm" style="display: none;" onsubmit="handleRegister(event)">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" class="input-field" required>
+                </div>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" class="input-field" required>
+                </div>
+                <div class="input-group">
+                    <label>Create Password</label>
+                    <input type="password" class="input-field" required>
+                </div>
+                <button type="submit" class="btn btn-block">Create Account</button>
             </form>
         </div>
-
-        <!-- STATE 2: DASHBOARD (Hidden by default) -->
-        <div id="dashboardSection" class="dashboard">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
-                <h1>My Profile</h1>
-                <button class="btn btn-outline" onclick="logoutSim()">Log Out</button>
-            </div>
-
-            <div style="background: var(--gray); padding: 2rem; margin-bottom: 2rem;">
-                <h3>Ali Khan</h3>
-                <p>Lahore, Pakistan</p>
-                <p class="text-gold">Gold Member</p>
-            </div>
-
-            <h3>Recent Orders</h3>
-            <table class="cart-table">
-                <tr>
-                    <th>Order #</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Total</th>
-                </tr>
-                <tr>
-                    <td>#1092</td>
-                    <td>July 14, 2026</td>
-                    <td style="color: orange;">Processing</td>
-                    <td>Rs. 17,550</td>
-                </tr>
-            </table>
-        </div>
-
     </div>
 
     <script src="main.js"></script>
     <script>
-        function switchAuth(type, tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
             
-            if(type === 'login') {
+            if(tab === 'login') {
                 document.getElementById('loginForm').style.display = 'block';
                 document.getElementById('registerForm').style.display = 'none';
             } else {
@@ -110,14 +132,23 @@
             }
         }
 
-        function loginSim() {
-            document.getElementById('authSection').style.display = 'none';
-            document.getElementById('dashboardSection').style.display = 'block';
-        }
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
 
-        function logoutSim() {
-            document.getElementById('authSection').style.display = 'block';
-            document.getElementById('dashboardSection').style.display = 'none';
+            if(email === 'admin@gift.com' || email === 'admin') {
+                window.location.href = 'admin.html';
+            } else {
+                // Redirect to Home with Success Flag
+                window.location.href = 'index.html?login=success';
+            }
+        }
+        
+        function handleRegister(e) {
+            e.preventDefault();
+            // Simulate Registration
+             window.location.href = 'index.html?login=created';
         }
     </script>
 </body>
