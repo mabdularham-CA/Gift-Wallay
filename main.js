@@ -1287,7 +1287,7 @@ function loadCheckoutPage() {
             <div style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.1);">
                 <label class="checkout-label" style="margin-bottom: 8px; display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #555;">Apply Promo Code (Optional)</label>
                 <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
-                    <input type="text" id="promoCodeInput" class="checkout-input" placeholder="E.g., GIFT10, EID20" value="${appliedPromo}" style="flex: 1; margin-bottom: 0; padding: 10px 14px; border: 1px solid rgba(0,0,0,0.15); border-radius: 4px; font-size: 0.9rem; height: 40px;" ${discount > 0 ? 'disabled' : ''}>
+                    <input type="text" id="promoCodeInput" class="checkout-input" placeholder="E.g., WELCOME_10" value="${appliedPromo}" style="flex: 1; margin-bottom: 0; padding: 10px 14px; border: 1px solid rgba(0,0,0,0.15); border-radius: 4px; font-size: 0.9rem; height: 40px;" ${discount > 0 ? 'disabled' : ''}>
                     ${discount > 0 ? `
                         <button type="button" id="removePromoBtn" class="btn" style="flex: 0 0 auto; padding: 0; width: 80px; height: 40px; background: #e57373; color: white; border: none; cursor: pointer; font-weight: 700; font-size: 0.8rem; border-radius: 4px; display: flex; align-items: center; justify-content: center;">Remove</button>
                     ` : `
@@ -1361,10 +1361,10 @@ function loadCheckoutPage() {
                     return;
                 }
 
-                if (code === 'GIFT10') {
+                if (code === 'WELCOME_10' || code === 'WELCOME10') {
                     discount = Math.round(subtotal * 0.1);
-                    appliedPromo = 'GIFT10';
-                    promoSuccess = 'Promo code GIFT10 applied! 10% Discount saved.';
+                    appliedPromo = 'WELCOME_10';
+                    promoSuccess = 'Promo code WELCOME_10 applied! 10% Discount saved.';
                     promoError = '';
                 } else if (code === 'EID20') {
                     discount = Math.round(subtotal * 0.2);
@@ -1377,7 +1377,7 @@ function loadCheckoutPage() {
                     promoSuccess = 'Promo code WELCOME500 applied! Rs. 500 Discount saved.';
                     promoError = '';
                 } else {
-                    promoError = 'Invalid promo code. Try GIFT10 or EID20.';
+                    promoError = 'Invalid promo code. Try WELCOME_10.';
                     promoSuccess = '';
                 }
                 renderSummary();
