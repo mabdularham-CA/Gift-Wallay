@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Watch | Gift Wallay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        @media(max-width: 768px) { .split-layout { grid-template-columns: 1fr; } }
+        
+        .qty-box { display: flex; align-items: center; border: 1px solid #ddd; width: fit-content; margin-bottom: 2rem; }
+        .qty-btn { padding: 10px 15px; cursor: pointer; background: #eee; border: none; }
+        .qty-val { padding: 10px 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+        <a href="index.html" class="brand" id="brandLogo" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+            <div class="logo-container" style="display: flex; align-items: center; gap: 12px;">
+                <!-- Beautiful SVG Gift Box Icon with GW inside -->
+                <svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.06));">
+                    <!-- Gift Box Base -->
+                    <rect x="20" y="45" width="60" height="45" rx="4" fill="#ffffff" stroke="var(--gold)" stroke-width="4.5"/>
+                    <rect x="18" y="38" width="64" height="10" rx="2" fill="var(--gold)"/>
+                    <!-- Golden Ribbon Vertical -->
+                    <rect x="47" y="38" width="6" height="52" fill="var(--gold)"/>
+                    <!-- GW Letters inside box -->
+                    <text x="31" y="70" font-family="'Cinzel', serif" font-size="20" font-weight="bold" fill="#000000">G</text>
+                    <text x="53" y="70" font-family="'Cinzel', serif" font-size="20" font-weight="bold" fill="var(--gold)">W</text>
+                    <!-- Heart in the middle of G -->
+                    <path d="M41 59.5 C41 58.5, 42 57.5, 43 58.5 C44 57.5, 45 58.5, 45 59.5 C45 61, 43 62, 43 62 C43 62, 41 61, 41 59.5 Z" fill="var(--gold)"/>
+                    <!-- Golden Bow Ribbon on Top -->
+                    <path d="M50 38 C40 25, 30 35, 48 38 Z" fill="var(--gold)" stroke="var(--gold)" stroke-width="1.5"/>
+                    <path d="M50 38 C60 25, 70 35, 52 38 Z" fill="var(--gold)" stroke="var(--gold)" stroke-width="1.5"/>
+                    <!-- Heart in the center of bow -->
+                    <path d="M47 34 C47 32, 48.5 31, 50 32.5 C51.5 31, 53 32, 53 34 C53 36, 50 38, 50 38 C50 38, 47 36, 47 34 Z" fill="#000000"/>
+                </svg>
+                <!-- Brand Text with Logo fonts -->
+                <div style="display: flex; flex-direction: column; align-items: start; line-height: 1.1; text-align: left;">
+                    <span style="font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; color: #000000; letter-spacing: 1px; text-transform: uppercase;">Gift<span style="color: var(--gold);">Wallay</span></span>
+                    <span style="font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 1.8px; color: #555; text-transform: uppercase; margin-top: 2px; font-weight: bold;">Har Thofa, Dil Se</span>
+                </div>
+            </div>
+        </a>
+        <a href="cart.html" class="cart-icon">🛒<span class="cart-count">0</span></a>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div style="text-align: right; font-size: 1.5rem; cursor: pointer;" onclick="toggleSidebar()">×</div>
+        <div style="margin-top: 2rem;">
+            <a href="index.html" class="sidebar-link">Home</a>
+            <a href="shop.html" class="sidebar-link">Shop All</a>
+            <a href="account.html" class="sidebar-link">My Account</a>
+        </div>
+    </div>
+
+    <!-- MAIN PRODUCT AREA -->
+    <div class="container section-pad split-layout" id="productDetailContainer">
+        <!-- Premium Shimmer Loading Skeleton -->
+        <div style="background: #fafafa; height: 500px; border-radius: 4px; animation: skeleton-shimmer 1.5s infinite linear; background: linear-gradient(90deg, #f3f3f3 25%, #eaeaea 50%, #f3f3f3 75%); background-size: 200% 100%;"></div>
+        <div style="display: flex; flex-direction: column; justify-content: center; gap: 1rem;">
+            <div style="width: 100px; height: 15px; background: #eee; border-radius: 2px;"></div>
+            <div style="width: 80%; height: 35px; background: #eee; border-radius: 4px;"></div>
+            <div style="width: 150px; height: 20px; background: #eee; border-radius: 2px;"></div>
+            <div style="width: 120px; height: 30px; background: #eee; border-radius: 4px;"></div>
+            <div style="width: 100%; height: 80px; background: #eee; border-radius: 4px;"></div>
+            <div style="width: 100%; height: 50px; background: #eee; border-radius: 4px;"></div>
+        </div>
+    </div>
+
+    <!-- REVIEWS SECTION -->
+    <div class="container" style="padding-bottom: 5rem; border-top: 1px solid #eee; padding-top: 3rem;" id="productReviewsContainer">
+        <!-- Dynamically populated reviews -->
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        let quantity = 1;
+        function changeQty(diff) {
+            quantity += diff;
+            if(quantity < 1) quantity = 1;
+            document.getElementById('qtyDisplay').innerText = quantity;
+        }
+    </script>
+</body>
+</html>
