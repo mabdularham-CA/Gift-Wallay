@@ -10,16 +10,7 @@
 <body>
 
     <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">Gift Wallay</div>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/shop">Shop</a>
-                <a href="/contact">Contact</a>
-            </div>
-        </div>
-    </nav>
+    <nav class="navbar"></nav>
 
     <div class="container section-pad">
         
@@ -253,62 +244,7 @@
             padding: 4rem 20px;
         }
 
-        /* Navbar Styles */
-        .navbar {
-            background: var(--white);
-            border-bottom: 1px solid rgba(0,0,0,0.08);
-            padding: 1.2rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-        }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: var(--font-head);
-            font-size: 1.5rem;
-            letter-spacing: 2px;
-            color: var(--black);
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-        }
-
-        .nav-links a {
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            text-decoration: none;
-            color: #666;
-            transition: all 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--gold);
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                gap: 1.5rem;
-                font-size: 0.8rem;
-            }
-            .logo {
-                font-size: 1.2rem;
-            }
-        }
 
         /* Checkout Styles */
         .checkout-title-section {
@@ -577,6 +513,6 @@
         }
     </style>
 
-    <script src="script.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
