@@ -2,5 +2,5 @@
   "name": "Gift Wallay",
   "description": "Premium Gift Shop - Timeless and Elegant Gifts Collection",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
