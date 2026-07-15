@@ -131,30 +131,59 @@ button { font-family: var(--font-body); }
     background: var(--white); 
     border-top: 1.5px solid var(--gold); 
     border-bottom: 1.5px solid var(--gold);
+    cursor: grab;
 }
-.scroll-track { display: inline-flex; gap: 2rem; animation: scrollLeft 30s linear infinite; }
-.scroll-track:hover { animation-play-state: paused; }
+.scroll-wrapper:active {
+    cursor: grabbing;
+}
+.scroll-track { 
+    display: inline-flex; 
+    gap: 2rem; 
+    will-change: transform;
+}
 
 .cat-item { 
-    min-width: 220px; height: 140px; 
+    position: relative;
+    min-width: 250px; height: 160px; 
     display: flex; align-items: center; justify-content: center; 
-    font-family: var(--font-head); font-size: 1.25rem; 
+    font-family: var(--font-head); font-size: 1.35rem; 
     font-weight: 700;
     letter-spacing: 2px;
-    border: 2px solid var(--gold);
-    background: var(--white);
-    color: var(--black);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    background-size: cover;
+    background-position: center;
+    color: var(--white) !important;
     text-transform: uppercase;
+    text-decoration: none;
     transition: var(--transition);
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.05);
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
+
+.cat-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.4) 100%);
+    transition: var(--transition);
+    z-index: 1;
+}
+
+.cat-item span {
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.cat-item:hover::before {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.8) 0%, rgba(212, 175, 55, 0.65) 100%);
+}
+
 .cat-item:hover { 
-    background: var(--black) !important; 
-    color: var(--gold) !important; 
     border-color: var(--gold) !important; 
-    transform: translateY(-8px) scale(1.05); 
-    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3) !important;
+    transform: translateY(-8px) scale(1.03); 
+    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4) !important;
 }
 
 /* Stagger category animation delays for beautiful alternating rotations */
@@ -364,9 +393,62 @@ button { font-family: var(--font-body); }
 }
 
 /* Mobile Responsive Adjustments */
-@media(max-width: 768px) {
-    .split-layout, .checkout-container { grid-template-columns: 1fr; gap: 2rem; }
-    .hero-title { font-size: 3rem; }
-    /* Mobile column controls */
-    .cart-table th:nth-child(2), .cart-table td:nth-child(2) { display: none; } /* Hide Price col on mobile */
+@media (max-width: 768px) {
+    .split-layout, .checkout-container { grid-template-columns: 1fr !important; gap: 2rem !important; }
+    .hero-title { font-size: 3rem !important; }
+}
+
+@media (max-width: 650px) {
+    /* Responsive Cart Table */
+    .cart-table, .cart-table thead, .cart-table tbody, .cart-table tr, .cart-table th, .cart-table td {
+        display: block !important;
+    }
+    .cart-table thead {
+        display: none !important;
+    }
+    .cart-table tr {
+        margin-bottom: 2rem;
+        border: 1px solid rgba(0,0,0,0.06);
+        background: #ffffff;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+        padding: 1.5rem;
+        position: relative;
+    }
+    .cart-table td {
+        border-bottom: 1px dashed rgba(0,0,0,0.05);
+        padding: 1rem 0;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        text-align: right;
+        min-height: 45px;
+    }
+    .cart-table td:first-child {
+        display: flex !important;
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+        padding-bottom: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+    .cart-table td:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-top: 0.5rem;
+        justify-content: flex-end !important;
+    }
+    .cart-table td[data-label]::before {
+        content: attr(data-label) ": ";
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        color: #777;
+        float: left;
+        text-align: left;
+        letter-spacing: 0.5px;
+    }
+    .cart-table td:first-child::before, .cart-table td:last-child::before {
+        content: none;
+    }
 }
