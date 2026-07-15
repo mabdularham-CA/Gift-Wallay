@@ -88,28 +88,135 @@ function saveDb(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
 }
 
-// Initialize Databases
-let products = getDb('gw_products', INITIAL_PRODUCTS);
+// In-memory local state copies synced with server DB
+let products = [];
 let cart = getDb('gw_cart', []);
-let users = getDb('gw_users', [
-    { email: "user@gift.com", name: "Hamza Ahmed", phone: "0300-9876543", pass: "user123" }
-]);
-let orders = getDb('gw_orders', [
-    {
-        orderNum: "9921",
-        email: "user@gift.com",
-        name: "Hamza Ahmed",
-        phone: "0300-9876543",
-        address: "DHA Phase 6",
-        city: "Lahore",
-        payment: "cod",
-        items: [{ id: "1", name: "Royal Emerald Watch", price: 12500, qty: 1 }],
-        total: 13875,
-        date: "July 13, 2026",
-        status: "Pending"
-    }
-]);
+let users = [];
+let orders = [];
 let currentUser = getDb('gw_current_user', null);
+
+let isStoreInitialized = false;
+let initPromise = null;
+
+async function initStore() {
+    if (initPromise) return initPromise;
+    
+    initPromise = (async () => {
+        try {
+            const prodRes = await fetch('/api/products');
+            products = await prodRes.json();
+            saveDb('gw_products', products); // backup local storage mirror
+        } catch (err) {
+            console.error("Failed to load products from server, falling back:", err);
+            products = getDb('gw_products', INITIAL_PRODUCTS);
+        }
+        
+        try {
+            const usersRes = await fetch('/api/users');
+            users = await usersRes.json();
+            saveDb('gw_users', users);
+        } catch (err) {
+            console.error("Failed to load users from server, falling back:", err);
+            users = getDb('gw_users', [
+                { email: "user@gift.com", name: "Hamza Ahmed", phone: "0300-9876543", pass: "user123" }
+            ]);
+        }
+
+        try {
+            const ordersRes = await fetch('/api/orders');
+            orders = await ordersRes.json();
+            saveDb('gw_orders', orders);
+        } catch (err) {
+            console.error("Failed to load orders from server, falling back:", err);
+            orders = getDb('gw_orders', []);
+        }
+
+        isStoreInitialized = true;
+        
+        // Execute dynamic layout builders
+        injectHeaderFooter();
+        loadPageData();
+        injectBackButton();
+        
+        // Load interactive endless category carousel on home page
+        const path = window.location.pathname;
+        const page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+        if (page === 'index.html' || page === '') {
+            initInfiniteCarousel();
+        }
+    })();
+    
+    return initPromise;
+}
+
+// API synchronizers
+async function saveProductToServer(newProduct) {
+    try {
+        await fetch('/api/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newProduct)
+        });
+    } catch (e) {
+        console.error("Failed to sync product to server:", e);
+    }
+}
+
+async function deleteProductFromServer(id) {
+    try {
+        await fetch(`/api/products/${id}`, { method: 'DELETE' });
+    } catch (e) {
+        console.error("Failed to delete product from server:", e);
+    }
+}
+
+async function addReviewToServer(productId, review) {
+    try {
+        await fetch(`/api/products/${productId}/reviews`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(review)
+        });
+    } catch (e) {
+        console.error("Failed to add review to server:", e);
+    }
+}
+
+async function addOrderToServer(order) {
+    try {
+        await fetch('/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(order)
+        });
+    } catch (e) {
+        console.error("Failed to add order to server:", e);
+    }
+}
+
+async function updateOrderStatusOnServer(orderNum, status) {
+    try {
+        await fetch(`/api/orders/${orderNum}/status`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+        });
+    } catch (e) {
+        console.error("Failed to update status on server:", e);
+    }
+}
+
+async function addUserToServer(user) {
+    try {
+        await fetch('/api/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user)
+        });
+    } catch (e) {
+        console.error("Failed to add user to server:", e);
+    }
+}
 
 // --- 3. COMMON DYNAMIC NAVBAR & SIDEBAR INJECTION ---
 function injectHeaderFooter() {
@@ -559,9 +666,8 @@ function loadShopPage() {
 }
 
 // C. CATEGORY PAGE
-function loadCategory() {
-    // Kept for onload backwards compatibility, forwards straight to loadCategoryPage
-    loadCategoryPage();
+async function loadCategory() {
+    await initStore();
 }
 
 function loadCategoryPage() {
@@ -709,189 +815,309 @@ window.showReviewImage = function(src) {
 
 function renderReviews(product) {
     const reviewsSection = document.querySelector('.container[style*="padding-bottom: 5rem"]');
-    if (reviewsSection) {
-        let reviewsListHtml = "";
-        if (product.reviews && product.reviews.length > 0) {
-            reviewsListHtml = product.reviews.map(r => `
-                <div class="review-box" style="margin-bottom: 2rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <strong style="font-size: 1.05rem; color: var(--black);">${r.name}</strong>
-                        <span class="stars" style="color: var(--gold); font-size: 1.1rem;">${"★".repeat(r.rating) + "☆".repeat(5 - r.rating)}</span>
-                    </div>
-                    <p style="color: #444; margin-top: 0.8rem; line-height: 1.6; font-size: 0.95rem;">"${r.comment}"</p>
-                    ${r.image ? `
-                    <div style="margin-top: 10px; border-radius: 4px; overflow: hidden; width: fit-content; max-width: 180px; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.05); cursor: zoom-in;" onclick="showReviewImage('${r.image}')">
-                        <img src="${r.image}" alt="User Review Photo" style="max-height: 120px; width: auto; object-fit: cover; display: block;">
-                    </div>
-                    ` : ''}
-                    <small style="color: #999; display: block; margin-top: 0.6rem; font-size: 0.8rem;">Posted on ${r.date}</small>
+    if (!reviewsSection) return;
+
+    // Calculate rating stats
+    const totalReviews = product.reviews ? product.reviews.length : 0;
+    const ratingAvg = totalReviews > 0 
+        ? (product.reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews).toFixed(1)
+        : "5.0";
+    
+    // Count distribution
+    const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    if (product.reviews) {
+        product.reviews.forEach(r => {
+            if (distribution[r.rating] !== undefined) {
+                distribution[r.rating]++;
+            }
+        });
+    } else {
+        distribution[5] = 1; // Default
+    }
+
+    // Build the visual stars distribution bars
+    let distributionHtml = "";
+    for (let stars = 5; stars >= 1; stars--) {
+        const count = distribution[stars];
+        const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : (stars === 5 ? 100 : 0);
+        distributionHtml += `
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 0.9rem;">
+                <span style="width: 50px; font-weight: bold; color: #555;">${stars} Stars</span>
+                <div style="flex: 1; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; position: relative;">
+                    <div style="width: ${percentage}%; height: 100%; background: var(--gold); border-radius: 4px; transition: width 0.8s ease;"></div>
                 </div>
-            `).join('');
-        } else {
-            reviewsListHtml = `<p style="color: #888; font-style: italic; margin-bottom: 2rem;">No reviews yet. Be the first to review this magnificent item!</p>`;
-        }
-
-        reviewsSection.innerHTML = `
-            <h3 style="margin-bottom: 2rem; font-size: 1.5rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Customer Feedback</h3>
-            
-            <div id="reviewsWrapper">
-                ${reviewsListHtml}
-            </div>
-
-            <!-- Write a Review Form -->
-            <div style="margin-top: 3rem; background: #fafafa; border: 1px solid #eee; padding: 2.5rem; box-shadow: var(--shadow);">
-                <h4 style="margin-bottom: 1.5rem; color: var(--black); font-size: 1.2rem;">Leave a Review</h4>
-                <form id="addReviewForm">
-                    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                        <div>
-                            <label style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 5px; font-weight: bold;">Your Name</label>
-                            <input type="text" id="revName" placeholder="Enter your full name" style="width: 100%; padding: 12px; border: 1px solid #ddd; background: #fff;" required>
-                        </div>
-                        <div>
-                            <label style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 8px; font-weight: bold;">Rating</label>
-                            <div id="interactiveStars" style="display: flex; gap: 8px; font-size: 1.8rem; cursor: pointer; color: var(--gold); user-select: none;">
-                                <span class="interactive-star" data-value="1">★</span>
-                                <span class="interactive-star" data-value="2">★</span>
-                                <span class="interactive-star" data-value="3">★</span>
-                                <span class="interactive-star" data-value="4">★</span>
-                                <span class="interactive-star" data-value="5">★</span>
-                            </div>
-                            <input type="hidden" id="revRating" value="5">
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 5px; font-weight: bold;">Your Thoughts</label>
-                        <textarea id="revComment" rows="4" placeholder="Tell other customers about your exquisite experience with this product" style="width: 100%; padding: 12px; border: 1px solid #ddd; font-family: var(--font-body); background: #fff; line-height: 1.6;" required></textarea>
-                    </div>
-                    
-                    <!-- Optional Image Upload -->
-                    <div style="margin-bottom: 1.8rem;">
-                        <label style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 5px; font-weight: bold;">Upload Photo (Optional)</label>
-                        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                            <label for="revImage" class="btn" style="width: auto; padding: 10px 20px; font-size: 0.8rem; background: #fff; color: var(--black); border: 1.5px solid var(--gold); cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
-                                📷 Choose Image
-                            </label>
-                            <input type="file" id="revImage" accept="image/*" style="display: none;">
-                            <span id="revImageName" style="color: #666; font-size: 0.85rem;">No file chosen</span>
-                        </div>
-                        <div id="revImagePreviewContainer" style="margin-top: 12px; display: none; position: relative; width: 100px; height: 100px; border: 1px solid #eee; overflow: hidden; box-shadow: var(--shadow);">
-                            <img id="revImagePreview" src="" style="width: 100%; height: 100%; object-fit: cover;">
-                            <button type="button" id="removeRevImage" style="position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 0.75rem; display: flex; align-items: center; justify-content: center;">×</button>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn" style="width: auto; padding: 12px 40px; font-size: 0.9rem; font-weight: bold; letter-spacing: 1px;">Post Review</button>
-                </form>
+                <span style="width: 30px; text-align: right; color: #777; font-size: 0.8rem;">${count}</span>
             </div>
         `;
+    }
 
-        // Interactive Stars logic
-        const stars = document.querySelectorAll('.interactive-star');
-        const ratingInput = document.getElementById('revRating');
-        if (stars && ratingInput) {
-            function updateStars(val) {
-                stars.forEach(s => {
-                    const starVal = parseInt(s.getAttribute('data-value'));
-                    if (starVal <= val) {
-                        s.innerText = '★';
-                        s.style.color = 'var(--gold)';
-                    } else {
-                        s.innerText = '☆';
-                        s.style.color = '#ccc';
-                    }
-                });
-            }
+    // Build the reviews list
+    let reviewsListHtml = "";
+    if (product.reviews && product.reviews.length > 0) {
+        reviewsListHtml = product.reviews.map(r => {
+            const initials = r.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            const avatarBg = ['#1a1a1a', '#d4af37', '#4a5568', '#2d3748', '#718096'][r.name.length % 5];
+            
+            return `
+                <div class="review-box" style="background: #ffffff; border: 1px solid rgba(0,0,0,0.04); border-left: 3px solid var(--gold); padding: 1.8rem; margin-bottom: 1.5rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.01);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 44px; height: 44px; border-radius: 50%; background: ${avatarBg}; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem; font-family: var(--font-head); border: 1px solid rgba(255,255,255,0.15);">
+                                ${initials}
+                            </div>
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <strong style="font-size: 1.05rem; color: var(--black);">${r.name}</strong>
+                                    <span style="background: #e6f7ed; color: #1e7e34; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 3px;">
+                                        ✓ Verified Purchase
+                                    </span>
+                                </div>
+                                <small style="color: #999; font-size: 0.8rem;">Reviewed on ${r.date}</small>
+                            </div>
+                        </div>
+                        <span class="stars" style="color: var(--gold); font-size: 1rem;">${"★".repeat(r.rating) + "☆".repeat(5 - r.rating)}</span>
+                    </div>
+                    <p style="color: #444; margin-top: 1rem; line-height: 1.6; font-size: 0.95rem; white-space: pre-line;">"${r.comment}"</p>
+                    ${r.image ? `
+                    <div style="margin-top: 12px; border-radius: 4px; overflow: hidden; width: fit-content; max-width: 180px; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.05); cursor: zoom-in;" onclick="showReviewImage('${r.image}')">
+                        <img src="${r.image}" alt="User Review Photo" style="max-height: 120px; width: auto; object-fit: cover; display: block; transition: transform 0.3s ease;">
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+    } else {
+        reviewsListHtml = `
+            <div style="text-align: center; padding: 4rem 2rem; background: #fff; border: 1px dashed #eee;">
+                <p style="color: #888; font-style: italic; margin-bottom: 1.5rem; font-size: 1rem;">No reviews yet for this premium curation.</p>
+                <p style="color: #aaa; font-size: 0.85rem;">Be the first to share your exquisite experience!</p>
+            </div>
+        `;
+    }
 
-            stars.forEach(star => {
-                star.addEventListener('click', () => {
-                    const val = parseInt(star.getAttribute('data-value'));
-                    ratingInput.value = val;
-                    updateStars(val);
-                });
-                star.addEventListener('mouseenter', () => {
-                    const val = parseInt(star.getAttribute('data-value'));
-                    updateStars(val);
-                });
-            });
+    // Set reviews Section contents with premium 2-column layout!
+    reviewsSection.innerHTML = `
+        <div style="margin-top: 4rem; border-top: 1px solid #eee; padding-top: 4rem;">
+            <h3 style="font-family: var(--font-head); font-size: 1.8rem; letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-bottom: 3rem; color: var(--black);">Client Appreciation</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr; md:grid-template-columns: 1.2fr 2fr; gap: 4rem; align-items: start;" class="reviews-grid-wrapper">
+                
+                <!-- Left: Distribution Summary Panel -->
+                <div style="background: #fafafa; border: 1px solid rgba(0,0,0,0.05); padding: 2.5rem; position: sticky; top: 120px; box-shadow: 0 4px 20px rgba(0,0,0,0.01);" class="reviews-summary-panel">
+                    <h4 style="font-family: var(--font-head); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--black); margin-bottom: 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px;">Review Summary</h4>
+                    
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <span style="font-size: 3.5rem; font-weight: bold; color: var(--black); line-height: 1; font-family: var(--font-head);">${ratingAvg}</span>
+                        <div style="color: var(--gold); font-size: 1.4rem; margin: 0.5rem 0 0.2rem 0;">${"★".repeat(Math.round(parseFloat(ratingAvg)))}${"☆".repeat(5 - Math.round(parseFloat(ratingAvg)))}</div>
+                        <p style="color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Based on ${totalReviews} elite reviews</p>
+                    </div>
 
-            const starContainer = document.getElementById('interactiveStars');
-            if (starContainer) {
-                starContainer.addEventListener('mouseleave', () => {
-                    updateStars(parseInt(ratingInput.value));
-                });
-            }
-        }
+                    <div style="margin-bottom: 2.5rem;">
+                        ${distributionHtml}
+                    </div>
 
-        // Image upload logic
-        let uploadedImageBase64 = "";
-        const imageInput = document.getElementById('revImage');
-        const imageName = document.getElementById('revImageName');
-        const previewContainer = document.getElementById('revImagePreviewContainer');
-        const previewImg = document.getElementById('revImagePreview');
-        const removeBtn = document.getElementById('removeRevImage');
+                    <button class="btn" id="openReviewFormBtn" style="width: 100%; padding: 15px; font-weight: bold; letter-spacing: 1px;">+ Write A Review</button>
+                    
+                    <!-- Write review container (hidden by default, toggles open smoothly) -->
+                    <div id="reviewFormContainer" style="max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; margin-top: 0;">
+                        <div style="border-top: 1.5px solid var(--gold); margin-top: 2rem; padding-top: 2rem;">
+                            <h4 style="margin-bottom: 1.5rem; color: var(--black); font-size: 1.1rem; font-family: var(--font-head); text-transform: uppercase; letter-spacing: 1px;">Share Your Experience</h4>
+                            <form id="addReviewForm">
+                                <div style="margin-bottom: 1.2rem;">
+                                    <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 6px; font-weight: bold;">Your Name</label>
+                                    <input type="text" id="revName" placeholder="Enter your full name" style="width: 100%; padding: 12px; border: 1px solid #ddd; background: #fff; font-size: 0.9rem;" required>
+                                </div>
+                                <div style="margin-bottom: 1.2rem;">
+                                    <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 8px; font-weight: bold;">Rating</label>
+                                    <div id="interactiveStars" style="display: flex; gap: 8px; font-size: 1.6rem; cursor: pointer; color: var(--gold); user-select: none;">
+                                        <span class="interactive-star" data-value="1">★</span>
+                                        <span class="interactive-star" data-value="2">★</span>
+                                        <span class="interactive-star" data-value="3">★</span>
+                                        <span class="interactive-star" data-value="4">★</span>
+                                        <span class="interactive-star" data-value="5">★</span>
+                                    </div>
+                                    <input type="hidden" id="revRating" value="5">
+                                </div>
+                                <div style="margin-bottom: 1.2rem;">
+                                    <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 6px; font-weight: bold;">Your Thoughts</label>
+                                    <textarea id="revComment" rows="4" placeholder="How was your exquisite experience with this product?" style="width: 100%; padding: 12px; border: 1px solid #ddd; font-family: var(--font-body); background: #fff; line-height: 1.6; font-size: 0.9rem; resize: vertical;" required></textarea>
+                                </div>
+                                
+                                <!-- Photo Upload -->
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 6px; font-weight: bold;">Upload Photo (Optional)</label>
+                                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                        <label for="revImage" class="btn" style="width: auto; padding: 8px 15px; font-size: 0.75rem; background: #fff; color: var(--black); border: 1px solid var(--gold); cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+                                            📷 Choose Image
+                                        </label>
+                                        <input type="file" id="revImage" accept="image/*" style="display: none;">
+                                        <span id="revImageName" style="color: #666; font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px;">No file chosen</span>
+                                    </div>
+                                    <div id="revImagePreviewContainer" style="margin-top: 12px; display: none; position: relative; width: 80px; height: 80px; border: 1px solid #eee; overflow: hidden;">
+                                        <img id="revImagePreview" src="" style="width: 100%; height: 100%; object-fit: cover;">
+                                        <button type="button" id="removeRevImage" style="position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 18px; height: 18px; cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center;">×</button>
+                                    </div>
+                                </div>
 
-        if (imageInput) {
-            imageInput.onchange = function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    imageName.innerText = file.name;
-                    const reader = new FileReader();
-                    reader.onload = function(evt) {
-                        uploadedImageBase64 = evt.target.result;
-                        previewImg.src = uploadedImageBase64;
-                        previewContainer.style.display = 'block';
-                    };
-                    reader.readAsDataURL(file);
+                                <button type="submit" class="btn" style="width: 100%; padding: 12px; font-size: 0.85rem;">Submit Appreciation</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Reviews List -->
+                <div style="flex: 1;" class="reviews-list-panel">
+                    <h4 style="font-family: var(--font-head); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--black); margin-bottom: 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px;">Client Feedback</h4>
+                    <div id="reviewsWrapper">
+                        ${reviewsListHtml}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    `;
+
+    // Dynamic responsive styles for reviews panel grid
+    if (!document.getElementById('reviewsMediaStyles')) {
+        const style = document.createElement('style');
+        style.id = 'reviewsMediaStyles';
+        style.innerHTML = `
+            @media (min-width: 768px) {
+                .reviews-grid-wrapper {
+                    grid-template-columns: 1.2fr 2fr !important;
                 }
-            };
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // Toggle Write Review Form open/close smoothly
+    const openBtn = document.getElementById('openReviewFormBtn');
+    const container = document.getElementById('reviewFormContainer');
+    if (openBtn && container) {
+        openBtn.onclick = () => {
+            if (container.style.maxHeight === '0px' || !container.style.maxHeight || container.style.maxHeight === '0') {
+                container.style.maxHeight = '1000px';
+                openBtn.innerText = "Close Review Form";
+                openBtn.style.background = "#eeeeee";
+                openBtn.style.color = "#333333";
+                openBtn.style.borderColor = "#eeeeee";
+            } else {
+                container.style.maxHeight = '0';
+                openBtn.innerText = "+ Write A Review";
+                openBtn.style.background = "var(--black)";
+                openBtn.style.color = "var(--gold)";
+                openBtn.style.borderColor = "var(--black)";
+            }
+        };
+    }
+
+    // Bind Interactive Stars
+    const stars = document.querySelectorAll('.interactive-star');
+    const ratingInput = document.getElementById('revRating');
+    if (stars && ratingInput) {
+        function updateStars(val) {
+            stars.forEach(s => {
+                const starVal = parseInt(s.getAttribute('data-value'));
+                if (starVal <= val) {
+                    s.innerText = '★';
+                    s.style.color = 'var(--gold)';
+                } else {
+                    s.innerText = '☆';
+                    s.style.color = '#ccc';
+                }
+            });
         }
 
-        if (removeBtn) {
-            removeBtn.onclick = function() {
-                imageInput.value = "";
-                uploadedImageBase64 = "";
-                imageName.innerText = "No file chosen";
-                previewContainer.style.display = 'none';
-                previewImg.src = "";
-            };
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const val = parseInt(star.getAttribute('data-value'));
+                ratingInput.value = val;
+                updateStars(val);
+            });
+            star.addEventListener('mouseenter', () => {
+                const val = parseInt(star.getAttribute('data-value'));
+                updateStars(val);
+            });
+        });
+
+        const starContainer = document.getElementById('interactiveStars');
+        if (starContainer) {
+            starContainer.addEventListener('mouseleave', () => {
+                updateStars(parseInt(ratingInput.value));
+            });
         }
+    }
 
-        // Bind Add Review Form Submit
-        const form = document.getElementById('addReviewForm');
-        if (form) {
-            form.onsubmit = function(e) {
-                e.preventDefault();
-                const name = document.getElementById('revName').value.trim();
-                const rating = parseInt(document.getElementById('revRating').value);
-                const comment = document.getElementById('revComment').value.trim();
+    // Image Upload Bindings
+    let uploadedImageBase64 = "";
+    const imageInput = document.getElementById('revImage');
+    const imageName = document.getElementById('revImageName');
+    const previewContainer = document.getElementById('revImagePreviewContainer');
+    const previewImg = document.getElementById('revImagePreview');
+    const removeBtn = document.getElementById('removeRevImage');
 
-                const today = new Date();
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                const formattedDate = today.toLocaleDateString('en-US', options);
-
-                const newReview = { 
-                    name, 
-                    rating, 
-                    comment, 
-                    date: formattedDate,
-                    image: uploadedImageBase64 || null
+    if (imageInput) {
+        imageInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                imageName.innerText = file.name;
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    uploadedImageBase64 = evt.target.result;
+                    previewImg.src = uploadedImageBase64;
+                    previewContainer.style.display = 'block';
                 };
+                reader.readAsDataURL(file);
+            }
+        };
+    }
 
-                // Add to current product in products array
-                if (!product.reviews) product.reviews = [];
-                product.reviews.unshift(newReview);
+    if (removeBtn) {
+        removeBtn.onclick = function() {
+            imageInput.value = "";
+            uploadedImageBase64 = "";
+            imageName.innerText = "No file chosen";
+            previewContainer.style.display = 'none';
+            previewImg.src = "";
+        };
+    }
 
-                // Save to storage
-                saveDb('gw_products', products);
+    // Form Submit Bind
+    const form = document.getElementById('addReviewForm');
+    if (form) {
+        form.onsubmit = async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('revName').value.trim();
+            const rating = parseInt(document.getElementById('revRating').value);
+            const comment = document.getElementById('revComment').value.trim();
 
-                showPremiumAlert("Review Submitted", "Thank you! Your feedback has been added successfully.", "success", () => {
-                    // Re-render reviews
-                    renderReviews(product);
-                    // Re-render main section to update star averages
-                    loadProductPage();
-                });
+            const today = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = today.toLocaleDateString('en-US', options);
+
+            const newReview = { 
+                name, 
+                rating, 
+                comment, 
+                date: formattedDate,
+                image: uploadedImageBase64 || null
             };
-        }
+
+            // Post to Server
+            await addReviewToServer(product.id, newReview);
+
+            // Update local state instantly so it re-renders without refreshing
+            if (!product.reviews) product.reviews = [];
+            product.reviews.unshift(newReview);
+
+            showPremiumAlert("Review Submitted", "Thank you! Your verified feedback has been added successfully.", "success", () => {
+                // Re-render
+                renderReviews(product);
+                // Also trigger product page stats reload
+                loadProductPage();
+            });
+        };
     }
 }
 
@@ -920,7 +1146,7 @@ function loadCartPage() {
     tableBody.innerHTML = cart.map((item, idx) => `
         <tr class="cart-row" data-id="${item.id}" style="animation: fadeUp 0.5s ease forwards;">
             <td style="display: flex; align-items: center; gap: 1.5rem;">
-                <div style="width: 70px; height: 70px; border: 1px solid #eee; overflow: hidden; box-shadow: var(--shadow);">
+                <div style="width: 70px; height: 70px; border: 1px solid #eee; overflow: hidden; box-shadow: var(--shadow); flex-shrink: 0;">
                     <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
                 <div>
@@ -928,15 +1154,15 @@ function loadCartPage() {
                     <small style="color: #888;">Ref: GW-${item.id}</small>
                 </div>
             </td>
-            <td class="price" data-price="${item.price}">Rs. ${item.price.toLocaleString()}</td>
-            <td>
+            <td data-label="Price" class="price" data-price="${item.price}">Rs. ${item.price.toLocaleString()}</td>
+            <td data-label="Quantity">
                 <div style="display: flex; align-items: center; border: 1px solid #ddd; width: fit-content; background: #fff;">
                     <button class="qty-control-btn" onclick="changeCartItemQty('${item.id}', -1)" style="border: none; background: #f9f9f9; padding: 5px 12px; cursor: pointer; font-weight: bold;">-</button>
                     <input type="text" value="${item.qty}" class="qty-input" readonly style="width: 35px; border: none; font-weight: bold; text-align: center; background: transparent;">
                     <button class="qty-control-btn" onclick="changeCartItemQty('${item.id}', 1)" style="border: none; background: #f9f9f9; padding: 5px 12px; cursor: pointer; font-weight: bold;">+</button>
                 </div>
             </td>
-            <td class="row-total" style="font-weight: bold; color: var(--black);">Rs. ${(item.price * item.qty).toLocaleString()}</td>
+            <td data-label="Total" class="row-total" style="font-weight: bold; color: var(--black);">Rs. ${(item.price * item.qty).toLocaleString()}</td>
             <td><button class="delete-btn" onclick="removeCartItemPrompt('${item.id}', '${item.name}')">×</button></td>
         </tr>
     `).join('');
@@ -1078,7 +1304,7 @@ function loadCheckoutPage() {
     if (completeOrderBtn) {
         // Unbind inline alert & replace with real custom workflow
         completeOrderBtn.removeAttribute('onclick');
-        completeOrderBtn.onclick = function(e) {
+        completeOrderBtn.onclick = async function(e) {
             e.preventDefault();
             
             // Form validation
@@ -1119,6 +1345,9 @@ function loadCheckoutPage() {
                 date: orderDate,
                 status: "Pending"
             };
+
+            // Sync order to backend DB
+            await addOrderToServer(newOrder);
 
             // Save to Orders Database
             orders.unshift(newOrder);
@@ -1271,7 +1500,7 @@ function renderAuthForms(container) {
     };
 
     // Register Form Submit Bind
-    regForm.onsubmit = (e) => {
+    regForm.onsubmit = async (e) => {
         e.preventDefault();
         const name = document.getElementById('regName').value.trim();
         const email = document.getElementById('regEmail').value.trim().toLowerCase();
@@ -1291,6 +1520,10 @@ function renderAuthForms(container) {
 
         // Add to db
         const newUser = { email, name, phone, pass };
+        
+        // Sync user creation to backend
+        await addUserToServer(newUser);
+
         users.push(newUser);
         saveDb('gw_users', users);
 
@@ -1428,7 +1661,7 @@ function loadAdminPage() {
     };
 
     // Add Product Bind
-    window.addNewProduct = function() {
+    window.addNewProduct = async function() {
         const name = document.getElementById('pName').value.trim();
         const price = parseFloat(document.getElementById('pPrice').value);
         const category = document.getElementById('pCat').value;
@@ -1450,6 +1683,9 @@ function loadAdminPage() {
             reviews: []
         };
 
+        // Sync to Server
+        await saveProductToServer(newProduct);
+
         products.push(newProduct);
         saveDb('gw_products', products);
 
@@ -1463,8 +1699,9 @@ function loadAdminPage() {
     };
 
     // Delete Product Bind
-    window.deleteProductAdmin = function(id) {
+    window.deleteProductAdmin = async function(id) {
         if (confirm("Are you sure you want to permanently delete this product?")) {
+            await deleteProductFromServer(id);
             products = products.filter(p => p.id !== id);
             saveDb('gw_products', products);
             renderAdminProducts();
@@ -1472,9 +1709,10 @@ function loadAdminPage() {
     };
 
     // Admin order status modifier
-    window.updateOrderStatus = function(orderNum, newStatus) {
+    window.updateOrderStatus = async function(orderNum, newStatus) {
         const order = orders.find(o => o.orderNum === orderNum);
         if (order) {
+            await updateOrderStatusOnServer(orderNum, newStatus);
             order.status = newStatus;
             saveDb('gw_orders', orders);
             renderAdminOrders();
@@ -1567,9 +1805,93 @@ function injectBackButton() {
 }
 
 
+// --- 8.8. ENDLESS CATEGORY CAROUSEL DRAG & AUTO-ROTATING SYSTEM ---
+let carouselX = 0;
+let carouselSpeed = 0.5; // default speed (pixels per frame)
+let isCarouselDragging = false;
+let startCarouselX = 0;
+let dragCarouselX = 0;
+let animationFrameId = null;
+
+function initInfiniteCarousel() {
+    const wrapper = document.querySelector('.scroll-wrapper');
+    const track = document.querySelector('.scroll-track');
+    if (!wrapper || !track) return;
+
+    // Remove any old CSS animation to let Javascript control coordinates with 1:1 precision
+    track.style.animation = 'none';
+
+    const trackWidth = track.scrollWidth;
+    const halfWidth = trackWidth / 2;
+
+    function step() {
+        if (!isCarouselDragging) {
+            carouselX -= carouselSpeed;
+            // Seamless infinite wrap around
+            if (carouselX <= -halfWidth) {
+                carouselX = 0;
+            } else if (carouselX > 0) {
+                carouselX = -halfWidth;
+            }
+            track.style.transform = `translate3d(${carouselX}px, 0, 0)`;
+        }
+        animationFrameId = requestAnimationFrame(step);
+    }
+
+    // Drag Actions
+    function onDragStart(e) {
+        isCarouselDragging = true;
+        const pageX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+        startCarouselX = pageX;
+        dragCarouselX = carouselX;
+        wrapper.style.cursor = 'grabbing';
+    }
+
+    function onDragMove(e) {
+        if (!isCarouselDragging) return;
+        const pageX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+        const diff = pageX - startCarouselX;
+        carouselX = dragCarouselX + diff;
+
+        // Dynamic auto-rotate direction sync based on user drag direction!
+        if (diff < 0) {
+            carouselSpeed = 0.5; // Dragged left -> rolls left endless
+        } else if (diff > 0) {
+            carouselSpeed = -0.5; // Dragged right -> rolls right endless
+        }
+
+        // Keep inside bounds
+        if (carouselX <= -halfWidth) {
+            carouselX += halfWidth;
+            dragCarouselX += halfWidth;
+        } else if (carouselX > 0) {
+            carouselX -= halfWidth;
+            dragCarouselX -= halfWidth;
+        }
+
+        track.style.transform = `translate3d(${carouselX}px, 0, 0)`;
+    }
+
+    function onDragEnd() {
+        if (!isCarouselDragging) return;
+        isCarouselDragging = false;
+        wrapper.style.cursor = 'grab';
+    }
+
+    // Attach dragging events
+    wrapper.addEventListener('mousedown', onDragStart);
+    window.addEventListener('mousemove', onDragMove);
+    window.addEventListener('mouseup', onDragEnd);
+
+    wrapper.addEventListener('touchstart', onDragStart, { passive: true });
+    window.addEventListener('touchmove', onDragMove, { passive: true });
+    window.addEventListener('touchend', onDragEnd);
+
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    step();
+}
+
 // --- 9. BOOT ENGINE ON WINDOW LOAD ---
 window.addEventListener('load', () => {
-    injectHeaderFooter();
-    loadPageData();
-    injectBackButton();
+    initStore();
 });
