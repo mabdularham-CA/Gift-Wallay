@@ -169,13 +169,6 @@
             align-items: start;
         }
 
-        /* PREMIUM STYLING INJECTIONS FOR DYNAMIC CONTENT (main.js integration) */
-        .product-gallery-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-        }
-
         .product-image-wrapper {
             position: relative;
             overflow: hidden;
@@ -201,73 +194,9 @@
 
         @media (min-width: 992px) {
             .product-image-wrapper:hover .product-main-img {
-                transform: scale(1.1);
+                transform: scale(1.06);
                 cursor: zoom-in;
             }
-        }
-
-        .thumbnail-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.75rem;
-        }
-
-        .thumb-img {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            border: 1px solid #e5e5e5;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition-premium);
-        }
-
-        .thumb-img:hover, .thumb-img.active {
-            border-color: var(--gold);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .product-meta-section {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-title {
-            font-family: var(--font-head);
-            font-size: 2.25rem;
-            font-weight: 700;
-            margin: 0 0 0.5rem 0;
-            letter-spacing: 0.5px;
-            line-height: 1.2;
-        }
-
-        .price-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin: 1rem 0 1.5rem 0;
-        }
-
-        .current-price {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        .original-price {
-            font-size: 1.25rem;
-            text-decoration: line-line-through;
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
-
-        .product-description {
-            font-size: 1rem;
-            line-height: 1.7;
-            color: #444444;
-            margin-bottom: 2rem;
-            word-wrap: break-word;
         }
 
         /* ==========================================================================
@@ -311,97 +240,16 @@
             text-align: center;
         }
 
-        .actions-group {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2.5rem;
-            width: 100%;
-        }
-
-        /* Elite Button Architecture with Ripple and Transition Effects */
-        .btn-premium {
-            position: relative;
-            overflow: hidden;
-            font-family: var(--font-body);
-            font-size: 0.95rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 16px 32px;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            border: none;
-            transition: var(--transition-premium);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .btn-premium::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0;
-            transition: transform 0.5s, opacity 1s;
-        }
-
-        .btn-premium:active::after {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-            transition: 0s;
-        }
-
-        .btn-primary-action {
-            background: var(--text-dark);
-            color: #ffffff;
-            flex: 2;
-        }
-
-        .btn-primary-action:hover {
-            background: #252525;
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary-action {
-            background: var(--gold);
-            color: #ffffff;
-            flex: 2;
-        }
-
-        .btn-secondary-action:hover {
-            background: #c5a02e;
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .btn-wishlist-action {
-            background: #ffffff;
-            color: var(--text-dark);
-            border: 1px solid #dddddd;
-            flex: 0.5;
-            padding: 16px;
-        }
-
-        .btn-wishlist-action:hover {
-            border-color: #999999;
-            background: #fafafa;
-            color: #e24444;
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
         /* ==========================================================================
-           REVIEWS SECTION DESIGN ELEVATION
-           ========================================================================== */
+           REVIEWS SECTION RESPONSIVE SYSTEM (FIXED FOR MOBILE COEXISTENCE)
+           ========================================================================= */
+        .reviews-section-wrapper {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 3.5rem;
+            align-items: start;
+        }
+
         .reviews-heading {
             font-family: var(--font-head);
             font-size: 1.75rem;
@@ -414,7 +262,7 @@
             background: #ffffff;
             border: 1px solid #eeeeee;
             border-radius: var(--border-radius);
-            padding: 2rem;
+            padding: 1.5rem;
             margin-bottom: 1.5rem;
             box-shadow: var(--shadow-sm);
             transition: var(--transition-premium);
@@ -430,20 +278,8 @@
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 1rem;
-        }
-
-        .review-user-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .review-author {
-            font-weight: 700;
-            font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
         .verified-badge {
@@ -478,90 +314,15 @@
             margin: 0;
         }
 
-        /* ==========================================================================
-           RELATED PRODUCTS RESPONSIVE GRID
-           ========================================================================== */
-        .related-section {
-            margin-top: 5rem;
-            border-top: 1px solid #eee;
-            padding-top: 4rem;
-        }
-
-        .related-title {
-            font-family: var(--font-head);
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            letter-spacing: 0.5px;
-        }
-
-        .related-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-        }
-
-        .related-card {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+        /* Prevent submission form from layout breaking or overlapping on small screens */
+        .add-review-form-container {
+            position: sticky;
+            top: 100px;
             background: #ffffff;
-            border: 1px solid #f0f0f0;
+            border: 1px solid #eeeeee;
             border-radius: var(--border-radius);
-            overflow: hidden;
-            text-decoration: none;
-            color: var(--text-dark);
+            padding: 2rem;
             box-shadow: var(--shadow-sm);
-            transition: var(--transition-premium);
-        }
-
-        .related-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-            border-color: #e0e0e0;
-        }
-
-        .related-img-wrapper {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            overflow: hidden;
-            background: #fafafa;
-        }
-
-        .related-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s var(--transition-premium);
-        }
-
-        .related-card:hover .related-img {
-            transform: scale(1.06);
-        }
-
-        .related-info {
-            padding: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            gap: 6px;
-        }
-
-        .related-prod-title {
-            font-family: var(--font-head);
-            font-size: 1.05rem;
-            font-weight: 700;
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .related-prod-price {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--text-dark);
-            margin-top: auto;
         }
 
         /* ==========================================================================
@@ -577,30 +338,31 @@
            ========================================================================== */
         @media(max-width: 1200px) {
             .split-layout { gap: 3rem; }
-            .related-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+            .reviews-section-wrapper { gap: 2rem; }
         }
 
         @media(max-width: 992px) {
             .navbar { padding: 0.75rem 1.5rem; }
             .split-layout { grid-template-columns: 1fr; gap: 3rem; }
-            .product-title { font-size: 2rem; }
-            .related-grid { grid-template-columns: repeat(2, 1fr); }
+            
+            /* Stack reviews lists and form on medium/small devices */
+            .reviews-section-wrapper { 
+                grid-template-columns: 1fr; 
+                gap: 3rem; 
+            }
+            .add-review-form-container {
+                position: static; /* Dissolve sticky wrapper state on mobile to stack naturally */
+                padding: 1.5rem;
+            }
         }
 
         @media(max-width: 576px) {
             .navbar { padding: 0.5rem 1rem; }
             .brand-logo-img { height: 36px; }
             .split-layout { gap: 2rem; }
-            .product-title { font-size: 1.65rem; }
-            .price-container { margin: 0.75rem 0 1.25rem 0; }
-            .actions-group { flex-direction: column; gap: 0.75rem; }
-            .btn-premium { width: 100%; box-sizing: border-box; padding: 14px 24px; }
-            .btn-wishlist-action { order: 3; }
             .review-card { padding: 1.25rem; }
-            .review-header { flex-direction: column; gap: 0.5rem; }
-            .review-date { float: none; display: block; margin-top: 2px; }
-            .related-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-            .related-section { margin-top: 3.5rem; padding-top: 2.5rem; }
+            .review-header { flex-direction: column; align-items: flex-start; }
+            .review-date { margin-top: 2px; }
         }
     </style>
 </head>
@@ -611,7 +373,6 @@
         <div class="menu-btn" onclick="toggleSidebar()" aria-label="Open menu" role="button" tabindex="0">☰</div>
         <a href="index.html" class="brand" id="brandLogo" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
             <div class="logo-container" style="display: flex; align-items: center; gap: 12px;">
-                <!-- Cleaned up, premium implementation matching standard layout rules -->
                 <img src="Gift-Wallay.png" alt="Gift Wallay Logo" class="brand-logo-img" loading="eager">
                 <div style="display: flex; flex-direction: column; align-items: start; line-height: 1.1; text-align: left;">
                     <span style="font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; color: #000000; letter-spacing: 1px; text-transform: uppercase;">Gift<span style="color: var(--gold);">Wallay</span></span>
@@ -647,9 +408,11 @@
         </div>
     </main>
 
-    <!-- REVIEWS & RELATED PRODUCTS CONTAINER -->
-    <section class="container" style="padding-bottom: 5rem; border-top: 1px solid #eee; padding-top: 3rem;" id="productReviewsContainer">
-        <!-- Dynamic component targets injection handled strictly by main.js data pipeline -->
+    <!-- REVIEWS & WRITE A REVIEW CONTAINER (FIXED RESPONSIVE GRID) -->
+    <section class="container" style="padding-bottom: 5rem; border-top: 1px solid #eee; padding-top: 3rem;">
+        <div class="reviews-section-wrapper" id="productReviewsContainer">
+            <!-- Dynamic reviews and "write a review" form are safely placed side-by-side on desktop, and cleanly stack vertically on mobile to prevent overlapping -->
+        </div>
     </section>
 
     <!-- CORE INTEGRATION SCRIPTS -->
