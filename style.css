@@ -460,3 +460,12 @@ button { font-family: var(--font-body); }
 [class*="review-grid"] {
     grid-template-columns: 1fr !important;
 }
+/* Force Hide the Left Review Summary Column */
+.reviews-section .split-layout > div:first-child {
+    display: none !important;
+}
+
+/* Force the Right Feedback Column to take full width */
+.reviews-section .split-layout {
+    display: block !important;
+}
