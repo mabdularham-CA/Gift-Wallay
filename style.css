@@ -199,13 +199,7 @@ button { font-family: var(--font-body); }
 .section-pad { padding: 5rem 0; }
 .text-center { text-align: center; }
 
-/* Custom Grid: 
-   - Mobile Vertical (Portrait) -> 1 column
-   - Mobile Horizontal (Landscape) -> 2 columns
-   - Tablet Vertical (Portrait) -> 2 columns
-   - Tablet Horizontal (Landscape) -> 3 columns
-   - Laptop / Desktop -> 4 columns
-*/
+/* Custom Grid */
 .product-grid { 
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr)); 
@@ -213,7 +207,6 @@ button { font-family: var(--font-body); }
 }
 
 @media (min-width: 480px) {
-    /* Mobile Landscape */
     .product-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 1.5rem;
@@ -221,7 +214,6 @@ button { font-family: var(--font-body); }
 }
 
 @media (min-width: 768px) {
-    /* Tablet Portrait */
     .product-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 2rem;
@@ -229,7 +221,6 @@ button { font-family: var(--font-body); }
 }
 
 @media (min-width: 992px) {
-    /* Tablet Landscape */
     .product-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 2.5rem;
@@ -237,7 +228,6 @@ button { font-family: var(--font-body); }
 }
 
 @media (min-width: 1200px) {
-    /* Laptop / Desktop */
     .product-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 3rem;
@@ -399,7 +389,6 @@ button { font-family: var(--font-body); }
 }
 
 @media (max-width: 650px) {
-    /* Responsive Cart Table */
     .cart-table, .cart-table thead, .cart-table tbody, .cart-table tr, .cart-table th, .cart-table td {
         display: block !important;
     }
@@ -456,4 +445,18 @@ button { font-family: var(--font-body); }
 @keyframes skeleton-shimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
+}
+
+/* --- 9. DYNAMIC ELEMENT RE-LAYOUTS (PRODUCT SHEET COMPONENT) --- */
+.review-summary, 
+[class*="summary-box"],
+[class*="summary-container"] {
+    display: none !important;
+}
+
+.reviews-layout, 
+.reviews-container,
+[class*="reviews-wrapper"], 
+[class*="review-grid"] {
+    grid-template-columns: 1fr !important;
 }
