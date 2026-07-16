@@ -4,66 +4,639 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Royal Watch | Gift Wallay</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
-        @media(max-width: 768px) { .split-layout { grid-template-columns: 1fr; } }
+        /* ==========================================================================
+           PREMIUM VARIABLE ALIGNMENT & DESIGN SYSTEM
+           ========================================================================== */
+        :root {
+            --gold: #D4AF37;
+            --font-head: 'Cinzel', serif;
+            --font-body: 'Lato', sans-serif;
+            --transition-premium: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+            --shadow-lg: 0 16px 36px rgba(0,0,0,0.09);
+            --border-radius: 4px;
+            --text-dark: #111111;
+            --text-muted: #666666;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* ==========================================================================
+           STICKY TOP BAR / NAVBAR
+           ========================================================================== */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition-premium);
+        }
+
+        .brand-logo-img {
+            height: 44px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+            transition: var(--transition-premium);
+        }
+
+        .brand:hover .brand-logo-img {
+            transform: scale(1.03);
+        }
+
+        .menu-btn {
+            font-size: 1.5rem;
+            cursor: pointer;
+            user-select: none;
+            padding: 5px;
+            transition: var(--transition-premium);
+        }
         
-        .qty-box { display: flex; align-items: center; border: 1px solid #ddd; width: fit-content; margin-bottom: 2rem; }
-        .qty-btn { padding: 10px 15px; cursor: pointer; background: #eee; border: none; }
-        .qty-val { padding: 10px 20px; font-weight: bold; }
+        .menu-btn:hover {
+            color: var(--gold);
+        }
+
+        .cart-icon {
+            text-decoration: none;
+            position: relative;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-premium);
+            padding: 5px;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.08);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -4px;
+            right: -8px;
+            background: var(--text-dark);
+            color: #ffffff;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-family: var(--font-body);
+            min-width: 12px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        /* ==========================================================================
+           SIDEBAR SYSTEM
+           ========================================================================== */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-premium);
+        }
+
+        .sidebar-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background: #ffffff;
+            z-index: 1002;
+            box-shadow: var(--shadow-lg);
+            padding: 2rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition-premium);
+        }
+
+        .sidebar-link {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            text-decoration: none;
+            color: var(--text-dark);
+            padding: 1rem 0;
+            border-bottom: 1px solid #f5f5f5;
+            letter-spacing: 0.5px;
+            transition: var(--transition-premium);
+        }
+
+        .sidebar-link:hover {
+            color: var(--gold);
+            padding-left: 8px;
+        }
+
+        /* ==========================================================================
+           MAIN PRODUCT DETAIL AREA LAYOUT
+           ========================================================================== */
+        .split-layout { 
+            display: grid; 
+            grid-template-columns: 1.1fr 0.9fr; 
+            gap: 5rem; 
+            align-items: start;
+        }
+
+        /* PREMIUM STYLING INJECTIONS FOR DYNAMIC CONTENT (main.js integration) */
+        .product-gallery-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .product-image-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            background: #fafafa;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #f0f0f0;
+            transition: var(--transition-premium);
+        }
+
+        .product-image-wrapper:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .product-main-img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        @media (min-width: 992px) {
+            .product-image-wrapper:hover .product-main-img {
+                transform: scale(1.1);
+                cursor: zoom-in;
+            }
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        .thumb-img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border: 1px solid #e5e5e5;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition-premium);
+        }
+
+        .thumb-img:hover, .thumb-img.active {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .product-meta-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-title {
+            font-family: var(--font-head);
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0 1.5rem 0;
+        }
+
+        .current-price {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .original-price {
+            font-size: 1.25rem;
+            text-decoration: line-line-through;
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .product-description {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #444444;
+            margin-bottom: 2rem;
+            word-wrap: break-word;
+        }
+
+        /* ==========================================================================
+           QUANTITY & PREMIUM ACTION BUTTONS
+           ========================================================================== */
+        .qty-box { 
+            display: flex; 
+            align-items: center; 
+            border: 1px solid #dddddd; 
+            border-radius: var(--border-radius);
+            width: fit-content; 
+            margin-bottom: 2rem; 
+            background: #ffffff;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .qty-btn { 
+            padding: 12px 20px; 
+            cursor: pointer; 
+            background: #f8f8f8; 
+            border: none; 
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: 400;
+            transition: var(--transition-premium);
+            user-select: none;
+        }
+
+        .qty-btn:hover { 
+            background: #eeeeee; 
+            color: var(--gold);
+        }
+
+        .qty-val { 
+            padding: 12px 24px; 
+            font-weight: 700; 
+            font-size: 1rem;
+            font-family: var(--font-body);
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .actions-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            width: 100%;
+        }
+
+        /* Elite Button Architecture with Ripple and Transition Effects */
+        .btn-premium {
+            position: relative;
+            overflow: hidden;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 16px 32px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            border: none;
+            transition: var(--transition-premium);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-premium::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 0.5s, opacity 1s;
+        }
+
+        .btn-premium:active::after {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            transition: 0s;
+        }
+
+        .btn-primary-action {
+            background: var(--text-dark);
+            color: #ffffff;
+            flex: 2;
+        }
+
+        .btn-primary-action:hover {
+            background: #252525;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary-action {
+            background: var(--gold);
+            color: #ffffff;
+            flex: 2;
+        }
+
+        .btn-secondary-action:hover {
+            background: #c5a02e;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .btn-wishlist-action {
+            background: #ffffff;
+            color: var(--text-dark);
+            border: 1px solid #dddddd;
+            flex: 0.5;
+            padding: 16px;
+        }
+
+        .btn-wishlist-action:hover {
+            border-color: #999999;
+            background: #fafafa;
+            color: #e24444;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================================================
+           REVIEWS SECTION DESIGN ELEVATION
+           ========================================================================== */
+        .reviews-heading {
+            font-family: var(--font-head);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: 0.5px;
+        }
+
+        .review-card {
+            background: #ffffff;
+            border: 1px solid #eeeeee;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-premium);
+        }
+
+        .review-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: #e0e0e0;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .review-user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .review-author {
+            font-weight: 700;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.72rem;
+            color: #1e7e34;
+            font-weight: 700;
+            background: #e6f4ea;
+            padding: 3px 8px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .review-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .star-rating {
+            color: #ffc107;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .review-body {
+            font-size: 0.98rem;
+            line-height: 1.6;
+            color: #333333;
+            margin: 0;
+        }
+
+        /* ==========================================================================
+           RELATED PRODUCTS RESPONSIVE GRID
+           ========================================================================== */
+        .related-section {
+            margin-top: 5rem;
+            border-top: 1px solid #eee;
+            padding-top: 4rem;
+        }
+
+        .related-title {
+            font-family: var(--font-head);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: 0.5px;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .related-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--text-dark);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-premium);
+        }
+
+        .related-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: #e0e0e0;
+        }
+
+        .related-img-wrapper {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: #fafafa;
+        }
+
+        .related-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s var(--transition-premium);
+        }
+
+        .related-card:hover .related-img {
+            transform: scale(1.06);
+        }
+
+        .related-info {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: 6px;
+        }
+
+        .related-prod-title {
+            font-family: var(--font-head);
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .related-prod-price {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-top: auto;
+        }
+
+        /* ==========================================================================
+           SHIMMER SKELETON ANIMATION
+           ========================================================================== */
+        @keyframes skeleton-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ==========================================================================
+           RESPONSIVE RE-ARCHITECTURE MEDIA QUERIES
+           ========================================================================== */
+        @media(max-width: 1200px) {
+            .split-layout { gap: 3rem; }
+            .related-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        }
+
+        @media(max-width: 992px) {
+            .navbar { padding: 0.75rem 1.5rem; }
+            .split-layout { grid-template-columns: 1fr; gap: 3rem; }
+            .product-title { font-size: 2rem; }
+            .related-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media(max-width: 576px) {
+            .navbar { padding: 0.5rem 1rem; }
+            .brand-logo-img { height: 36px; }
+            .split-layout { gap: 2rem; }
+            .product-title { font-size: 1.65rem; }
+            .price-container { margin: 0.75rem 0 1.25rem 0; }
+            .actions-group { flex-direction: column; gap: 0.75rem; }
+            .btn-premium { width: 100%; box-sizing: border-box; padding: 14px 24px; }
+            .btn-wishlist-action { order: 3; }
+            .review-card { padding: 1.25rem; }
+            .review-header { flex-direction: column; gap: 0.5rem; }
+            .review-date { float: none; display: block; margin-top: 2px; }
+            .related-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+            .related-section { margin-top: 3.5rem; padding-top: 2.5rem; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- STICKY GLOBAL NAVIGATION TOP BAR -->
     <nav class="navbar">
-        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+        <div class="menu-btn" onclick="toggleSidebar()" aria-label="Open menu" role="button" tabindex="0">☰</div>
         <a href="index.html" class="brand" id="brandLogo" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
             <div class="logo-container" style="display: flex; align-items: center; gap: 12px;">
-                <!-- Beautiful SVG Gift Box Icon with GW inside -->
-                <svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.06));">
-                    <!-- Gift Box Base -->
-                    <rect x="20" y="45" width="60" height="45" rx="4" fill="#ffffff" stroke="var(--gold)" stroke-width="4.5"/>
-                    <rect x="18" y="38" width="64" height="10" rx="2" fill="var(--gold)"/>
-                    <!-- Golden Ribbon Vertical -->
-                    <rect x="47" y="38" width="6" height="52" fill="var(--gold)"/>
-                    <!-- GW Letters inside box -->
-                    <text x="31" y="70" font-family="'Cinzel', serif" font-size="20" font-weight="bold" fill="#000000">G</text>
-                    <text x="53" y="70" font-family="'Cinzel', serif" font-size="20" font-weight="bold" fill="var(--gold)">W</text>
-                    <!-- Heart in the middle of G -->
-                    <path d="M41 59.5 C41 58.5, 42 57.5, 43 58.5 C44 57.5, 45 58.5, 45 59.5 C45 61, 43 62, 43 62 C43 62, 41 61, 41 59.5 Z" fill="var(--gold)"/>
-                    <!-- Golden Bow Ribbon on Top -->
-                    <path d="M50 38 C40 25, 30 35, 48 38 Z" fill="var(--gold)" stroke="var(--gold)" stroke-width="1.5"/>
-                    <path d="M50 38 C60 25, 70 35, 52 38 Z" fill="var(--gold)" stroke="var(--gold)" stroke-width="1.5"/>
-                    <!-- Heart in the center of bow -->
-                    <path d="M47 34 C47 32, 48.5 31, 50 32.5 C51.5 31, 53 32, 53 34 C53 36, 50 38, 50 38 C50 38, 47 36, 47 34 Z" fill="#000000"/>
-                </svg>
-                <!-- Brand Text with Logo fonts -->
+                <!-- Cleaned up, premium implementation matching standard layout rules -->
+                <img src="Gift-Wallay.png" alt="Gift Wallay Logo" class="brand-logo-img" loading="eager">
                 <div style="display: flex; flex-direction: column; align-items: start; line-height: 1.1; text-align: left;">
                     <span style="font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; color: #000000; letter-spacing: 1px; text-transform: uppercase;">Gift<span style="color: var(--gold);">Wallay</span></span>
                     <span style="font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 1.8px; color: #555; text-transform: uppercase; margin-top: 2px; font-weight: bold;">Har Thofa, Dil Se</span>
                 </div>
             </div>
         </a>
-        <a href="cart.html" class="cart-icon">🛒<span class="cart-count">0</span></a>
+        <a href="cart.html" class="cart-icon" aria-label="View shopping cart">🛒<span class="cart-count">0</span></a>
     </nav>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    <div class="sidebar-menu" id="sidebarMenu">
-        <div style="text-align: right; font-size: 1.5rem; cursor: pointer;" onclick="toggleSidebar()">×</div>
-        <div style="margin-top: 2rem;">
+    <!-- SIDEBAR NAVIGATION DRAWER -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar-menu" id="sidebarMenu" role="navigation" aria-label="Sidebar Navigation Menu">
+        <div style="text-align: right; font-size: 1.75rem; cursor: pointer; font-family: var(--font-body); line-height: 1;" onclick="toggleSidebar()" role="button" tabindex="0">×</div>
+        <div style="margin-top: 2rem; display: flex; flex-direction: column;">
             <a href="index.html" class="sidebar-link">Home</a>
             <a href="shop.html" class="sidebar-link">Shop All</a>
             <a href="account.html" class="sidebar-link">My Account</a>
         </div>
     </div>
 
-    <!-- MAIN PRODUCT AREA -->
-    <div class="container section-pad split-layout" id="productDetailContainer">
-        <!-- Premium Shimmer Loading Skeleton -->
-        <div style="background: #fafafa; height: 500px; border-radius: 4px; animation: skeleton-shimmer 1.5s infinite linear; background: linear-gradient(90deg, #f3f3f3 25%, #eaeaea 50%, #f3f3f3 75%); background-size: 200% 100%;"></div>
+    <!-- MAIN PRODUCT DETAIL HOST WRAPPER -->
+    <main class="container section-pad split-layout" id="productDetailContainer">
+        <!-- Structural Premium Shimmer Placeholder Loop (Replaced completely on data load inside main.js) -->
+        <div style="background: #fafafa; height: 500px; border-radius: var(--border-radius); animation: skeleton-shimmer 1.5s infinite linear; background: linear-gradient(90deg, #f3f3f3 25%, #eaeaea 50%, #f3f3f3 75%); background-size: 200% 100%;"></div>
         <div style="display: flex; flex-direction: column; justify-content: center; gap: 1rem;">
             <div style="width: 100px; height: 15px; background: #eee; border-radius: 2px;"></div>
             <div style="width: 80%; height: 35px; background: #eee; border-radius: 4px;"></div>
@@ -72,20 +645,25 @@
             <div style="width: 100%; height: 80px; background: #eee; border-radius: 4px;"></div>
             <div style="width: 100%; height: 50px; background: #eee; border-radius: 4px;"></div>
         </div>
-    </div>
+    </main>
 
-    <!-- REVIEWS SECTION -->
-    <div class="container" style="padding-bottom: 5rem; border-top: 1px solid #eee; padding-top: 3rem;" id="productReviewsContainer">
-        <!-- Dynamically populated reviews -->
-    </div>
+    <!-- REVIEWS & RELATED PRODUCTS CONTAINER -->
+    <section class="container" style="padding-bottom: 5rem; border-top: 1px solid #eee; padding-top: 3rem;" id="productReviewsContainer">
+        <!-- Dynamic component targets injection handled strictly by main.js data pipeline -->
+    </section>
 
+    <!-- CORE INTEGRATION SCRIPTS -->
     <script src="main.js"></script>
     <script>
+        // Retention of existing dynamic client state logic metrics 
         let quantity = 1;
         function changeQty(diff) {
             quantity += diff;
             if(quantity < 1) quantity = 1;
-            document.getElementById('qtyDisplay').innerText = quantity;
+            const qtyDisplayElement = document.getElementById('qtyDisplay');
+            if(qtyDisplayElement) {
+                qtyDisplayElement.innerText = quantity;
+            }
         }
     </script>
 </body>
