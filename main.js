@@ -1933,27 +1933,33 @@ function injectBackButton() {
 
 // --- 8.8. ENDLESS CATEGORY CAROUSEL DRAG & AUTO-ROTATING SYSTEM ---
 let carouselX = 0;
-let carouselSpeed = 0.5; // default speed (pixels per frame)
+let carouselSpeed = 0.5; 
 let isCarouselDragging = false;
 let startCarouselX = 0;
 let dragCarouselX = 0;
 let animationFrameId = null;
 
 function initInfiniteCarousel() {
+    // Clean up any previously running loops to prevent memory leaks and browser crashes
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+
     const wrapper = document.querySelector('.scroll-wrapper');
     const track = document.querySelector('.scroll-track');
     if (!wrapper || !track) return;
 
-    // Remove any old CSS animation to let Javascript control coordinates with 1:1 precision
     track.style.animation = 'none';
 
+    // Reset initial positions for clean state
+    carouselX = 0; 
     const trackWidth = track.scrollWidth;
     const halfWidth = trackWidth / 2;
 
     function step() {
         if (!isCarouselDragging) {
             carouselX -= carouselSpeed;
-            // Seamless infinite wrap around
             if (carouselX <= -halfWidth) {
                 carouselX = 0;
             } else if (carouselX > 0) {
@@ -1964,7 +1970,6 @@ function initInfiniteCarousel() {
         animationFrameId = requestAnimationFrame(step);
     }
 
-    // Drag Actions
     function onDragStart(e) {
         isCarouselDragging = true;
         const pageX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
@@ -1979,14 +1984,12 @@ function initInfiniteCarousel() {
         const diff = pageX - startCarouselX;
         carouselX = dragCarouselX + diff;
 
-        // Dynamic auto-rotate direction sync based on user drag direction!
         if (diff < 0) {
-            carouselSpeed = 0.5; // Dragged left -> rolls left endless
+            carouselSpeed = 0.5; 
         } else if (diff > 0) {
-            carouselSpeed = -0.5; // Dragged right -> rolls right endless
+            carouselSpeed = -0.5; 
         }
 
-        // Keep inside bounds
         if (carouselX <= -halfWidth) {
             carouselX += halfWidth;
             dragCarouselX += halfWidth;
@@ -2004,22 +2007,31 @@ function initInfiniteCarousel() {
         wrapper.style.cursor = 'grab';
     }
 
-    // Attach dragging events
+    // Clean event structure prevents duplication
+    wrapper.removeEventListener('mousedown', onDragStart);
     wrapper.addEventListener('mousedown', onDragStart);
+    
+    window.removeEventListener('mousemove', onDragMove);
     window.addEventListener('mousemove', onDragMove);
+    
+    window.removeEventListener('mouseup', onDragEnd);
     window.addEventListener('mouseup', onDragEnd);
 
+    wrapper.removeEventListener('touchstart', onDragStart);
     wrapper.addEventListener('touchstart', onDragStart, { passive: true });
+    
+    window.removeEventListener('touchmove', onDragMove);
     window.addEventListener('touchmove', onDragMove, { passive: true });
+    
+    window.removeEventListener('touchend', onDragEnd);
     window.addEventListener('touchend', onDragEnd);
 
-    if (animationFrameId) cancelAnimationFrame(animationFrameId);
     step();
 }
 
 // --- 9. BOOT ENGINE ON WINDOW LOAD ---
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initStore);
+    document.addEventListener('DOMContentLoaded', () => initStore());
 } else {
     initStore();
 }
