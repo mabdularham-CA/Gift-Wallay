@@ -1816,3 +1816,50 @@ if (document.readyState === 'loading') {
 } else {
     initStore();
 }
+// Run when page loads to check authentication state
+document.addEventListener("DOMContentLoaded", function() {
+    checkLoginState();
+});
+
+function checkLoginState() {
+    const loggedIn = localStorage.getItem("userLoggedIn");
+    const outView = document.getElementById("auth-logged-out-view");
+    const inView = document.getElementById("auth-logged-in-view");
+    const userTitle = document.getElementById("welcome-user-title");
+
+    if (loggedIn === "true" && inView && outView) {
+        outView.style.display = "none";
+        inView.style.display = "block";
+        if (userTitle) {
+            userTitle.innerText = "Welcome, " + (localStorage.getItem("userName") || "User");
+        }
+    } else if (inView && outView) {
+        outView.style.display = "block";
+        inView.style.display = "none";
+    }
+}
+
+function handleCredentialResponse(response) {
+    const responsePayload = parseJwt(response.credential);
+    
+    localStorage.setItem("userLoggedIn", "true");
+    localStorage.setItem("userName", responsePayload.name);
+    localStorage.setItem("userEmail", responsePayload.email);
+    localStorage.setItem("userPic", responsePayload.picture);
+    
+    checkLoginState(); // Switch views instantly without full reload
+}
+
+function handleLogout() {
+    localStorage.clear(); // Clear session keys
+    window.location.reload(); // Refresh to lock everything down
+}
+
+function parseJwt(token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+}
