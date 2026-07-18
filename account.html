@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Account | Gift Wallay</title>
+    <!-- Google Auth Script -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
@@ -95,6 +97,33 @@
             border-radius: 0;
             display: inline-block;
         }
+
+        /* Google Box and Logout styling */
+        .google-auth-box {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .logout-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #cc3333;
+            color: white;
+            border: none;
+            font-family: var(--font-head);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .logout-btn:hover {
+            background: #b32424;
+        }
     </style>
 </head>
 <body>
@@ -107,17 +136,48 @@
 
     <div class="container account-page-wrapper">
         
-        <!-- AUTH CARD (Main Login / Register forms and active dashboard injected dynamically by main.js) -->
+        <!-- AUTH CARD -->
         <div class="auth-container">
-            <h2 style="text-align: center; margin-bottom: 0.5rem; font-family: var(--font-head); letter-spacing: 1px;">Welcome Back</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 2rem; font-size: 0.9rem;">Sign in to access your premium shopping profile.</p>
+            <div id="auth-logged-out-view">
+                <h2 style="text-align: center; margin-bottom: 0.5rem; font-family: var(--font-head); letter-spacing: 1px;">Welcome Back</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 2rem; font-size: 0.9rem;">Sign in to access your premium shopping profile.</p>
 
-            <div class="tab-nav">
-                <div class="tab-btn active">Login</div>
-                <div class="tab-btn">Register</div>
+                <div class="tab-nav">
+                    <div class="tab-btn active">Login</div>
+                    <div class="tab-btn">Register</div>
+                </div>
+
+                <!-- Forms injected by main.js go here -->
+
+                <!-- Google Sign-In Container -->
+                <div id="g_id_onload"
+                     data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+                     data-context="signin"
+                     data-ux_mode="popup"
+                     data-callback="handleCredentialResponse"
+                     data-auto_select="true"
+                     data-itp_support="true">
+                </div>
+
+                <div class="google-auth-box">
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-shape="rectangular"
+                         data-theme="filled_blue"
+                         data-text="signin_with"
+                         data-size="large"
+                         data-logo_alignment="left">
+                    </div>
+                </div>
             </div>
 
-            <!-- Forms injected by main.js -->
+            <!-- Dynamic Dashboard / Logout View Container -->
+            <div id="auth-logged-in-view" style="display: none; text-align: center;">
+                <h2 style="font-family: var(--font-head); margin-bottom: 0.5rem;" id="welcome-user-title">Hello, User</h2>
+                <p style="color: #666; margin-bottom: 2rem; font-size: 0.9rem;">Manage your premium gift orders and profile details.</p>
+                
+                <button class="logout-btn" onclick="handleLogout()">Logout</button>
+            </div>
         </div>
 
     </div>
