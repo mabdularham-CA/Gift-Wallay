@@ -1,5 +1,9 @@
 /* main.js - Premium Gift Wallay Store Engine */
 
+// --- Google Apps Script Web App URL ---
+// Replace this placeholder with your deployed Google Apps Script URL
+const PRODUCTS_API = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+
 // --- 1. INITIAL PREMIUM PRODUCTS DATABASE ---
 const INITIAL_PRODUCTS = [
     {
@@ -88,7 +92,7 @@ function saveDb(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
 }
 
-// In-memory local state copies synced with server DB
+// In-memory local state copies synced with local storage
 let products = [];
 let cart = getDb('gw_cart', []);
 let users = [];
@@ -96,7 +100,35 @@ let orders = [];
 let currentUser = getDb('gw_current_user', null);
 
 let isStoreInitialized = false;
-let initPromise = null;
+
+// Google Sheets live syncing pipeline
+async function syncProducts() {
+    try {
+        const response = await fetch(PRODUCTS_API + "?action=products&t=" + Date.now(), {
+            cache: "no-store"
+        });
+
+        if (!response.ok) throw new Error("Network Error");
+
+        const latestProducts = await response.json();
+        if (!Array.isArray(latestProducts)) return;
+
+        const oldProducts = JSON.parse(localStorage.getItem("gw_products") || "[]");
+
+        // Update ONLY if items in database have visually changed
+        if (JSON.stringify(oldProducts) !== JSON.stringify(latestProducts)) {
+            products = latestProducts;
+            localStorage.setItem("gw_products", JSON.stringify(latestProducts));
+
+            // Quietly re-render UI assets matching latest sheet parameters
+            loadPageData();
+            console.log("Products synced from Google Sheets.");
+        }
+    } catch (err) {
+        console.log("Using cached localized products database.");
+        products = JSON.parse(localStorage.getItem("gw_products")) || INITIAL_PRODUCTS;
+    }
+}
 
 async function initStore() {
     if (isStoreInitialized) return;
@@ -121,136 +153,45 @@ async function initStore() {
         initInfiniteCarousel();
     }
     
-    // 3. Fetch fresh database values in parallel in the background (Non-blocking)
-    initPromise = Promise.all([
-        fetch('/api/products').then(r => {
-            if (!r.ok) throw new Error("Status " + r.status);
-            return r.json();
-        }).then(data => {
-            if (data && Array.isArray(data)) {
-                products = data;
-                saveDb('gw_products', data);
-            }
-        }).catch(err => {
-            console.error("Failed to load products from server, falling back:", err);
-        }),
-        
-        fetch('/api/users').then(r => {
-            if (!r.ok) throw new Error("Status " + r.status);
-            return r.json();
-        }).then(data => {
-            if (data && Array.isArray(data)) {
-                users = data;
-                saveDb('gw_users', data);
-            }
-        }).catch(err => {
-            console.error("Failed to load users from server, falling back:", err);
-        }),
-        
-        fetch('/api/orders').then(r => {
-            if (!r.ok) throw new Error("Status " + r.status);
-            return r.json();
-        }).then(data => {
-            if (data && Array.isArray(data)) {
-                orders = data;
-                saveDb('gw_orders', data);
-            }
-        }).catch(err => {
-            console.error("Failed to load orders from server, falling back:", err);
-        })
-    ]).then(() => {
-        isStoreInitialized = true;
-        
-        // Refresh with fresh database data quietly (with zero visual jumps)
-        injectHeaderFooter();
-        loadPageData();
-        updateCartBadge();
-        
-        if (page === 'index.html' || page === '') {
-            initInfiniteCarousel();
-        }
-    });
+    // 3. Sync from Google Sheets API in background
+    await syncProducts();
     
-    return initPromise;
+    // Auto check every 60 seconds
+    setInterval(syncProducts, 60000);
+
+    isStoreInitialized = true;
 }
 
-// API synchronizers
+// Local Fallback Synchronizers (No-Op servers since hosting on static GitHub Pages)
 async function saveProductToServer(newProduct) {
-    try {
-        await fetch('/api/products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newProduct)
-        });
-    } catch (e) {
-        console.error("Failed to sync product to server:", e);
-    }
+    console.log("Static Mode: Changes will reset unless committed to Google Sheets.");
 }
 
 async function deleteProductFromServer(id) {
-    try {
-        await fetch(`/api/products/${id}`, { method: 'DELETE' });
-    } catch (e) {
-        console.error("Failed to delete product from server:", e);
-    }
+    console.log("Static Mode: Deletions should occur via Google Sheets Admin.");
 }
 
 async function addReviewToServer(productId, review) {
-    try {
-        await fetch(`/api/products/${productId}/reviews`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(review)
-        });
-    } catch (e) {
-        console.error("Failed to add review to server:", e);
-    }
+    console.log("Static Mode: Review saved locally on user device.");
 }
 
 async function addOrderToServer(order) {
-    try {
-        await fetch('/api/orders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(order)
-        });
-    } catch (e) {
-        console.error("Failed to add order to server:", e);
-    }
+    console.log("Static Mode: Order captured locally.");
 }
 
 async function updateOrderStatusOnServer(orderNum, status) {
-    try {
-        await fetch(`/api/orders/${orderNum}/status`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status })
-        });
-    } catch (e) {
-        console.error("Failed to update status on server:", e);
-    }
+    console.log("Static Mode: Local status configuration adjusted.");
 }
 
 async function addUserToServer(user) {
-    try {
-        await fetch('/api/users', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(user)
-        });
-    } catch (e) {
-        console.error("Failed to add user to server:", e);
-    }
+    console.log("Static Mode: User structured locally.");
 }
 
 // --- 3. COMMON DYNAMIC NAVBAR & SIDEBAR INJECTION ---
 function injectHeaderFooter() {
-    // Determine current page filename
     const path = window.location.pathname;
     const page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
 
-
-    // 1. Inject Banner + Navbar Content inside a single fixed wrapper
     const bannerHtml = `
         <div id="topBanner" style="background: black; color: var(--gold); text-align: center; padding: 10px; font-size: 0.8rem; letter-spacing: 1.5px; font-weight: 700; width: 100%;">
             WELCOME10 - GET 10% OFF YOUR FIRST ORDER
@@ -259,7 +200,7 @@ function injectHeaderFooter() {
     
     const navbar = document.querySelector('.navbar');
     if (navbar) {
-        navbar.removeAttribute('style'); // Clear any inline styles like top: 35px
+        navbar.removeAttribute('style'); 
         
         let headerWrapper = document.getElementById('gwHeader');
         if (!headerWrapper) {
@@ -299,7 +240,6 @@ function injectHeaderFooter() {
             </div>
         `;
 
-        // Clean up any existing back button first to avoid duplicates
         const existingBackBtn = document.getElementById('gwBackButton');
         if (existingBackBtn) {
             existingBackBtn.remove();
@@ -309,8 +249,8 @@ function injectHeaderFooter() {
             const backDiv = document.createElement('div');
             backDiv.id = 'gwBackButton';
             backDiv.style.position = 'fixed';
-            backDiv.style.top = '112px'; // Directly under the 98px header (38px banner + 60px navbar)
-            backDiv.style.left = '5%';   // Perfectly aligned with the hamburger menu button
+            backDiv.style.top = '112px'; 
+            backDiv.style.left = '5%';   
             backDiv.style.zIndex = '1500';
             backDiv.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
             backDiv.innerHTML = `
@@ -343,11 +283,9 @@ function injectHeaderFooter() {
             }
         }
 
-        // Bind events
         document.getElementById('burgerBtn').addEventListener('click', toggleSidebar);
     }
 
-    // 2. Inject Sidebar Content
     let sidebarOverlay = document.getElementById('sidebarOverlay');
     let sidebarMenu = document.getElementById('sidebarMenu');
     
@@ -391,17 +329,14 @@ function injectHeaderFooter() {
                 </div>
             </div>
             
-            <!-- SOCIAL MEDIA FOOTER -->
             <div style="padding-top: 1.5rem; border-top: 1px dashed rgba(0,0,0,0.1); margin-top: auto; padding-bottom: 10px;">
                 <p style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 0.8rem; font-weight: bold; text-align: center;">Connect With Us</p>
                 <div style="display: flex; justify-content: center; gap: 1.5rem; align-items: center;">
-                    <!-- WhatsApp -->
                     <a href="https://wa.me/923211234567" target="_blank" style="text-decoration: none; color: #25D366; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(37, 211, 102, 0.1); border-radius: 50%; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.15)'; this.style.background='rgba(37,211,102,0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.background='rgba(37,211,102,0.1)'" title="WhatsApp">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.735-4.326 9.738-9.725.002-2.617-1.011-5.074-2.852-6.918C16.307 2.116 13.86 1.1 11.247 1.1 5.845 1.1 1.511 5.428 1.508 10.826c-.001 1.508.397 2.979 1.155 4.269l-.988 3.61 3.73-.977c1.238.675 2.535 1.031 3.754 1.031l-.001-.005zm10.748-6.147c-.296-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.766.967-.94 1.165-.173.198-.346.223-.642.074-.296-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.174.2-.298.3-.496.099-.198.05-.372-.025-.521-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.011c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347z"/>
                         </svg>
                     </a>
-                    <!-- Instagram -->
                     <a href="https://instagram.com/gift_wallay" target="_blank" style="text-decoration: none; color: #E1306C; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(225, 48, 108, 0.1); border-radius: 50%; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.15)'; this.style.background='rgba(225,48,108,0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.background='rgba(225,48,108,0.1)'" title="Instagram">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
@@ -409,7 +344,6 @@ function injectHeaderFooter() {
                             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                         </svg>
                     </a>
-                    <!-- Facebook -->
                     <a href="https://facebook.com/gift_wallay" target="_blank" style="text-decoration: none; color: #1877F2; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(24, 119, 242, 0.1); border-radius: 50%; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.15)'; this.style.background='rgba(24,119,242,0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.background='rgba(24,119,242,0.1)'" title="Facebook">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -420,7 +354,6 @@ function injectHeaderFooter() {
         </div>
     `;
 
-    // Category Toggle Interactive Logic
     const categoriesToggle = document.getElementById('categoriesToggleBtn');
     const categoriesContainer = document.getElementById('sidebarCategoriesContainer');
     const categoriesArrow = document.getElementById('categoriesToggleArrow');
@@ -438,14 +371,12 @@ function injectHeaderFooter() {
         };
     }
 
-    // 3. Inject Custom Premium Modal Container
     if (!document.getElementById('gwModalOverlay')) {
         const modalContainer = document.createElement('div');
         modalContainer.id = "gwModalOverlay";
         modalContainer.className = "gw-modal-overlay";
         modalContainer.innerHTML = `
             <div class="gw-modal-card" id="gwModalCard">
-                <!-- Injected dynamically -->
             </div>
         `;
         document.body.appendChild(modalContainer);
@@ -601,7 +532,6 @@ function updateCartBadge() {
 }
 
 function addToCart(productName, price, qty = 1) {
-    // Check if we can map this product to our database for better data matching
     const matchingProduct = products.find(p => p.name.toLowerCase().includes(productName.toLowerCase()));
     const productId = matchingProduct ? matchingProduct.id : String(Date.now());
     const imageUrl = matchingProduct ? matchingProduct.image : "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=600&auto=format&fit=crop&q=80";
@@ -664,10 +594,8 @@ function loadPageData() {
 
 // A. INDEX PAGE (Home)
 function loadIndexPage() {
-    // 1. Dynamic Recently Added
     const productGrid = document.querySelector('.product-grid');
     if (productGrid) {
-        // Take the first 4 items or show custom featured items
         const recentProducts = products.slice(0, 4);
         productGrid.innerHTML = recentProducts.map(p => `
             <div class="product-card" style="animation: fadeUp 1s ease forwards;">
@@ -715,6 +643,7 @@ async function loadCategory() {
     await initStore();
 }
 
+// C. CATEGORY PAGE
 function loadCategoryPage() {
     const params = new URLSearchParams(window.location.search);
     const type = params.get('type');
@@ -753,10 +682,10 @@ function loadCategoryPage() {
     }
 }
 
-// D. PRODUCT DETAIL PAGE (With Reviews & Review Addition)
+// D. PRODUCT DETAIL PAGE
 function loadProductPage() {
     const params = new URLSearchParams(window.location.search);
-    let productId = params.get('id') || "1"; // Default to 1 if no ID passed
+    let productId = params.get('id') || "1"; 
 
     const product = products.find(p => p.id === productId);
     if (!product) {
@@ -770,10 +699,8 @@ function loadProductPage() {
         return;
     }
 
-    // Set Document Title
     document.title = `${product.name} | Gift Wallay`;
 
-    // 1. Render Product Detail Layout
     const detailContainer = document.querySelector('.container.section-pad.split-layout');
     if (detailContainer) {
         const ratingAvg = product.reviews && product.reviews.length > 0 
@@ -782,12 +709,10 @@ function loadProductPage() {
         const starStr = "★".repeat(Math.round(ratingAvg)) + "☆".repeat(5 - Math.round(ratingAvg));
 
         detailContainer.innerHTML = `
-            <!-- Product Image -->
             <div style="background: #fdfdfd; border: 1px solid #f0f0f0; padding: 1rem; height: 500px; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: var(--shadow);">
                 <img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
 
-            <!-- Product Details -->
             <div style="display: flex; flex-direction: column; justify-content: center;">
                 <div style="color: var(--gold); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 2px; font-weight: 700; margin-bottom: 10px;">
                     ${product.category}
@@ -804,7 +729,6 @@ function loadProductPage() {
                     ${product.description}
                 </p>
 
-                <!-- Quantity controls -->
                 <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem;">
                     <span style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #333;">Quantity:</span>
                     <div class="qty-box" style="display: flex; align-items: center; border: 1px solid #ddd; width: fit-content; background: #fff;">
@@ -823,7 +747,6 @@ function loadProductPage() {
             </div>
         `;
 
-        // Bind Quantity Controls
         let qty = 1;
         document.getElementById('prodQtyMinus').onclick = () => {
             if (qty > 1) qty--;
@@ -834,13 +757,11 @@ function loadProductPage() {
             document.getElementById('qtyDisplay').innerText = qty;
         };
 
-        // Bind Add to Cart Click
         document.getElementById('addToCartBtn').onclick = () => {
             addToCartById(product.id, qty);
         };
     }
 
-    // 2. Render Product Reviews Section Dynamically
     renderReviews(product);
 }
 
@@ -862,13 +783,11 @@ function renderReviews(product) {
     const reviewsSection = document.querySelector('.container[style*="padding-bottom: 5rem"]');
     if (!reviewsSection) return;
 
-    // Calculate rating stats
     const totalReviews = product.reviews ? product.reviews.length : 0;
     const ratingAvg = totalReviews > 0 
         ? (product.reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews).toFixed(1)
         : "5.0";
     
-    // Count distribution
     const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
     if (product.reviews) {
         product.reviews.forEach(r => {
@@ -877,10 +796,9 @@ function renderReviews(product) {
             }
         });
     } else {
-        distribution[5] = 1; // Default
+        distribution[5] = 1;
     }
 
-    // Build the visual stars distribution bars
     let distributionHtml = "";
     for (let stars = 5; stars >= 1; stars--) {
         const count = distribution[stars];
@@ -896,7 +814,6 @@ function renderReviews(product) {
         `;
     }
 
-    // Build the reviews list
     let reviewsListHtml = "";
     if (product.reviews && product.reviews.length > 0) {
         reviewsListHtml = product.reviews.map(r => {
@@ -940,14 +857,12 @@ function renderReviews(product) {
         `;
     }
 
-    // Set reviews Section contents with premium 2-column layout!
     reviewsSection.innerHTML = `
         <div style="margin-top: 4rem; border-top: 1px solid #eee; padding-top: 4rem;">
             <h3 style="font-family: var(--font-head); font-size: 1.8rem; letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-bottom: 3rem; color: var(--black);">Client Appreciation</h3>
             
             <div style="display: grid; grid-template-columns: 1fr; md:grid-template-columns: 1.2fr 2fr; gap: 4rem; align-items: start;" class="reviews-grid-wrapper">
                 
-                <!-- Left: Distribution Summary Panel -->
                 <div style="background: #fafafa; border: 1px solid rgba(0,0,0,0.05); padding: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.01);" class="reviews-summary-panel">
                     <h4 style="font-family: var(--font-head); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--black); margin-bottom: 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px;">Review Summary</h4>
                     
@@ -963,7 +878,6 @@ function renderReviews(product) {
 
                     <button class="btn" id="openReviewFormBtn" style="width: 100%; padding: 15px; font-weight: bold; letter-spacing: 1px;">+ Write A Review</button>
                     
-                    <!-- Write review container (hidden by default, toggles open smoothly) -->
                     <div id="reviewFormContainer" style="max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; margin-top: 0;">
                         <div style="border-top: 1.5px solid var(--gold); margin-top: 2rem; padding-top: 2rem;">
                             <h4 style="margin-bottom: 1.5rem; color: var(--black); font-size: 1.1rem; font-family: var(--font-head); text-transform: uppercase; letter-spacing: 1px;">Share Your Experience</h4>
@@ -988,7 +902,6 @@ function renderReviews(product) {
                                     <textarea id="revComment" rows="4" placeholder="How was your exquisite experience with this product?" style="width: 100%; padding: 12px; border: 1px solid #ddd; font-family: var(--font-body); background: #fff; line-height: 1.6; font-size: 0.9rem; resize: vertical;" required></textarea>
                                 </div>
                                 
-                                <!-- Photo Upload -->
                                 <div style="margin-bottom: 1.5rem;">
                                     <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 6px; font-weight: bold;">Upload Photo (Optional)</label>
                                     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
@@ -1010,7 +923,6 @@ function renderReviews(product) {
                     </div>
                 </div>
 
-                <!-- Right: Reviews List -->
                 <div style="flex: 1;" class="reviews-list-panel">
                     <h4 style="font-family: var(--font-head); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--black); margin-bottom: 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px;">Client Feedback</h4>
                     <div id="reviewsWrapper">
@@ -1022,7 +934,6 @@ function renderReviews(product) {
         </div>
     `;
 
-    // Dynamic responsive styles for reviews panel grid
     if (!document.getElementById('reviewsMediaStyles')) {
         const style = document.createElement('style');
         style.id = 'reviewsMediaStyles';
@@ -1040,7 +951,6 @@ function renderReviews(product) {
         document.head.appendChild(style);
     }
 
-    // Toggle Write Review Form open/close smoothly
     const openBtn = document.getElementById('openReviewFormBtn');
     const container = document.getElementById('reviewFormContainer');
     if (openBtn && container) {
@@ -1061,7 +971,6 @@ function renderReviews(product) {
         };
     }
 
-    // Bind Interactive Stars
     const stars = document.querySelectorAll('.interactive-star');
     const ratingInput = document.getElementById('revRating');
     if (stars && ratingInput) {
@@ -1098,7 +1007,6 @@ function renderReviews(product) {
         }
     }
 
-    // Image Upload Bindings
     let uploadedImageBase64 = "";
     const imageInput = document.getElementById('revImage');
     const imageName = document.getElementById('revImageName');
@@ -1132,7 +1040,6 @@ function renderReviews(product) {
         };
     }
 
-    // Form Submit Bind
     const form = document.getElementById('addReviewForm');
     if (form) {
         form.onsubmit = async function(e) {
@@ -1153,32 +1060,26 @@ function renderReviews(product) {
                 image: uploadedImageBase64 || null
             };
 
-            // Post to Server
             await addReviewToServer(product.id, newReview);
 
-            // Update local state instantly so it re-renders without refreshing
             if (!product.reviews) product.reviews = [];
             product.reviews.unshift(newReview);
 
             showPremiumAlert("Review Submitted", "Thank you! Your verified feedback has been added successfully.", "success", () => {
-                // Re-render
                 renderReviews(product);
-                // Also trigger product page stats reload
                 loadProductPage();
             });
         };
     }
 }
 
-// E. SHOPPING CART PAGE (Dynamic Rows & Asking Confirm)
+// E. SHOPPING CART PAGE
 function loadCartPage() {
     const tableBody = document.querySelector('#cartTable tbody');
-    const subtotalEl = document.getElementById('cartSubtotal');
 
     if (!tableBody) return;
 
     if (cart.length === 0) {
-        // Empty state
         document.querySelector('.container.section-pad').innerHTML = `
             <h1 class="text-center" style="margin-bottom: 2rem;">Your Cart</h1>
             <div style="text-align: center; padding: 5rem 0; border: 1px dashed #ddd; background: #fafafa;">
@@ -1191,7 +1092,6 @@ function loadCartPage() {
         return;
     }
 
-    // Populate rows
     tableBody.innerHTML = cart.map((item, idx) => `
         <tr class="cart-row" data-id="${item.id}" style="animation: fadeUp 0.5s ease forwards;">
             <td style="display: flex; align-items: center; gap: 1.5rem;">
@@ -1244,12 +1144,9 @@ function removeCartItemPrompt(id, name) {
         "Remove Item",
         `Are you sure you want to permanently remove <strong>${name}</strong> from your premium gift cart?`,
         () => {
-            // Confirm removal
             cart = cart.filter(item => item.id !== id);
             saveDb('gw_cart', cart);
             updateCartBadge();
-            
-            // Re-render
             loadCartPage();
         }
     );
@@ -1263,7 +1160,7 @@ function recalcCartPageSubtotal() {
     }
 }
 
-// F. CHECKOUT PAGE (Dynamic Summary & COD tax calculations with Promo Code support)
+// F. CHECKOUT PAGE
 function loadCheckoutPage() {
     const checkoutForm = document.getElementById('checkoutForm');
     if (!checkoutForm) return;
@@ -1275,7 +1172,6 @@ function loadCheckoutPage() {
         return;
     }
 
-    // 50+ Custom Promo Codes dictionary
     const CUSTOM_PROMO_CODES = {
         "WELCOME_10": { type: "percent", value: 10 },
         "WELCOME10": { type: "percent", value: 10 },
@@ -1369,7 +1265,6 @@ function loadCheckoutPage() {
         summaryContainer.innerHTML = `
             <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--black); padding-bottom: 10px;">Order Summary</h3>
             
-            <!-- Promo Code Section (Top) -->
             <div style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.1);">
                 <label class="checkout-label" style="margin-bottom: 8px; display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #555;">Apply Promo Code (Optional)</label>
                 <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
@@ -1401,7 +1296,6 @@ function loadCheckoutPage() {
                 </div>
                 ` : ''}
 
-                <!-- TAX ROW -->
                 <div id="taxRow" class="tax-row" style="display: ${paymentType === 'cod' ? 'flex' : 'none'}; justify-content: space-between; margin-bottom: 8px;">
                     <span>COD Advance Surcharge (9%)</span>
                     <span id="taxAmount" style="font-weight: bold;">Rs. ${surcharge.toLocaleString()}</span>
@@ -1418,7 +1312,6 @@ function loadCheckoutPage() {
                 </div>
             </div>
 
-            <!-- Trust Badges -->
             <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(0,0,0,0.1); text-align: center;">
                 <p style="font-size: 0.75rem; color: #888; margin-bottom: 0.8rem; letter-spacing: 0.5px; text-transform: uppercase;">TRUSTED BY THOUSANDS</p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
@@ -1434,7 +1327,6 @@ function loadCheckoutPage() {
             </div>
         `;
 
-        // Bind events inside renderSummary so they are wireable when DOM updates
         const applyPromoBtn = document.getElementById('applyPromoBtn');
         if (applyPromoBtn) {
             applyPromoBtn.onclick = function() {
@@ -1478,10 +1370,8 @@ function loadCheckoutPage() {
         }
     }
 
-    // Initial render of summary
     renderSummary();
 
-    // 2. Select Payment Toggle bind
     window.selectPay = function(element, type) {
         document.querySelectorAll('.pay-option').forEach(el => el.classList.remove('selected'));
         element.classList.add('selected');
@@ -1497,23 +1387,20 @@ function loadCheckoutPage() {
             }
         }
 
-        renderSummary(); // Re-render summary to sync surcharge and grand totals!
+        renderSummary(); 
     };
 
-    // Trigger initial selectPay layout sync (COD is default checked in HTML)
     const initialCodOption = document.querySelector('.pay-option input[value="cod"]');
     if (initialCodOption && initialCodOption.checked) {
         window.selectPay(initialCodOption.closest('.pay-option'), 'cod');
     }
 
-    // 3. Process Checkout Submit
     const completeOrderBtn = document.getElementById('completeOrderBtn') || document.querySelector('button[onclick*="Complete Order"]');
     if (completeOrderBtn) {
         completeOrderBtn.removeAttribute('onclick');
         completeOrderBtn.onclick = async function(e) {
             e.preventDefault();
             
-            // Form validation
             const inputs = checkoutForm.querySelectorAll('input[required], select');
             for (let input of inputs) {
                 if (!input.value.trim()) {
@@ -1539,7 +1426,6 @@ function loadCheckoutPage() {
 
             const paymentType = checkoutForm.querySelector('input[name="payment"]:checked')?.value || 'cod';
 
-            // Generate Order Number
             const orderNum = String(Math.floor(Math.random() * 90000) + 10000);
             const surcharge = paymentType === 'cod' ? Math.round((subtotal - discount) * 0.09) : 0;
             const grandTotal = subtotal + shipping + surcharge - discount;
@@ -1562,19 +1448,15 @@ function loadCheckoutPage() {
                 status: "Pending"
             };
 
-            // Sync order to backend DB
             await addOrderToServer(newOrder);
 
-            // Save to Orders Database
             orders.unshift(newOrder);
             saveDb('gw_orders', orders);
 
-            // Clear Cart
             cart = [];
             saveDb('gw_cart', cart);
             updateCartBadge();
 
-            // Display Premium Success PopUp and redirect
             showPremiumAlert(
                 "Order Placed", 
                 `Your order <strong>#${orderNum}</strong> has been secured! A confirmation email and tracking link has been routed to your details.`,
@@ -1593,10 +1475,8 @@ function loadAccountPage() {
     if (!authContainer) return;
 
     if (currentUser) {
-        // USER LOGGED IN - SHOW DASHBOARD
         renderUserDashboard(authContainer);
     } else {
-        // USER GUEST - SHOW LOGIN / REGISTRATION TABS
         renderAuthForms(authContainer);
     }
 }
@@ -1611,7 +1491,6 @@ function renderAuthForms(container) {
             <div class="tab-btn" id="registerTabBtn" style="flex: 1; padding: 1rem; text-align: center; cursor: pointer; font-family: var(--font-head); border-bottom: 2px solid transparent; color: #888;">Register</div>
         </div>
 
-        <!-- LOGIN FORM -->
         <form id="loginForm">
             <div class="input-group">
                 <label>Email Address</label>
@@ -1627,7 +1506,6 @@ function renderAuthForms(container) {
             </p>
         </form>
 
-        <!-- REGISTER FORM -->
         <form id="registerForm" style="display: none;">
             <div class="input-group">
                 <label>Full Name</label>
@@ -1654,7 +1532,6 @@ function renderAuthForms(container) {
         </form>
     `;
 
-    // Tab Switching binds
     const logTab = document.getElementById('loginTabBtn');
     const regTab = document.getElementById('registerTabBtn');
     const logForm = document.getElementById('loginForm');
@@ -1690,7 +1567,6 @@ function renderAuthForms(container) {
         logForm.style.display = 'none';
     };
 
-    // Login Form Submit Bind
     logForm.onsubmit = (e) => {
         e.preventDefault();
         const emailInput = document.getElementById('email').value.trim().toLowerCase();
@@ -1709,7 +1585,6 @@ function renderAuthForms(container) {
         }
     };
 
-    // Register Form Submit Bind
     regForm.onsubmit = async (e) => {
         e.preventDefault();
         const name = document.getElementById('regName').value.trim();
@@ -1735,16 +1610,12 @@ function renderAuthForms(container) {
             return;
         }
 
-        // Add to db
         const newUser = { email, name, phone: finalPhone, pass };
-        
-        // Sync user creation to backend
         await addUserToServer(newUser);
 
         users.push(newUser);
         saveDb('gw_users', users);
 
-        // Auto Login
         currentUser = { email, name, phone: finalPhone };
         saveDb('gw_current_user', currentUser);
 
@@ -1763,14 +1634,12 @@ function renderAuthForms(container) {
 }
 
 function renderUserDashboard(container) {
-    // Style the auth-container box wider for a premium double panel dashboard
     const parentContainer = container.closest('.auth-container');
     if (parentContainer) {
         parentContainer.style.maxWidth = "850px";
         parentContainer.style.padding = "2.5rem";
     }
 
-    // Filter orders by current logged in user
     const userOrders = orders.filter(o => o.email === currentUser.email);
     let ordersHtml = "";
 
@@ -1805,7 +1674,6 @@ function renderUserDashboard(container) {
 
     container.innerHTML = `
         <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 3rem;">
-            <!-- Profile Info Panel -->
             <div style="border-right: 1px solid #eee; padding-right: 2rem;">
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 1.5rem;">
                     <div style="width: 80px; height: 80px; border-radius: 50%; background: #000; color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-family: var(--font-head); font-weight: bold; margin-bottom: 10px; border: 2px solid var(--gold);">
@@ -1821,7 +1689,6 @@ function renderUserDashboard(container) {
                 <button class="btn" id="logoutBtn" style="padding: 10px; font-size: 0.8rem; background: #eee; color: #333; border-color: #eee;">Logout Session</button>
             </div>
 
-            <!-- Past Orders History -->
             <div>
                 <h3 style="font-family: var(--font-head); margin-bottom: 1.5rem; font-size: 1.4rem; color: var(--black); border-bottom: 1px solid #eee; padding-bottom: 8px;">Your Orders</h3>
                 <div style="max-height: 380px; overflow-y: auto; padding-right: 5px;">
@@ -1831,7 +1698,6 @@ function renderUserDashboard(container) {
         </div>
     `;
 
-    // Logout click bind
     document.getElementById('logoutBtn').onclick = () => {
         showPremiumConfirm(
             "Logout?",
@@ -1845,16 +1711,9 @@ function renderUserDashboard(container) {
     };
 }
 
-
-
-
-
-
 // --- 8.5. INJECT PREMIUM BACK BUTTON FOR INNER PAGES ---
 function injectBackButton() {
-    // Handled inline in dynamic navbar generation for superior placement just after the setting button.
 }
-
 
 // --- 8.8. ENDLESS CATEGORY CAROUSEL DRAG & AUTO-ROTATING SYSTEM ---
 let carouselX = 0;
@@ -1865,7 +1724,6 @@ let dragCarouselX = 0;
 let animationFrameId = null;
 
 function initInfiniteCarousel() {
-    // Clean up any previously running loops to prevent memory leaks and browser crashes
     if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
         animationFrameId = null;
@@ -1877,7 +1735,6 @@ function initInfiniteCarousel() {
 
     track.style.animation = 'none';
 
-    // Reset initial positions for clean state
     carouselX = 0; 
     const trackWidth = track.scrollWidth;
     const halfWidth = trackWidth / 2;
@@ -1932,7 +1789,6 @@ function initInfiniteCarousel() {
         wrapper.style.cursor = 'grab';
     }
 
-    // Clean event structure prevents duplication
     wrapper.removeEventListener('mousedown', onDragStart);
     wrapper.addEventListener('mousedown', onDragStart);
     
